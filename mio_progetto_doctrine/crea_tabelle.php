@@ -1,19 +1,18 @@
 <?php
 // crea_tabelle.php
+// Eseguire con: php crea_tabelle.php (da terminale nella root del progetto)
 
-require_once "bootstrap.php";
+require_once "src/Foundation/Persistent/bootstrap.php";
 use Doctrine\ORM\Tools\SchemaTool;
 
-// 1. Diciamo a Doctrine di leggere tutti i file dentro "src" (come il tuo User.php)
 $classes = $entityManager->getMetadataFactory()->getAllMetadata();
-
-// 2. Prepariamo lo strumento che materialmente crea le tabelle
 $schemaTool = new SchemaTool($entityManager);
 
 try {
-    // 3. Creiamo le tabelle nel database!
-    $schemaTool->createSchema($classes);
-    echo "Magia riuscita! Tabella 'users' creata nel database con successo.\n";
+    // updateSchema aggiorna le tabelle esistenti senza cancellarle,
+    // oppure le crea da zero se non esistono ancora.
+    $schemaTool->updateSchema($classes);
+    echo "Successo! Tutte le tabelle sono aggiornate nel database.\n";
 } catch (Exception $e) {
-    echo "C'è stato un problema: " . $e->getMessage() . "\n";
+    echo "Errore: " . $e->getMessage() . "\n";
 }
