@@ -1,6 +1,13 @@
 {
     "require": {
         "doctrine/orm": "^3.6",
-        "symfony/cache": "^7.4"
+        "symfony/cache": "^7.4",
+        "smarty/smarty": "^5.8"
+    },
+    "autoload": {
+        "classmap": [
+            "src/Entity/",
+            "src/Foundation/"
+        ]
     }
 }
