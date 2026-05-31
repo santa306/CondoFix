@@ -1,18 +1,20 @@
 <?php
 // crea_tabelle.php
-// Eseguire con: php crea_tabelle.php (da terminale nella root del progetto)
+// Genera tutte le tabelle nel database a partire dalle Entity.
+// Eseguire una volta sola (o dopo aver cancellato il DB):
+//   php crea_tabelle.php
 
-require_once "src/Foundation/Persistent/bootstrap.php";
+require_once "bootstrap.php";
 use Doctrine\ORM\Tools\SchemaTool;
 
+// Legge i metadati di tutte le Entity in src/Entity
 $classes = $entityManager->getMetadataFactory()->getAllMetadata();
+
 $schemaTool = new SchemaTool($entityManager);
 
 try {
-    // updateSchema aggiorna le tabelle esistenti senza cancellarle,
-    // oppure le crea da zero se non esistono ancora.
-    $schemaTool->updateSchema($classes);
-    echo "Successo! Tutte le tabelle sono aggiornate nel database.\n";
+    $schemaTool->createSchema($classes);
+    echo "Tabelle create con successo nel database 'mio_database'.\n";
 } catch (Exception $e) {
     echo "Errore: " . $e->getMessage() . "\n";
 }
