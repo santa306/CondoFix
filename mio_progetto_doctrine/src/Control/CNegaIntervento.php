@@ -41,7 +41,6 @@ class CNegaIntervento
         }
 
         $negato = new Negato();
-        $negato->setNome('Negato');
         if (!empty(trim((string) $motivazione))) {
             $negato->setMotivazione(trim($motivazione));
         }

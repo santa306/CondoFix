@@ -167,7 +167,7 @@ class Session
     {
         self::start();
         if (!isset($_SESSION['userId'])) {
-            header('Location: /login.php');
+            header('Location: index.php?action=login');
             exit;
         }
         // Protezione anti-session hijacking:
@@ -175,7 +175,7 @@ class Session
         if (isset($_SESSION['loginIP']) &&
             $_SESSION['loginIP'] !== $_SERVER['REMOTE_ADDR']) {
             self::destroy();
-            header('Location: /login.php?errore=sessione_scaduta');
+            header('Location: index.php?action=login');
             exit;
         }
     }
@@ -192,7 +192,7 @@ class Session
     {
         self::requireAuth();
         if (self::get('ruolo') !== $ruolo) {
-            header('Location: /accesso_negato.php');
+            http_response_code(403); echo 'Accesso negato.'; exit;
             exit;
         }
     }
@@ -207,7 +207,7 @@ class Session
     {
         self::requireAuth();
         if (!in_array(self::get('ruolo'), $ruoli, true)) {
-            header('Location: /accesso_negato.php');
+            http_response_code(403); echo 'Accesso negato.'; exit;
             exit;
         }
     }
@@ -235,7 +235,7 @@ class Session
     public static function logout(): void
     {
         self::destroy();
-        header('Location: /login.php');
+        header('Location: index.php?action=login');
         exit;
     }
 
