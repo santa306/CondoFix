@@ -24,3 +24,8 @@ Thumbs.db
 *~
 .idea/
 .vscode/
+
+# Backup e residui ambiente
+*.zip
+xampp/
+dashboard/
