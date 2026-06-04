@@ -52,7 +52,7 @@ try {
             break;
 
         case 'dashboardCondomino':
-            (new CDashboard())->condomino();
+            (new CDashboardCondomino())->mostra();
             break;
 
         // ---- Amministratore: nega intervento (Control pronto, manca la View) ----

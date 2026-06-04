@@ -116,3 +116,42 @@ body {
     margin-bottom: 1.5rem;
 }
 .barra-top a { color: var(--rosso); text-decoration: none; font-size: 0.9rem; }
+
+/* ===== DASHBOARD CONDOMINO (Blocco A) ===== */
+.app { display: flex; min-height: 100vh; }
+.sidebar { width: 230px; flex-shrink: 0; background: #fff; border-right: 1px solid var(--colore-bordo); padding: 1.5rem 1rem; display: flex; flex-direction: column; }
+.sidebar-logo { font-size: 1.4rem; font-weight: 700; color: var(--colore-primario); margin-bottom: 1.5rem; }
+.sidebar-utente { display: flex; align-items: center; gap: 0.6rem; padding-bottom: 1rem; margin-bottom: 1rem; border-bottom: 1px solid var(--colore-bordo); }
+.avatar { width: 36px; height: 36px; border-radius: 50%; background: var(--colore-bordo); flex-shrink: 0; }
+.utente-nome { font-weight: 600; font-size: 0.9rem; }
+.utente-ruolo { font-size: 0.8rem; color: #6b7c89; }
+.sidebar-menu { display: flex; flex-direction: column; gap: 0.25rem; }
+.voce-menu { padding: 0.6rem 0.8rem; border-radius: 8px; text-decoration: none; color: var(--colore-testo); font-size: 0.95rem; }
+.voce-menu:hover { background: var(--colore-sfondo); }
+.voce-menu.attiva { background: rgba(44,95,124,0.12); color: var(--colore-primario); font-weight: 600; }
+.voce-esci { color: var(--rosso); margin-top: auto; }
+.contenuto { flex: 1; padding: 2rem; max-width: 1000px; }
+.intestazione { display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 1.5rem; }
+.intestazione h1 { margin: 0; color: var(--colore-primario); }
+.benvenuto { margin: 0.25rem 0 0; color: #6b7c89; }
+.btn-primario { background: var(--colore-primario); color: #fff; text-decoration: none; padding: 0.65rem 1.1rem; border-radius: 8px; font-weight: 600; font-size: 0.9rem; white-space: nowrap; }
+.btn-primario:hover { background: var(--colore-primario-scuro); }
+.griglia-contatori { display: grid; grid-template-columns: repeat(auto-fit, minmax(120px, 1fr)); gap: 0.8rem; margin-bottom: 2rem; }
+.card-contatore { background: #fff; border: 1px solid var(--colore-bordo); border-radius: var(--raggio); padding: 1rem; text-align: center; }
+.card-contatore .numero { font-size: 1.8rem; font-weight: 700; color: var(--colore-primario); }
+.card-contatore .etichetta { font-size: 0.8rem; color: #6b7c89; }
+.sezione-lista h2 { color: var(--colore-testo); font-size: 1.2rem; }
+.lista-vuota { color: #6b7c89; }
+.card-lavoro { display: flex; justify-content: space-between; align-items: flex-start; background: #fff; border: 1px solid var(--colore-bordo); border-radius: var(--raggio); padding: 1rem 1.2rem; margin-bottom: 0.8rem; text-decoration: none; color: inherit; transition: box-shadow 0.15s; }
+.card-lavoro:hover { box-shadow: 0 4px 14px rgba(31,45,54,0.1); }
+.card-lavoro h3 { margin: 0 0 0.2rem; font-size: 1.05rem; }
+.card-lavoro .meta { margin: 0 0 0.3rem; font-size: 0.8rem; color: #6b7c89; }
+.card-lavoro .descrizione { margin: 0; font-size: 0.9rem; color: #4a5a66; }
+.card-lavoro-stato { text-align: right; flex-shrink: 0; padding-left: 1rem; }
+.card-lavoro-stato .data { margin: 0.4rem 0 0; font-size: 0.8rem; color: #6b7c89; }
+.badge { display: inline-block; padding: 0.25rem 0.6rem; border-radius: 999px; font-size: 0.78rem; font-weight: 600; }
+.badge-presentato { background: #e7eef3; color: var(--colore-primario); }
+.badge-accettato { background: #fff4e0; color: #9a6a00; }
+.badge-in_corso { background: #e7eef3; color: var(--colore-primario); }
+.badge-completato { background: var(--verde-sfondo); color: var(--verde); }
+.badge-negato { background: var(--rosso-sfondo); color: var(--rosso); }
