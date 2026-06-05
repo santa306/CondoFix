@@ -117,41 +117,226 @@ body {
 }
 .barra-top a { color: var(--rosso); text-decoration: none; font-size: 0.9rem; }
 
-/* ===== DASHBOARD CONDOMINO (Blocco A) ===== */
+/* ============================================================
+   DASHBOARD CONDOMINO (Blocco A) â€” stile professionale e sobrio
+   ============================================================ */
+
 .app { display: flex; min-height: 100vh; }
-.sidebar { width: 230px; flex-shrink: 0; background: #fff; border-right: 1px solid var(--colore-bordo); padding: 1.5rem 1rem; display: flex; flex-direction: column; }
-.sidebar-logo { font-size: 1.4rem; font-weight: 700; color: var(--colore-primario); margin-bottom: 1.5rem; }
-.sidebar-utente { display: flex; align-items: center; gap: 0.6rem; padding-bottom: 1rem; margin-bottom: 1rem; border-bottom: 1px solid var(--colore-bordo); }
-.avatar { width: 36px; height: 36px; border-radius: 50%; background: var(--colore-bordo); flex-shrink: 0; }
-.utente-nome { font-weight: 600; font-size: 0.9rem; }
-.utente-ruolo { font-size: 0.8rem; color: #6b7c89; }
-.sidebar-menu { display: flex; flex-direction: column; gap: 0.25rem; }
-.voce-menu { padding: 0.6rem 0.8rem; border-radius: 8px; text-decoration: none; color: var(--colore-testo); font-size: 0.95rem; }
-.voce-menu:hover { background: var(--colore-sfondo); }
-.voce-menu.attiva { background: rgba(44,95,124,0.12); color: var(--colore-primario); font-weight: 600; }
-.voce-esci { color: var(--rosso); margin-top: auto; }
-.contenuto { flex: 1; padding: 2rem; max-width: 1000px; }
-.intestazione { display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 1.5rem; }
-.intestazione h1 { margin: 0; color: var(--colore-primario); }
-.benvenuto { margin: 0.25rem 0 0; color: #6b7c89; }
-.btn-primario { background: var(--colore-primario); color: #fff; text-decoration: none; padding: 0.65rem 1.1rem; border-radius: 8px; font-weight: 600; font-size: 0.9rem; white-space: nowrap; }
+
+/* ---------- SIDEBAR ---------- */
+.sidebar {
+    width: 250px;
+    flex-shrink: 0;
+    background: #fff;
+    border-right: 1px solid var(--colore-bordo);
+    padding: 1.5rem 1.1rem;
+    display: flex;
+    flex-direction: column;
+}
+.sidebar-brand {
+    display: flex;
+    align-items: center;
+    gap: 0.6rem;
+    font-size: 1.35rem;
+    font-weight: 700;
+    color: var(--colore-primario);
+    letter-spacing: -0.3px;
+    padding: 0 0.4rem 1.4rem;
+}
+.brand-icon { width: 26px; height: 26px; }
+
+.sidebar-utente {
+    display: flex;
+    align-items: center;
+    gap: 0.7rem;
+    padding: 0.9rem 0.5rem;
+    margin-bottom: 1.2rem;
+    border-top: 1px solid var(--colore-bordo);
+    border-bottom: 1px solid var(--colore-bordo);
+}
+.avatar {
+    width: 40px; height: 40px;
+    border-radius: 50%;
+    background: var(--colore-primario);
+    color: #fff;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 0.85rem;
+    font-weight: 600;
+    text-transform: uppercase;
+    flex-shrink: 0;
+    letter-spacing: 0.5px;
+}
+.utente-info { overflow: hidden; }
+.utente-nome { font-weight: 600; font-size: 0.92rem; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.utente-ruolo { font-size: 0.78rem; color: #7a8a96; }
+
+.sidebar-menu { display: flex; flex-direction: column; gap: 0.2rem; }
+.voce-menu {
+    display: flex;
+    align-items: center;
+    gap: 0.7rem;
+    padding: 0.65rem 0.8rem;
+    border-radius: 8px;
+    text-decoration: none;
+    color: #4a5a66;
+    font-size: 0.92rem;
+    font-weight: 500;
+    transition: background 0.15s, color 0.15s;
+}
+.voce-menu svg { width: 18px; height: 18px; flex-shrink: 0; }
+.voce-menu:hover { background: var(--colore-sfondo); color: var(--colore-testo); }
+.voce-menu.attiva {
+    background: rgba(44, 95, 124, 0.1);
+    color: var(--colore-primario);
+    font-weight: 600;
+}
+.voce-esci { margin-top: auto; color: #7a8a96; }
+.voce-esci:hover { background: var(--rosso-sfondo); color: var(--rosso); }
+
+/* ---------- CONTENUTO ---------- */
+.contenuto {
+    flex: 1;
+    padding: 2.2rem 2.6rem;
+    max-width: 1080px;
+}
+.intestazione {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    margin-bottom: 1.8rem;
+    flex-wrap: wrap;
+    gap: 1rem;
+}
+.intestazione h1 { margin: 0; font-size: 1.7rem; color: var(--colore-testo); letter-spacing: -0.5px; }
+.benvenuto { margin: 0.3rem 0 0; color: #7a8a96; font-size: 0.95rem; }
+
+.btn-primario {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+    background: var(--colore-primario);
+    color: #fff;
+    text-decoration: none;
+    padding: 0.65rem 1.15rem;
+    border-radius: 8px;
+    font-weight: 600;
+    font-size: 0.9rem;
+    white-space: nowrap;
+    transition: background 0.15s;
+    box-shadow: 0 1px 3px rgba(31, 45, 54, 0.12);
+}
+.btn-primario svg { width: 17px; height: 17px; }
 .btn-primario:hover { background: var(--colore-primario-scuro); }
-.griglia-contatori { display: grid; grid-template-columns: repeat(auto-fit, minmax(120px, 1fr)); gap: 0.8rem; margin-bottom: 2rem; }
-.card-contatore { background: #fff; border: 1px solid var(--colore-bordo); border-radius: var(--raggio); padding: 1rem; text-align: center; }
-.card-contatore .numero { font-size: 1.8rem; font-weight: 700; color: var(--colore-primario); }
-.card-contatore .etichetta { font-size: 0.8rem; color: #6b7c89; }
-.sezione-lista h2 { color: var(--colore-testo); font-size: 1.2rem; }
-.lista-vuota { color: #6b7c89; }
-.card-lavoro { display: flex; justify-content: space-between; align-items: flex-start; background: #fff; border: 1px solid var(--colore-bordo); border-radius: var(--raggio); padding: 1rem 1.2rem; margin-bottom: 0.8rem; text-decoration: none; color: inherit; transition: box-shadow 0.15s; }
-.card-lavoro:hover { box-shadow: 0 4px 14px rgba(31,45,54,0.1); }
-.card-lavoro h3 { margin: 0 0 0.2rem; font-size: 1.05rem; }
-.card-lavoro .meta { margin: 0 0 0.3rem; font-size: 0.8rem; color: #6b7c89; }
-.card-lavoro .descrizione { margin: 0; font-size: 0.9rem; color: #4a5a66; }
-.card-lavoro-stato { text-align: right; flex-shrink: 0; padding-left: 1rem; }
-.card-lavoro-stato .data { margin: 0.4rem 0 0; font-size: 0.8rem; color: #6b7c89; }
-.badge { display: inline-block; padding: 0.25rem 0.6rem; border-radius: 999px; font-size: 0.78rem; font-weight: 600; }
+
+/* ---------- CARD CONTATORI ---------- */
+.griglia-contatori {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(165px, 1fr));
+    gap: 1rem;
+    margin-bottom: 2.4rem;
+}
+.card-contatore {
+    display: flex;
+    align-items: center;
+    gap: 0.9rem;
+    background: #fff;
+    border: 1px solid var(--colore-bordo);
+    border-radius: var(--raggio);
+    padding: 1.1rem 1.2rem;
+    transition: box-shadow 0.15s, transform 0.15s;
+}
+.card-contatore:hover { box-shadow: 0 4px 16px rgba(31, 45, 54, 0.08); transform: translateY(-1px); }
+.card-icona {
+    width: 42px; height: 42px;
+    border-radius: 9px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+}
+.card-icona svg { width: 21px; height: 21px; }
+.icona-totali      { background: #eef2f5; color: #5a6b78; }
+.icona-presentati  { background: #e7eef3; color: var(--colore-primario); }
+.icona-dafare      { background: #fff4e0; color: #b07d18; }
+.icona-incorso     { background: #e8eef7; color: #3b5b9a; }
+.icona-completati  { background: var(--verde-sfondo); color: var(--verde); }
+.icona-negati      { background: var(--rosso-sfondo); color: var(--rosso); }
+.card-dati .numero { font-size: 1.7rem; font-weight: 700; line-height: 1.1; color: var(--colore-testo); }
+.card-dati .etichetta { font-size: 0.8rem; color: #7a8a96; margin-top: 0.1rem; }
+
+/* ---------- LISTA LAVORI ---------- */
+.sezione-lista h2 {
+    font-size: 1.15rem;
+    color: var(--colore-testo);
+    margin-bottom: 1rem;
+    font-weight: 600;
+}
+
+.lista-vuota {
+    background: #fff;
+    border: 1px dashed var(--colore-bordo);
+    border-radius: var(--raggio);
+    padding: 3rem 1.5rem;
+    text-align: center;
+    color: #7a8a96;
+}
+.lista-vuota svg { width: 42px; height: 42px; color: #b7c3cc; margin-bottom: 0.5rem; }
+.lista-vuota p { margin: 0 0 1.2rem; font-size: 0.95rem; }
+.lista-vuota .btn-primario { margin: 0 auto; }
+
+.card-lavoro {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    background: #fff;
+    border: 1px solid var(--colore-bordo);
+    border-radius: var(--raggio);
+    padding: 1.1rem 1.3rem;
+    margin-bottom: 0.8rem;
+    text-decoration: none;
+    color: inherit;
+    transition: box-shadow 0.15s, border-color 0.15s;
+}
+.card-lavoro:hover { box-shadow: 0 4px 16px rgba(31, 45, 54, 0.08); border-color: #b7c3cc; }
+.card-lavoro-testo { min-width: 0; }
+.card-lavoro h3 { margin: 0 0 0.35rem; font-size: 1.05rem; font-weight: 600; }
+.card-lavoro .meta {
+    display: flex;
+    align-items: center;
+    gap: 0.35rem;
+    margin: 0 0 0.4rem;
+    font-size: 0.82rem;
+    color: #7a8a96;
+}
+.card-lavoro .meta svg { width: 14px; height: 14px; }
+.card-lavoro .descrizione { margin: 0; font-size: 0.9rem; color: #5a6b78; line-height: 1.45; }
+.card-lavoro-stato { text-align: right; flex-shrink: 0; padding-left: 1.2rem; }
+.card-lavoro-stato .data { margin: 0.5rem 0 0; font-size: 0.8rem; color: #9aa7b1; }
+
+/* ---------- BADGE STATO ---------- */
+.badge {
+    display: inline-block;
+    padding: 0.28rem 0.7rem;
+    border-radius: 999px;
+    font-size: 0.76rem;
+    font-weight: 600;
+    white-space: nowrap;
+}
 .badge-presentato { background: #e7eef3; color: var(--colore-primario); }
-.badge-accettato { background: #fff4e0; color: #9a6a00; }
-.badge-in_corso { background: #e7eef3; color: var(--colore-primario); }
+.badge-accettato  { background: #fff4e0; color: #b07d18; }
+.badge-in_corso   { background: #e8eef7; color: #3b5b9a; }
 .badge-completato { background: var(--verde-sfondo); color: var(--verde); }
-.badge-negato { background: var(--rosso-sfondo); color: var(--rosso); }
+.badge-negato     { background: var(--rosso-sfondo); color: var(--rosso); }
+
+/* ---------- RESPONSIVE ---------- */
+@media (max-width: 720px) {
+    .app { flex-direction: column; }
+    .sidebar { width: 100%; flex-direction: row; flex-wrap: wrap; align-items: center; gap: 1rem; }
+    .sidebar-brand { padding-bottom: 0; }
+    .sidebar-utente { border: none; margin: 0; padding: 0; }
+    .sidebar-menu { flex-direction: row; }
+    .voce-esci { margin: 0; }
+    .contenuto { padding: 1.5rem; }
+}
