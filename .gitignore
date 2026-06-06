@@ -29,3 +29,7 @@ Thumbs.db
 *.zip
 xampp/
 dashboard/
+
+# Foto caricate dagli utenti (dati, non codice)
+uploads/*
+!uploads/.gitkeep

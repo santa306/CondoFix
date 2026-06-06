@@ -340,3 +340,118 @@ body {
     .voce-esci { margin: 0; }
     .contenuto { padding: 1.5rem; }
 }
+
+/* ============================================================
+   FORM "NUOVA SEGNALAZIONE" (Blocco A)
+   ============================================================ */
+.form-card {
+    background: #fff;
+    border: 1px solid var(--colore-bordo);
+    border-radius: var(--raggio);
+    padding: 1.8rem;
+    max-width: 640px;
+}
+.form-card form { display: flex; flex-direction: column; }
+.form-card label {
+    font-size: 0.85rem;
+    font-weight: 600;
+    margin-bottom: 0.35rem;
+    color: var(--colore-testo);
+}
+.form-card input[type="text"],
+.form-card textarea {
+    padding: 0.7rem 0.85rem;
+    margin-bottom: 1.2rem;
+    border: 1px solid var(--colore-bordo);
+    border-radius: 8px;
+    font-size: 0.95rem;
+    font-family: inherit;
+    color: var(--colore-testo);
+    resize: vertical;
+}
+.form-card input[type="text"]:focus,
+.form-card textarea:focus {
+    outline: none;
+    border-color: var(--colore-primario);
+    box-shadow: 0 0 0 3px rgba(44, 95, 124, 0.15);
+}
+.form-card input[type="file"] {
+    padding: 0.6rem;
+    border: 1px dashed var(--colore-bordo);
+    border-radius: 8px;
+    font-size: 0.9rem;
+    background: var(--colore-sfondo);
+    cursor: pointer;
+}
+.aiuto-campo {
+    margin: 0.4rem 0 1.2rem;
+    font-size: 0.8rem;
+    color: #7a8a96;
+}
+.form-azioni {
+    display: flex;
+    justify-content: flex-end;
+    gap: 0.7rem;
+    margin-top: 0.5rem;
+}
+.btn-secondario {
+    display: inline-flex;
+    align-items: center;
+    background: #fff;
+    color: #4a5a66;
+    text-decoration: none;
+    padding: 0.65rem 1.15rem;
+    border: 1px solid var(--colore-bordo);
+    border-radius: 8px;
+    font-weight: 600;
+    font-size: 0.9rem;
+    cursor: pointer;
+}
+.btn-secondario:hover { background: var(--colore-sfondo); }
+.form-card .btn-primario { border: none; cursor: pointer; }
+
+/* ===== Campi foto dinamici (form Nuova Segnalazione) ===== */
+.riga-foto {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    margin-bottom: 0.6rem;
+}
+.riga-foto input[type="file"] {
+    flex: 1;
+    padding: 0.55rem;
+    border: 1px dashed var(--colore-bordo);
+    border-radius: 8px;
+    font-size: 0.88rem;
+    background: var(--colore-sfondo);
+    cursor: pointer;
+}
+.btn-rimuovi {
+    width: 34px; height: 34px;
+    flex-shrink: 0;
+    border: 1px solid var(--colore-bordo);
+    background: #fff;
+    color: var(--rosso);
+    border-radius: 8px;
+    font-size: 1.2rem;
+    line-height: 1;
+    cursor: pointer;
+}
+.btn-rimuovi:hover { background: var(--rosso-sfondo); }
+.btn-aggiungi {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.4rem;
+    background: none;
+    border: 1px solid var(--colore-primario);
+    color: var(--colore-primario);
+    padding: 0.5rem 0.9rem;
+    border-radius: 8px;
+    font-size: 0.85rem;
+    font-weight: 600;
+    cursor: pointer;
+    margin-bottom: 0.3rem;
+    align-self: flex-start;
+}
+.btn-aggiungi svg { width: 15px; height: 15px; }
+.btn-aggiungi:hover { background: rgba(44, 95, 124, 0.08); }
