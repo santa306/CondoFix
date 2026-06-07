@@ -48,7 +48,7 @@ try {
             break;
 
         case 'dashboardFornitore':
-            (new CDashboard())->fornitore();
+            (new CDashboardFornitore())->mostra();
             break;
 
         case 'dashboardCondomino':
@@ -89,3 +89,4 @@ try {
     http_response_code(500);
     echo 'Si e\' verificato un errore: ' . htmlspecialchars($e->getMessage());
 }
+
