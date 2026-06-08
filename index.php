@@ -57,6 +57,14 @@ try {
             (new CDettaglioIntervento())->mostra();
             break;
 
+        // ---- Condomino: modifica segnalazione presentata (Blocco A) ----
+        case 'formModificaIntervento':
+            (new CModificaIntervento())->mostraForm();
+            break;
+        case 'modificaIntervento':
+            (new CModificaIntervento())->esegui();
+            break;
+
         // ---- Azioni ancora DA IMPLEMENTARE ----
         case 'accettaIntervento':
         case 'allegaFattura':

@@ -687,3 +687,35 @@ body {
     transition: transform 0.2s;
 }
 .galleria-foto:hover img { transform: scale(1.05); }
+
+/* ===== Modifica segnalazione: galleria con eliminazione + bottone modifica ===== */
+.btn-modifica { margin-left: auto; }
+.galleria-modifica {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(130px, 1fr));
+    gap: 0.8rem;
+    margin-bottom: 0.6rem;
+}
+.foto-eliminabile {
+    display: block;
+    border: 1px solid var(--colore-bordo);
+    border-radius: 8px;
+    overflow: hidden;
+    cursor: pointer;
+}
+.foto-eliminabile img {
+    width: 100%;
+    aspect-ratio: 4 / 3;
+    object-fit: cover;
+    display: block;
+}
+.checkbox-elimina {
+    display: flex;
+    align-items: center;
+    gap: 0.4rem;
+    padding: 0.45rem 0.6rem;
+    font-size: 0.82rem;
+    color: #4a5a66;
+    background: var(--colore-sfondo);
+}
+.checkbox-elimina input { margin: 0; }
