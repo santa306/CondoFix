@@ -719,3 +719,105 @@ body {
     background: var(--colore-sfondo);
 }
 .checkbox-elimina input { margin: 0; }
+/* Dashboard Amministratore (Blocco B)                          */
+/* ============================================================ */
+
+.layout-admin { display: flex; min-height: 100vh; }
+
+/* ---- Sidebar ---- */
+.sidebar {
+    width: 230px;
+    background: #fff;
+    border-right: 1px solid var(--colore-bordo);
+    padding: 1.25rem 1rem;
+    display: flex;
+    flex-direction: column;
+    gap: 1.25rem;
+}
+.sidebar-logo {
+    font-size: 1.4rem;
+    font-weight: 700;
+    color: var(--colore-primario);
+}
+.sidebar-utente { display: flex; align-items: center; gap: 0.6rem; }
+.sidebar-utente .avatar {
+    width: 38px; height: 38px; border-radius: 50%;
+    background: var(--colore-bordo);
+}
+.sidebar-utente .nome { font-weight: 600; font-size: 0.95rem; }
+.sidebar-utente .ruolo { font-size: 0.8rem; color: #6a7c88; }
+
+.sidebar-menu { display: flex; flex-direction: column; gap: 0.25rem; }
+.sidebar-menu .voce {
+    text-decoration: none;
+    color: var(--colore-testo);
+    padding: 0.55rem 0.75rem;
+    border-radius: var(--raggio);
+    font-size: 0.95rem;
+}
+.sidebar-menu .voce:hover { background: var(--colore-sfondo); }
+.sidebar-menu .voce.attiva {
+    background: var(--colore-primario);
+    color: #fff;
+}
+.sidebar-menu .voce.logout { color: var(--rosso); margin-top: 0.5rem; }
+
+/* ---- Contenuto ---- */
+.contenuto { flex: 1; padding: 1.75rem 2rem; }
+.titolo-pagina { color: var(--colore-primario); margin: 0; }
+.benvenuto { color: #6a7c88; margin-top: 0.25rem; }
+
+/* ---- Card contatori ---- */
+.griglia-card {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(120px, 1fr));
+    gap: 1rem;
+    margin: 1.5rem 0;
+}
+.card-contatore {
+    background: #fff;
+    border: 1px solid var(--colore-bordo);
+    border-radius: var(--raggio);
+    padding: 1rem;
+    text-align: center;
+}
+.card-contatore .numero {
+    font-size: 1.8rem; font-weight: 700;
+    color: var(--colore-primario);
+}
+.card-contatore .etichetta { font-size: 0.8rem; color: #6a7c88; }
+
+/* ---- Lavori recenti ---- */
+.lavori-recenti h2 { color: var(--colore-testo); font-size: 1.1rem; }
+.riga-lavoro {
+    display: grid;
+    grid-template-columns: 1fr 1fr auto;
+    align-items: center;
+    gap: 1rem;
+    background: #fff;
+    border: 1px solid var(--colore-bordo);
+    border-radius: var(--raggio);
+    padding: 0.85rem 1rem;
+    margin-bottom: 0.6rem;
+    text-decoration: none;
+    color: var(--colore-testo);
+}
+.riga-lavoro:hover { border-color: var(--colore-primario); }
+.riga-titolo { font-weight: 600; }
+.riga-meta { color: #6a7c88; font-size: 0.9rem; }
+.vuoto { color: #6a7c88; }
+
+/* ---- Badge di stato (workflow) ---- */
+.badge {
+    justify-self: end;
+    padding: 0.25rem 0.7rem;
+    border-radius: 999px;
+    font-size: 0.78rem;
+    font-weight: 600;
+    text-transform: capitalize;
+}
+.badge-presentato { background: #eef2f5; color: #41576a; }
+.badge-negato     { background: var(--rosso-sfondo); color: var(--rosso); }
+.badge-accettato  { background: #e7f0fb; color: #1f4659; }
+.badge-in_corso   { background: #fff4e0; color: #9a6a00; }
+.badge-completato { background: var(--verde-sfondo); color: var(--verde); }
