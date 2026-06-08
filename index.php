@@ -52,12 +52,16 @@ try {
             (new CPresentaIntervento())->esegui();
             break;
 
+        // ---- Condomino: dettaglio intervento (Blocco A) ----
+        case 'dettaglioIntervento':
+            (new CDettaglioIntervento())->mostra();
+            break;
+
         // ---- Azioni ancora DA IMPLEMENTARE ----
         case 'accettaIntervento':
         case 'allegaFattura':
         case 'avviaIntervento':
         case 'completaIntervento':
-        case 'dettaglioIntervento':
         case 'aggiungiNota':
         case 'caricaFoto':
             http_response_code(501);
