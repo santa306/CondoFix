@@ -1,6 +1,7 @@
 {* templates/dettaglio_intervento.tpl *}
-{* Dettaglio intervento — riferimento UI: sketch_condomino.pdf (caso 8).       *}
-{* La View passa: intervento, stato, note[], foto[], errore, successo.         *}
+{* Dettaglio di un singolo intervento — riferimento UI: sketch_amministratore.pdf pag. 3. *}
+{* Variabili dalla View: titolo, intervento (Intervento), fornitori (array), *}
+{* daValutare (bool), errore, successo. *}
 <!DOCTYPE html>
 <html lang="it">
 <head>
@@ -9,138 +10,177 @@
     <title>{$titolo|escape}</title>
     <link rel="stylesheet" href="css/style.css">
 </head>
-<body class="app">
+<body>
+<div class="layout-admin">
 
-    {* ===== SIDEBAR ===== *}
+    {* ---------- SIDEBAR ---------- *}
     <aside class="sidebar">
-        <div class="sidebar-brand">
-            <svg class="brand-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 21h18"/><path d="M5 21V7l8-4v18"/><path d="M19 21V11l-6-4"/><path d="M9 9v.01"/><path d="M9 12v.01"/><path d="M9 15v.01"/></svg>
-            <span>CondoFix</span>
-        </div>
+        <div class="sidebar-logo">CondoFix</div>
         <nav class="sidebar-menu">
-            <a href="index.php?action=dashboardCondomino" class="voce-menu">
-                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="7" height="7"/><rect x="14" y="3" width="7" height="7"/><rect x="14" y="14" width="7" height="7"/><rect x="3" y="14" width="7" height="7"/></svg>
-                Dashboard
-            </a>
+            <a class="voce" href="index.php?action=dashboardAdmin">Dashboard</a>
+            <a class="voce" href="index.php?action=listaCondomini">Condomini</a>
+            <a class="voce" href="index.php?action=listaFornitori">Lavoratori</a>
+            <a class="voce" href="index.php?action=listaLavori">Lavori</a>
+            <a class="voce logout" href="index.php?action=logout">Esci</a>
         </nav>
-        <a href="index.php?action=logout" class="voce-menu voce-esci">
-            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"/><polyline points="16 17 21 12 16 7"/><line x1="21" y1="12" x2="9" y2="12"/></svg>
-            Esci
-        </a>
     </aside>
 
-    {* ===== CONTENUTO ===== *}
+    {* ---------- CONTENUTO ---------- *}
     <main class="contenuto">
 
-        <a href="index.php?action=dashboardCondomino" class="link-indietro">
-            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="19" y1="12" x2="5" y2="12"/><polyline points="12 19 5 12 12 5"/></svg>
-            Torna alla dashboard
-        </a>
-
-        {if $errore}<div class="avviso avviso-errore">{$errore|escape}</div>{/if}
         {if $successo}<div class="avviso avviso-successo">{$successo|escape}</div>{/if}
+        {if $errore}<div class="avviso avviso-errore">{$errore|escape}</div>{/if}
 
-        {assign var="tipo" value=$stato->getTipo()}
+        <a class="link-indietro" href="index.php?action=dashboardAdmin">&larr; Torna alla dashboard</a>
 
-        <header class="dettaglio-header">
-            <h1>{$intervento->getTitolo()|escape}</h1>
-            <span class="badge badge-{$tipo|escape}">
-                {if $tipo == 'in_corso'}In Corso
-                {elseif $tipo == 'presentato'}Presentato
-                {elseif $tipo == 'accettato'}Accettato
-                {elseif $tipo == 'completato'}Completato
-                {elseif $tipo == 'negato'}Negato
-                {else}{$tipo|escape}{/if}
+        <h1 class="titolo-pagina">{$intervento->getTitolo()|escape}</h1>
+
+        <p class="riga-stato">
+            STATO:
+            <span class="badge badge-{$intervento->getStato()->getTipo()|escape}">
+                {$intervento->getStato()->getTipo()|replace:'_':' '|escape}
             </span>
-            {if $tipo == 'presentato'}
-                <a href="index.php?action=formModificaIntervento&amp;id={$intervento->getId()}" class="btn-secondario btn-modifica">
-                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"/><path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"/></svg>
-                    Modifica
-                </a>
-            {/if}
-        </header>
+        </p>
 
-        {* ===== SCHEDA DATI ===== *}
-        <div class="scheda">
-            <div class="riga-dato">
-                <span class="etichetta-dato">Condominio</span>
-                <span>{if $intervento->getCondominio()}{$intervento->getCondominio()->getNome()|escape}{else}—{/if}</span>
+        {* ---------- DATI INTERVENTO ---------- *}
+        <section class="scheda">
+            <div class="campo">
+                <span class="etichetta-campo">Condominio</span>
+                {if $intervento->getCondominio()}
+                    {$intervento->getCondominio()->getNome()|escape} —
+                    {$intervento->getCondominio()->getIndirizzo()|escape},
+                    {$intervento->getCondominio()->getCitta()|escape}
+                {else}—{/if}
             </div>
-            <div class="riga-dato">
-                <span class="etichetta-dato">Data creazione</span>
-                <span>{$intervento->getDataCreazione()->format('d/m/Y H:i')}</span>
-            </div>
-            {if $stato->getPriorita()}
-            <div class="riga-dato">
-                <span class="etichetta-dato">Priorità</span>
-                <span>{$stato->getPriorita()|escape}</span>
-            </div>
-            {/if}
-            {if $stato->getFornitore()}
-            <div class="riga-dato">
-                <span class="etichetta-dato">Fornitore assegnato</span>
-                <span>{$stato->getFornitore()->getNome()|escape} {$stato->getFornitore()->getCognome()|escape}</span>
-            </div>
-            {/if}
-            {if $tipo == 'negato' && $stato->getMotivazione()}
-            <div class="riga-dato">
-                <span class="etichetta-dato">Motivazione rifiuto</span>
-                <span>{$stato->getMotivazione()|escape}</span>
-            </div>
-            {/if}
-        </div>
 
-        {* ===== DESCRIZIONE ===== *}
-        <section class="blocco">
-            <h2>Descrizione</h2>
-            <p class="testo-descrizione">{$intervento->getDescrizione()|escape|nl2br}</p>
-        </section>
+            <div class="campo">
+                <span class="etichetta-campo">Data creazione</span>
+                {$intervento->getDataCreazione()->format('d/m/Y H:i')}
+            </div>
 
-        {* ===== STORICO NOTE ===== *}
-        <section class="blocco">
-            <h2>Storico</h2>
-            {if $note|@count == 0}
-                <p class="vuoto-inline">Nessuna nota presente.</p>
-            {else}
-                <ul class="timeline">
-                    {foreach $note as $n}
-                        <li>
-                            <div class="timeline-punto"></div>
-                            <div class="timeline-contenuto">
-                                <p class="timeline-testo">{$n->getTesto()|escape}</p>
-                                <span class="timeline-data">{$n->getTimestamp()->format('d/m/Y H:i')}</span>
-                            </div>
-                        </li>
-                    {/foreach}
-                </ul>
-            {/if}
-        </section>
-
-        {* ===== GALLERIA FOTO ===== *}
-        <section class="blocco">
-            <h2>Foto lavoro</h2>
-            {if $foto|@count == 0}
-                <p class="vuoto-inline">Nessuna foto allegata.</p>
-            {else}
-                <div class="galleria">
-                    {foreach $foto as $f}
-                        <a href="{$f->getPercorso()|escape}" target="_blank" class="galleria-foto">
-                            <img src="{$f->getPercorso()|escape}" alt="{$f->getNomeOriginale()|escape}">
-                        </a>
-                    {/foreach}
+            {if $intervento->getSegnalante()}
+                <div class="campo">
+                    <span class="etichetta-campo">Segnalato da</span>
+                    {$intervento->getSegnalante()->getNome()|escape}
+                    {$intervento->getSegnalante()->getCognome()|escape}
+                    ({$intervento->getSegnalante()->getEmail()|escape})
                 </div>
             {/if}
+
+            {* Priorità e fornitore esistono solo dagli stati accettato in poi *}
+            {if $intervento->getStato()->getPriorita()}
+                <div class="campo">
+                    <span class="etichetta-campo">Priorità</span>
+                    {$intervento->getStato()->getPriorita()|escape}
+                </div>
+            {/if}
+            {if $intervento->getStato()->getFornitore()}
+                <div class="campo">
+                    <span class="etichetta-campo">Fornitore assegnato</span>
+                    {$intervento->getStato()->getFornitore()->getNome()|escape}
+                    {$intervento->getStato()->getFornitore()->getCognome()|escape}
+                </div>
+            {/if}
+
+            <div class="campo">
+                <span class="etichetta-campo">Descrizione</span>
+                <p class="descrizione">{$intervento->getDescrizione()|escape}</p>
+            </div>
         </section>
 
-        {* ===== FATTURA (solo se completato e presente) ===== *}
-        {if $tipo == 'completato' && $stato->getFattura()}
-        <section class="blocco">
+        {* ---------- FOTO ---------- *}
+        <section class="scheda">
+            <h2>Foto lavoro</h2>
+            {if $intervento->getFoto()|@count > 0}
+                <div class="galleria-foto">
+                    {foreach $intervento->getFoto() as $f}
+                        <div class="foto-box">
+                            <img src="{$f->getPercorso()|escape}"
+                                 alt="{$f->getNomeOriginale()|escape}">
+                        </div>
+                    {/foreach}
+                </div>
+            {else}
+                <p class="vuoto">Nessuna foto allegata.</p>
+            {/if}
+        </section>
+
+        {* ---------- FATTURA (solo se l'intervento è Completato) ---------- *}
+        {if $intervento->getStato()->getTipo() == 'completato'}
+        <section class="scheda">
             <h2>Fattura</h2>
-            <a href="{$stato->getFattura()|escape}" target="_blank" class="btn-secondario">Apri fattura</a>
+
+            {if $intervento->getStato()->getFattura()}
+                <p class="campo">
+                    Fattura allegata:
+                    <a href="{$intervento->getStato()->getFattura()|escape}" target="_blank">
+                        apri il PDF
+                    </a>
+                </p>
+                <p class="etichetta-campo">Carica un nuovo file per sostituirla.</p>
+            {else}
+                <p class="vuoto">Fattura mancante.</p>
+            {/if}
+
+            <form class="form-azione" method="post"
+                  enctype="multipart/form-data"
+                  action="index.php?action=allegaFattura&id={$intervento->getId()}">
+                <label for="fattura">File PDF della fattura</label>
+                <input type="file" id="fattura" name="fattura" accept="application/pdf" required>
+                <button type="submit" class="btn btn-approva">Carica fattura</button>
+            </form>
+        </section>
+        {/if}
+
+        {* ---------- AZIONI (solo se l'intervento è ancora "Presentato") ---------- *}
+        {if $daValutare}
+        <section class="scheda azioni">
+            <h2>Valuta la segnalazione</h2>
+
+            <div class="due-colonne">
+
+                {* --- FORM NEGA --- *}
+                <form class="form-azione" method="post"
+                      action="index.php?action=negaIntervento&id={$intervento->getId()}">
+                    <h3>Nega</h3>
+                    <label for="motivazione">Motivazione (opzionale)</label>
+                    <textarea id="motivazione" name="motivazione" rows="3"
+                              placeholder="Perché rifiuti la segnalazione?"></textarea>
+                    <button type="submit" class="btn btn-nega">NEGA</button>
+                </form>
+
+                {* --- FORM APPROVA --- *}
+                <form class="form-azione" method="post"
+                      action="index.php?action=accettaIntervento&id={$intervento->getId()}">
+                    <h3>Approva</h3>
+
+                    <label for="priorita">Priorità</label>
+                    <select id="priorita" name="priorita" required>
+                        <option value="">Seleziona…</option>
+                        <option value="alta">Alta</option>
+                        <option value="media">Media</option>
+                        <option value="bassa">Bassa</option>
+                    </select>
+
+                    <label for="id_fornitore">Fornitore</label>
+                    <select id="id_fornitore" name="id_fornitore" required>
+                        <option value="">Seleziona…</option>
+                        {foreach $fornitori as $forn}
+                            <option value="{$forn->getId()}">
+                                {$forn->getNome()|escape} {$forn->getCognome()|escape}
+                                {if $forn->getCategoria()} — {$forn->getCategoria()->getNome()|escape}{/if}
+                            </option>
+                        {/foreach}
+                    </select>
+
+                    <button type="submit" class="btn btn-approva">APPROVA</button>
+                </form>
+
+            </div>
         </section>
         {/if}
 
     </main>
-
+</div>
 </body>
 </html>

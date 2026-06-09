@@ -1,56 +1,52 @@
 <?php
 // src/Control/CDettaglioIntervento.php
 //
-// CONTROLLORE — operazione di sistema "Visualizza dettaglio intervento".
-//   mostra()  ->  ?action=dettaglioIntervento&id=NN
+// CONTROLLORE — operazione di sistema "visualizza dettaglio di un intervento".
+// ATTORE: Amministratore.
 //
-// Mostra un intervento del condomino loggato: dati, stato, note (storico)
-// e galleria foto.
+// Caso d'uso (sketch pag. 3): l'admin clicca un intervento dalla dashboard
+// (o dalla lista lavori) e vede la scheda completa: titolo, stato, condominio,
+// data, descrizione e foto. Se l'intervento è ancora "Presentato", la pagina
+// mostra i pulsanti NEGA e APPROVA che avviano la prima biforcazione del
+// workflow (Presentato -> Negato | Accettato).
 //
-// SICUREZZA: un condomino può vedere SOLO i propri interventi. Se l'id
-// nell'URL non gli appartiene (o non esiste), niente accesso: redirect
-// alla dashboard con messaggio. Questo evita che, cambiando l'id a mano
-// nell'URL, si possano sbirciare le segnalazioni di altri condomini.
+// Questa pagina è di sola lettura: le azioni (accetta/nega) sono operazioni
+// separate, gestite dai rispettivi Control (CAccettaIntervento / CNegaIntervento).
+// Qui ci limitiamo a caricare l'intervento e a passarlo alla View.
 
 class CDettaglioIntervento
 {
     public function mostra(): void
     {
-        Session::requireRole('condomino');
+        // 1. INPUT — l'id arriva dalla URL (?id=...), letto SOLO tramite la View.
+        $view         = new ViewGestioneIntervento();
+        $idIntervento = $view->getIdIntervento();
 
-        $view = new ViewDettaglioIntervento();
+        // 2. PERMESSI
+        Session::requireRole('amministratore');
 
-        // 1. INPUT (dalla View)
-        $id = $view->getIdIntervento();
-        if ($id <= 0) {
+        // 3. VALIDAZIONE
+        if ($idIntervento <= 0) {
             Session::setFlash('errore', 'Intervento non valido.');
-            header('Location: index.php?action=dashboardCondomino');
+            header('Location: index.php?action=dashboardAdmin');
             exit;
         }
 
-        $pm = PersistentManager::getInstance();
-
-        // 2. CARICO l'intervento
-        $intervento = $pm->load(Intervento::class, $id);
+        // 4. FOUNDATION — carico l'intervento per id.
+        $pm         = PersistentManager::getInstance();
+        $intervento = $pm->load(Intervento::class, $idIntervento);
         if ($intervento === null) {
-            Session::setFlash('errore', 'Intervento non trovato.');
-            header('Location: index.php?action=dashboardCondomino');
+            Session::setFlash('errore', 'Intervento inesistente.');
+            header('Location: index.php?action=dashboardAdmin');
             exit;
         }
 
-        // 3. CONTROLLO DI PROPRIETA': dev'essere del condomino loggato
-        $segnalante = $intervento->getSegnalante();
-        if ($segnalante === null || $segnalante->getId() !== Session::getUserId()) {
-            Session::setFlash('errore', 'Non hai accesso a questa segnalazione.');
-            header('Location: index.php?action=dashboardCondomino');
-            exit;
-        }
+        // Per il form di APPROVA servono i fornitori selezionabili.
+        // Li passo alla View così, se lo stato è "Presentato", il template
+        // può mostrare la tendina di scelta del fornitore.
+        $fornitori = $pm->utente()->findAllFornitori();
 
-        // 4. CARICO note e foto tramite la Foundation
-        $note = $pm->nota()->findByIntervento($intervento);
-        $foto = $pm->foto()->findByIntervento($intervento);
-
-        // 5. PASSO ALLA VIEW
-        $view->mostra($intervento, $note, $foto);
+        // 5. OUTPUT
+        (new ViewGestioneIntervento())->mostra($intervento, $fornitori);
     }
 }
