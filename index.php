@@ -30,7 +30,7 @@ try {
 
         // ---- Dashboard ----
         case 'dashboardAdmin':
-            (new CDashboard())->admin();
+            (new CDashboardAdmin())->mostra();
             break;
         case 'dashboardFornitore':
             (new CDashboard())->fornitore();
