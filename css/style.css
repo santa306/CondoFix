@@ -206,3 +206,77 @@ body {
     border-color: var(--colore-bordo);
 }
 .btn-secondario:hover { background: #f3f6f8; }
+/* ============================================================ */
+/* BLOCCO C — DETTAGLIO INTERVENTO  (appendi in fondo a css/style.css) */
+/* ============================================================ */
+
+.link-indietro {
+    display: inline-block;
+    margin-bottom: 1rem;
+    color: var(--colore-primario);
+    text-decoration: none;
+    font-size: 0.9rem;
+}
+.link-indietro:hover { text-decoration: underline; }
+
+.dettaglio-testa {
+    display: flex;
+    align-items: center;
+    gap: 0.9rem;
+    margin-bottom: 1rem;
+}
+.dettaglio-testa h1 { margin: 0; color: var(--colore-primario); }
+
+/* Riquadri delle sezioni (dati, note, foto) */
+.riquadro {
+    background: #fff;
+    border: 1px solid var(--colore-bordo);
+    border-radius: var(--raggio);
+    padding: 1.1rem 1.25rem;
+    margin-bottom: 1rem;
+    box-shadow: 0 2px 8px rgba(31, 45, 54, 0.05);
+}
+.riquadro h2 { margin: 0 0 0.8rem; font-size: 1.1rem; color: var(--colore-testo); }
+.riquadro p  { margin: 0.4rem 0; }
+.descrizione-completa { margin-top: 0.8rem; line-height: 1.5; }
+
+.dettaglio-azioni { margin-bottom: 1rem; }
+
+.vuoto-inline { color: #8a99a4; font-style: italic; }
+
+/* Badge stato completato (gli altri due sono gia' nello snippet precedente) */
+.badge-completato { background: var(--verde-sfondo); color: var(--verde); border-color: #b6dfc4; }
+
+/* Lista note (storico) */
+.lista-note { list-style: none; margin: 0; padding: 0; }
+.nota {
+    display: flex;
+    flex-direction: column;
+    gap: 0.15rem;
+    padding: 0.6rem 0;
+    border-bottom: 1px solid #eef2f5;
+}
+.nota:last-child { border-bottom: none; }
+.nota-data { font-size: 0.78rem; color: #8a99a4; }
+.nota-testo { color: var(--colore-testo); }
+
+/* Galleria foto */
+.galleria-foto {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.7rem;
+}
+.foto-thumb {
+    display: block;
+    width: 120px;
+    height: 120px;
+    border-radius: 8px;
+    overflow: hidden;
+    border: 1px solid var(--colore-bordo);
+}
+.foto-thumb img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    display: block;
+}

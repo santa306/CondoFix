@@ -50,6 +50,9 @@ try {
         case 'dashboardFornitore':
             (new CDashboardFornitore())->mostra();
             break;
+        case 'dettaglioIntervento':
+            (new CDettaglioIntervento())->mostra();
+            break;
 
         case 'dashboardCondomino':
             (new CDashboard())->condomino();
@@ -69,7 +72,6 @@ try {
         case 'allegaFattura':
         case 'avviaIntervento':
         case 'completaIntervento':
-        case 'dettaglioIntervento':
         case 'aggiungiNota':
         case 'caricaFoto':
             http_response_code(501);
@@ -89,4 +91,6 @@ try {
     http_response_code(500);
     echo 'Si e\' verificato un errore: ' . htmlspecialchars($e->getMessage());
 }
+
+
 
