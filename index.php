@@ -20,6 +20,7 @@ require_once __DIR__ . '/bootstrap.php';
 //  composer.json e fare "composer dump-autoload": allora questi due foreach
 //  diventano superflui. Per ora il require esplicito e' il modo piu' robusto.)
 foreach (glob(__DIR__ . '/src/Control/*.php') as $file) { require_once $file; }
+require_once __DIR__ . '/src/View/ViewBase.php';
 foreach (glob(__DIR__ . '/src/View/*.php')    as $file) { require_once $file; }
 
 // --- 2. AZIONE -------------------------------------------------------
@@ -53,6 +54,9 @@ try {
         case 'dettaglioIntervento':
             (new CDettaglioIntervento())->mostra();
             break;
+        case 'avviaIntervento':
+            (new CAvviaIntervento())->esegui();
+            break;
 
         case 'dashboardCondomino':
             (new CDashboard())->condomino();
@@ -70,7 +74,6 @@ try {
         case 'presentaIntervento':
         case 'accettaIntervento':
         case 'allegaFattura':
-        case 'avviaIntervento':
         case 'completaIntervento':
         case 'aggiungiNota':
         case 'caricaFoto':
@@ -91,6 +94,9 @@ try {
     http_response_code(500);
     echo 'Si e\' verificato un errore: ' . htmlspecialchars($e->getMessage());
 }
+
+
+
 
 
 
