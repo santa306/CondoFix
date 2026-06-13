@@ -57,6 +57,9 @@ try {
         case 'avviaIntervento':
             (new CAvviaIntervento())->esegui();
             break;
+        case 'completaIntervento':
+            (new CCompletaIntervento())->esegui();
+            break;
 
         case 'dashboardCondomino':
             (new CDashboard())->condomino();
@@ -74,7 +77,6 @@ try {
         case 'presentaIntervento':
         case 'accettaIntervento':
         case 'allegaFattura':
-        case 'completaIntervento':
         case 'aggiungiNota':
         case 'caricaFoto':
             http_response_code(501);
@@ -94,6 +96,8 @@ try {
     http_response_code(500);
     echo 'Si e\' verificato un errore: ' . htmlspecialchars($e->getMessage());
 }
+
+
 
 
 
