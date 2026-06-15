@@ -60,6 +60,9 @@ try {
         case 'completaIntervento':
             (new CCompletaIntervento())->esegui();
             break;
+        case 'aggiungiNota':
+            (new CAggiungiNota())->esegui();
+            break;
 
         case 'dashboardCondomino':
             (new CDashboard())->condomino();
@@ -77,7 +80,6 @@ try {
         case 'presentaIntervento':
         case 'accettaIntervento':
         case 'allegaFattura':
-        case 'aggiungiNota':
         case 'caricaFoto':
             http_response_code(501);
             echo 'Funzione non ancora implementata: ' . htmlspecialchars($action);
@@ -96,6 +98,8 @@ try {
     http_response_code(500);
     echo 'Si e\' verificato un errore: ' . htmlspecialchars($e->getMessage());
 }
+
+
 
 
 

@@ -100,9 +100,15 @@
                 </ul>
             {/if}
 
-            {* PUNTO DI AGGANCIO — verticale 5 (aggiungiNota):
-               qui andra' il form per inserire una nuova nota operativa. *}
-        </section>
+{* --- Form aggiungi nota (verticale 5) --- *}
+{if $tipoStato == 'accettato' || $tipoStato == 'in_corso'}
+    <form method="post" action="index.php?action=aggiungiNota" class="form-nota">
+        <input type="hidden" name="id" value="{$intervento->getId()}">
+        <textarea name="testo" rows="2"
+                  placeholder="Aggiungi una nota operativa..." required></textarea>
+        <button type="submit" class="btn btn-primario">Aggiungi nota</button>
+    </form>
+{/if}
 
         {* --- Galleria foto --- *}
         <section class="riquadro">
@@ -129,3 +135,4 @@
 
 </body>
 </html>
+

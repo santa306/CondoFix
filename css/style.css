@@ -280,3 +280,28 @@ body {
     object-fit: cover;
     display: block;
 }
+/* ============================================================ */
+/* BLOCCO C — FORM NOTA  (appendi in fondo a css/style.css) */
+/* ============================================================ */
+
+.form-nota {
+    margin-top: 1rem;
+    display: flex;
+    flex-direction: column;
+    gap: 0.6rem;
+}
+.form-nota textarea {
+    width: 100%;
+    box-sizing: border-box;
+    padding: 0.6rem 0.75rem;
+    border: 1px solid var(--colore-bordo);
+    border-radius: 8px;
+    font-family: inherit;
+    font-size: 0.95rem;
+    resize: vertical;
+}
+.form-nota textarea:focus {
+    outline: none;
+    border-color: var(--colore-primario);
+}
+.form-nota button { align-self: flex-start; }
