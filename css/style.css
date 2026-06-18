@@ -305,3 +305,24 @@ body {
     border-color: var(--colore-primario);
 }
 .form-nota button { align-self: flex-start; }
+/* ============================================================ */
+/* BLOCCO C — FORM FOTO  (appendi in fondo a css/style.css) */
+/* ============================================================ */
+
+.form-foto {
+    margin-top: 1rem;
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 0.6rem;
+}
+.form-foto input[type="file"] {
+    flex: 1 1 auto;
+    min-width: 0;
+    padding: 0.4rem;
+    border: 1px solid var(--colore-bordo);
+    border-radius: 8px;
+    background: #fff;
+    font-family: inherit;
+    font-size: 0.9rem;
+}

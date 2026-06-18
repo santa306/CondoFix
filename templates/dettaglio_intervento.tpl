@@ -127,9 +127,15 @@
                 </div>
             {/if}
 
-            {* PUNTO DI AGGANCIO — verticale 6 (caricaFoto):
-               qui andra' il form di upload (enctype multipart/form-data). *}
-        </section>
+{* --- Form carica foto (verticale 6) --- *}
+{if $tipoStato == 'accettato' || $tipoStato == 'in_corso'}
+    <form method="post" action="index.php?action=caricaFoto"
+          enctype="multipart/form-data" class="form-foto">
+        <input type="hidden" name="id" value="{$intervento->getId()}">
+        <input type="file" name="foto" accept="image/*" required>
+        <button type="submit" class="btn btn-primario">Carica foto</button>
+    </form>
+{/if}
 
     </main>
 
