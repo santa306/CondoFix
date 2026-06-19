@@ -9,6 +9,7 @@ require_once __DIR__ . '/bootstrap.php';
 
 // Le classi Control e View non hanno namespace: le includo a mano.
 foreach (glob(__DIR__ . '/src/Control/*.php') as $file) { require_once $file; }
+require_once __DIR__ . '/src/View/ViewBase.php';
 foreach (glob(__DIR__ . '/src/View/*.php')    as $file) { require_once $file; }
 
 // --- 2. AZIONE -------------------------------------------------------
@@ -33,7 +34,22 @@ try {
             (new CDashboard())->admin();
             break;
         case 'dashboardFornitore':
-            (new CDashboard())->fornitore();
+            (new CDashboardFornitore())->mostra();
+            break;
+        case 'dettaglioInterventoFornitore':
+            (new CDettaglioInterventoFornitore())->mostra();
+            break;
+        case 'avviaIntervento':
+            (new CAvviaIntervento())->esegui();
+            break;
+        case 'completaIntervento':
+            (new CCompletaIntervento())->esegui();
+            break;
+        case 'aggiungiNota':
+            (new CAggiungiNota())->esegui();
+            break;
+        case 'caricaFoto':
+            (new CCaricaFoto())->esegui();
             break;
         case 'dashboardCondomino':
             (new CDashboardCondomino())->mostra();
@@ -68,10 +84,6 @@ try {
         // ---- Azioni ancora DA IMPLEMENTARE ----
         case 'accettaIntervento':
         case 'allegaFattura':
-        case 'avviaIntervento':
-        case 'completaIntervento':
-        case 'aggiungiNota':
-        case 'caricaFoto':
             http_response_code(501);
             echo 'Funzione non ancora implementata: ' . htmlspecialchars($action);
             break;
@@ -86,3 +98,7 @@ try {
     http_response_code(500);
     echo 'Si e\' verificato un errore: ' . htmlspecialchars($e->getMessage());
 }
+
+
+
+
