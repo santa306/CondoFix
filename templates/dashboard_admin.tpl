@@ -86,7 +86,7 @@
             {if $recenti}
                 {foreach $recenti as $i}
                     <a class="riga-lavoro"
-                       href="index.php?action=dettaglioIntervento&id={$i->getId()}">
+                       href="index.php?action=dettaglioInterventoAdmin&id={$i->getId()}">
                         <div class="riga-titolo">{$i->getTitolo()|escape}</div>
                         <div class="riga-meta">
                             {if $i->getCondominio()}
