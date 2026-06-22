@@ -172,11 +172,11 @@ class FIntervento extends FBase
     public function cercaAttiviByFornitore(Fornitore $fornitore, string $cerca): array
     {
         return $this->em->createQuery('
-            SELECT i FROM Intervento i JOIN i.stato s
+            SELECT i FROM Intervento i JOIN i.stato s LEFT JOIN i.condominio c
             WHERE s.fornitore = :fornitore
             AND (s INSTANCE OF ' . Accettato::class . '
                  OR s INSTANCE OF ' . InCorso::class . ')
-            AND LOWER(i.titolo) LIKE :cerca
+            AND (LOWER(i.titolo) LIKE :cerca OR LOWER(c.nome) LIKE :cerca)
             ORDER BY i.dataCreazione DESC
         ')
         ->setParameter('fornitore', $fornitore)
@@ -191,9 +191,9 @@ class FIntervento extends FBase
     public function cercaBySegnalante(Condomino $condomino, string $cerca): array
     {
         return $this->em->createQuery('
-            SELECT i FROM Intervento i
+            SELECT i FROM Intervento i LEFT JOIN i.condominio c
             WHERE i.segnalante = :segnalante
-            AND LOWER(i.titolo) LIKE :cerca
+            AND (LOWER(i.titolo) LIKE :cerca OR LOWER(c.nome) LIKE :cerca)
             ORDER BY i.dataCreazione DESC
         ')
         ->setParameter('segnalante', $condomino)
@@ -208,8 +208,8 @@ class FIntervento extends FBase
     public function cercaTutti(string $cerca): array
     {
         return $this->em->createQuery('
-            SELECT i FROM Intervento i
-            WHERE LOWER(i.titolo) LIKE :cerca
+            SELECT i FROM Intervento i LEFT JOIN i.condominio c
+            WHERE LOWER(i.titolo) LIKE :cerca OR LOWER(c.nome) LIKE :cerca
             ORDER BY i.dataCreazione DESC
         ')
         ->setParameter('cerca', '%' . mb_strtolower($cerca) . '%')
@@ -225,9 +225,9 @@ class FIntervento extends FBase
     public function cercaByCondominio(Condominio $condominio, string $cerca): array
     {
         return $this->em->createQuery('
-            SELECT i FROM Intervento i
+            SELECT i FROM Intervento i LEFT JOIN i.condominio c
             WHERE i.condominio = :condominio
-            AND LOWER(i.titolo) LIKE :cerca
+            AND (LOWER(i.titolo) LIKE :cerca OR LOWER(c.nome) LIKE :cerca)
             ORDER BY i.dataCreazione DESC
         ')
         ->setParameter('condominio', $condominio)
