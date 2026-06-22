@@ -52,6 +52,9 @@ class ViewDashboardCondomino extends ViewBase
         // Messaggio flash di successo (es. dopo aver creato una segnalazione)
         $this->assign('successo', Session::getFlash('successo'));
 
+        // Banner di esito (riepilogo azione: crea segnalazione).
+        $this->assign('banner', Session::getBanner());
+
         // Disegna il template
         $this->render('dashboard_condomino.tpl');
     }

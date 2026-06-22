@@ -12,20 +12,7 @@
 <body>
 <div class="layout-app">
 
-    <aside class="sidebar">
-        <div class="sidebar-logo"><img src="img/logo.jpeg" alt="CondoFix"><span>CondoFix</span></div>
-        <div class="sidebar-utente">
-            <div class="avatar"></div>
-            <div>
-                <div class="nome">{$nomeCompleto|escape}</div>
-                <div class="ruolo">Lavoratore</div>
-            </div>
-        </div>
-        <nav class="sidebar-menu">
-            <a class="voce attiva" href="index.php?action=dashboardFornitore">I miei lavori</a>
-            <a class="voce logout" href="index.php?action=logout">Esci</a>
-        </nav>
-    </aside>
+    {include file="_sidebar.tpl"}
 
     <main class="contenuto">
 

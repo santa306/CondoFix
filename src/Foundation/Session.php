@@ -153,6 +153,41 @@ class Session
     }
 
     // -------------------------------------------------------
+    // BANNER DI ESITO (modale di conferma con riepilogo dati)
+    // -------------------------------------------------------
+
+    /**
+     * Imposta un banner di esito da mostrare sulla pagina successiva.
+     * A differenza del flash semplice (solo testo), il banner porta un array
+     * di dati strutturati: tipo grafico (successo/errore), titolo, e righe di
+     * riepilogo. Sparisce dopo la prima lettura, come il flash.
+     *
+     * Uso:
+     *   Session::setBanner([
+     *       'tipo'    => 'successo',          // 'successo' (verde) | 'errore' (rosso)
+     *       'titolo'  => 'Intervento creato',
+     *       'righe'   => ['Titolo' => '...', 'Priorità' => '...'],
+     *   ]);
+     */
+    public static function setBanner(array $dati): void
+    {
+        self::start();
+        $_SESSION['_banner'] = $dati;
+    }
+
+    /**
+     * Legge e rimuove il banner di esito.
+     * Restituisce null se non esiste.
+     */
+    public static function getBanner(): ?array
+    {
+        self::start();
+        $banner = $_SESSION['_banner'] ?? null;
+        unset($_SESSION['_banner']);
+        return $banner;
+    }
+
+    // -------------------------------------------------------
     // PROTEZIONE DELLE PAGINE
     // -------------------------------------------------------
 
@@ -218,13 +253,15 @@ class Session
      *
      * Uso: Session::login($utente->getId(), 'amministratore');
      */
-    public static function login(int $userId, string $ruolo): void
+    public static function login(int $userId, string $ruolo, string $nome = '', string $cognome = ''): void
     {
         self::start();
         // Rigenera l'ID di sessione per prevenire session fixation
         session_regenerate_id(true);
         $_SESSION['userId']  = $userId;
         $_SESSION['ruolo']   = $ruolo;
+        $_SESSION['nome']    = $nome;
+        $_SESSION['cognome'] = $cognome;
         $_SESSION['loginIP'] = $_SERVER['REMOTE_ADDR'];
     }
 
@@ -259,6 +296,32 @@ class Session
     public static function getRuolo(): ?string
     {
         return self::get('ruolo');
+    }
+
+    /**
+     * Nome completo dell'utente loggato (per la sidebar/saluti).
+     * Uso: $nome = Session::getNomeCompleto();
+     */
+    public static function getNomeCompleto(): string
+    {
+        $nome    = (string) self::get('nome');
+        $cognome = (string) self::get('cognome');
+        $completo = trim($nome . ' ' . $cognome);
+        return $completo !== '' ? $completo : 'Utente';
+    }
+
+    /**
+     * Etichetta leggibile del ruolo (per la sidebar).
+     * Uso: $label = Session::getRuoloLabel();  // "Amministratore" / "Condomino" / "Lavoratore"
+     */
+    public static function getRuoloLabel(): string
+    {
+        switch (self::get('ruolo')) {
+            case 'amministratore': return 'Amministratore';
+            case 'condomino':      return 'Condomino';
+            case 'fornitore':      return 'Lavoratore';
+            default:               return '';
+        }
     }
 
     /**

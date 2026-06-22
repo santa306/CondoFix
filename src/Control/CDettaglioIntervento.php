@@ -38,9 +38,19 @@ class CDettaglioIntervento
             exit;
         }
 
-        // 3. CONTROLLO DI PROPRIETA': dev'essere del condomino loggato
-        $segnalante = $intervento->getSegnalante();
-        if ($segnalante === null || $segnalante->getId() !== Session::getUserId()) {
+        // 3. CONTROLLO DI ACCESSO: il condomino può vedere i lavori del PROPRIO
+        //    condominio (coerente con la dashboard, che mostra tutti i lavori del
+        //    palazzo: quelli segnalati da lui, da altri condomini, o creati
+        //    dall'amministratore — questi ultimi non hanno un segnalante).
+        $condomino    = $pm->load(Condomino::class, Session::getUserId());
+        $mioCondominio = $condomino?->getCondominio();
+        $condInterv    = $intervento->getCondominio();
+
+        $stessoCondominio = $mioCondominio !== null
+            && $condInterv !== null
+            && $condInterv->getId() === $mioCondominio->getId();
+
+        if (!$stessoCondominio) {
             Session::setFlash('errore', 'Non hai accesso a questa segnalazione.');
             header('Location: index.php?action=dashboardCondomino');
             exit;

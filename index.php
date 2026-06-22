@@ -41,6 +41,20 @@ try {
         case 'creaIntervento':
             (new CCreaIntervento())->esegui();
             break;
+        // ---- Amministratore: lista lavoratori (fornitori) ----
+        case 'listaLavoratori':
+            (new CListaLavoratori())->mostra();
+            break;
+        // ---- Amministratore: lista condomini + nuovo condominio ----
+        case 'listaCondomini':
+            (new CListaCondomini())->mostra();
+            break;
+        case 'formCreaCondominio':
+            (new CListaCondomini())->mostraForm();
+            break;
+        case 'creaCondominio':
+            (new CListaCondomini())->esegui();
+            break;
         case 'dashboardFornitore':
             (new CDashboardFornitore())->mostra();
             break;

@@ -107,7 +107,20 @@ class CCreaIntervento
         $pm->store($intervento);
 
         // 6. ESITO
-        Session::setFlash('successo', 'Lavoro creato e assegnato al fornitore.');
+        $nomeFornitore = trim($fornitore->getNome() . ' ' . $fornitore->getCognome());
+        Session::setBanner([
+            'tipo'        => 'successo',
+            'titolo'      => 'Intervento creato',
+            'sottotitolo' => 'Il lavoro è stato creato e assegnato al fornitore.',
+            'righe'       => [
+                'Titolo'          => $titolo,
+                'Descrizione'     => $descrizione,
+                'Categoria'       => $fornitore->getCategoria() ? $fornitore->getCategoria()->getNome() : '—',
+                'Priorità'        => ucfirst($priorita),
+                'Condominio'      => $condominio->getNome(),
+                'E-mail lavoratore' => $fornitore->getEmail(),
+            ],
+        ]);
         header('Location: index.php?action=dashboardAdmin');
         exit;
     }

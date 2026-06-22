@@ -12,14 +12,7 @@
 <body>
 <div class="layout-app">
 
-    <aside class="sidebar">
-        <div class="sidebar-logo"><img src="img/logo.jpeg" alt="CondoFix"><span>CondoFix</span></div>
-        <nav class="sidebar-menu">
-            <a class="voce" href="index.php?action=dashboardCondomino">Dashboard</a>
-            <a class="voce" href="index.php?action=formPresentaIntervento">Nuova segnalazione</a>
-            <a class="voce logout" href="index.php?action=logout">Esci</a>
-        </nav>
-    </aside>
+    {include file="_sidebar.tpl"}
 
     <main class="contenuto">
 
@@ -73,7 +66,7 @@
         </section>
 
         <section class="scheda">
-            <h2>Storico</h2>
+            <h2>Storico note</h2>
             {if $note|@count == 0}
                 <p class="vuoto-inline">Nessuna nota presente.</p>
             {else}
@@ -103,10 +96,14 @@
             {/if}
         </section>
 
-        {if $tipo == 'completato' && $stato->getFattura()}
+        {if $tipo == 'completato'}
         <section class="scheda">
             <h2>Fattura</h2>
-            <a href="{$stato->getFattura()|escape}" target="_blank" class="btn-secondario">Apri fattura</a>
+            {if $stato->getFattura()}
+                <a href="{$stato->getFattura()|escape}" target="_blank" class="btn-secondario">Apri fattura</a>
+            {else}
+                <p class="vuoto-inline">Fattura mancante</p>
+            {/if}
         </section>
         {/if}
 

@@ -92,11 +92,26 @@ class CPresentaIntervento
             exit;
         }
 
+        // Nota automatica di avanzamento (timestamp automatico), così lo
+        // storico parte dalla creazione, come per le azioni dell'admin/fornitore.
+        $nota = new Nota();
+        $nota->setTesto('Segnalazione inviata.');
+        $intervento->addNota($nota);
+
         // 6. SALVO TUTTO (intervento + stato + foto in cascade)
         $pm->store($intervento);
 
         // 7. ESITO
-        Session::setFlash('successo', 'Segnalazione inviata con successo.');
+        Session::setBanner([
+            'tipo'        => 'successo',
+            'titolo'      => 'Segnalazione inviata',
+            'sottotitolo' => 'La tua segnalazione è stata inviata con successo.',
+            'righe'       => [
+                'Titolo'      => $titolo,
+                'Descrizione' => $descrizione,
+                'Condominio'  => $condominio->getNome(),
+            ],
+        ]);
         header('Location: index.php?action=dashboardCondomino');
         exit;
     }

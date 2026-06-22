@@ -14,23 +14,7 @@
 <div class="layout-app">
 
     {* ---------- SIDEBAR ---------- *}
-    <aside class="sidebar">
-        <div class="sidebar-logo"><img src="img/logo.jpeg" alt="CondoFix"><span>CondoFix</span></div>
-
-        <div class="sidebar-utente">
-            <div class="avatar"></div>
-            <div>
-                <div class="nome">{$nomeCompleto|escape}</div>
-                <div class="ruolo">Amministratore</div>
-            </div>
-        </div>
-
-        <nav class="sidebar-menu">
-            <a class="voce attiva" href="index.php?action=dashboardAdmin">Dashboard</a>
-            <a class="voce" href="index.php?action=formCreaIntervento">Nuovo lavoro</a>
-            <a class="voce logout" href="index.php?action=logout">Esci</a>
-        </nav>
-    </aside>
+    {include file="_sidebar.tpl"}
 
     {* ---------- CONTENUTO ---------- *}
     <main class="contenuto">
@@ -42,8 +26,13 @@
             <div class="avviso avviso-errore">{$errore|escape}</div>
         {/if}
 
-        <h1 class="titolo-pagina">Dashboard</h1>
-        <p class="benvenuto">Benvenuto, {$nomeCompleto|escape}</p>
+        <div class="intestazione">
+            <div>
+                <h1 class="titolo-pagina">Dashboard</h1>
+                <p class="benvenuto">Benvenuto, {$nomeCompleto|escape}</p>
+            </div>
+            <a href="index.php?action=formCreaIntervento" class="btn-primario">+ Nuovo lavoro</a>
+        </div>
 
         {* ---------- CARD CONTATORI ---------- *}
         <section class="griglia-card">
@@ -57,7 +46,7 @@
             </a>
             <a class="card-contatore" href="index.php?action=dashboardAdmin&stato=accettato">
                 <div class="numero">{$contatori.da_fare}</div>
-                <div class="etichetta">Da fare</div>
+                <div class="etichetta">Accettato</div>
             </a>
             <a class="card-contatore" href="index.php?action=dashboardAdmin&stato=in_corso">
                 <div class="numero">{$contatori.in_corso}</div>
@@ -67,14 +56,6 @@
                 <div class="numero">{$contatori.completati}</div>
                 <div class="etichetta">Completati</div>
             </a>
-            <div class="card-contatore">
-                <div class="numero">{$contatori.condomini}</div>
-                <div class="etichetta">Condomini</div>
-            </div>
-            <div class="card-contatore">
-                <div class="numero">{$contatori.lavoratori}</div>
-                <div class="etichetta">Lavoratori</div>
-            </div>
         </section>
 
         {* ---------- LAVORI RECENTI ---------- *}
@@ -109,6 +90,8 @@
                 <p class="vuoto">Nessun lavoro presente.</p>
             {/if}
         </section>
+
+        {include file="_banner_esito.tpl"}
 
     </main>
 </div>

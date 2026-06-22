@@ -13,17 +13,7 @@
 <div class="layout-app">
 
     {* ===== SIDEBAR ===== *}
-    <aside class="sidebar">
-        <div class="sidebar-logo"><img src="img/logo.jpeg" alt="CondoFix"><span>CondoFix</span></div>
-        <nav class="sidebar-menu">
-            <a href="index.php?action=dashboardCondomino" class="voce">
-                Dashboard
-            </a>
-        </nav>
-        <a href="index.php?action=logout" class="voce logout">
-            Esci
-        </a>
-    </aside>
+    {include file="_sidebar.tpl"}
 
     {* ===== CONTENUTO ===== *}
     <main class="contenuto">

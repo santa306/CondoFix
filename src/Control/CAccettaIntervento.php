@@ -84,7 +84,20 @@ class CAccettaIntervento
         $pm->update();
 
         // 6. ESITO
-        Session::setFlash('successo', 'Intervento accettato e assegnato al fornitore.');
+        $nomeFornitore = trim($fornitore->getNome() . ' ' . $fornitore->getCognome());
+        Session::setBanner([
+            'tipo'        => 'successo',
+            'titolo'      => 'Intervento creato',
+            'sottotitolo' => 'La segnalazione è stata approvata e assegnata al fornitore.',
+            'righe'       => [
+                'Titolo'            => $intervento->getTitolo(),
+                'Descrizione'       => $intervento->getDescrizione(),
+                'Categoria'         => $fornitore->getCategoria() ? $fornitore->getCategoria()->getNome() : '—',
+                'Priorità'          => ucfirst($priorita),
+                'Condominio'        => $intervento->getCondominio() ? $intervento->getCondominio()->getNome() : '—',
+                'E-mail lavoratore' => $fornitore->getEmail(),
+            ],
+        ]);
         header('Location: index.php?action=dashboardAdmin');
         exit;
     }

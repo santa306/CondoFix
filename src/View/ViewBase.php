@@ -53,6 +53,15 @@ abstract class ViewBase
      */
     protected function render(string $template): void
     {
+        // Variabili della sidebar comuni a tutte le pagine: lette dalla Session,
+        // cosi' la barra laterale e' SEMPRE identica e completa (nome, ruolo,
+        // voci di menu) su ogni pagina, senza che ogni View le debba passare.
+        $this->smarty->assign('sidebarNome',  Session::getNomeCompleto());
+        $this->smarty->assign('sidebarRuolo', Session::getRuolo());
+        $this->smarty->assign('sidebarRuoloLabel', Session::getRuoloLabel());
+        // Azione corrente: serve al partial per evidenziare la voce attiva.
+        $this->smarty->assign('sidebarAzione', $_GET['action'] ?? '');
+
         $this->smarty->display($template);
     }
 

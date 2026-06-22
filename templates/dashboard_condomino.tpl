@@ -12,21 +12,7 @@
 <body>
 <div class="layout-app">
 
-    <aside class="sidebar">
-        <div class="sidebar-logo"><img src="img/logo.jpeg" alt="CondoFix"><span>CondoFix</span></div>
-        <div class="sidebar-utente">
-            <div class="avatar"></div>
-            <div>
-                <div class="nome">{$nome|escape} {$cognome|escape}</div>
-                <div class="ruolo">Condomino</div>
-            </div>
-        </div>
-        <nav class="sidebar-menu">
-            <a class="voce attiva" href="index.php?action=dashboardCondomino">Dashboard</a>
-            <a class="voce" href="index.php?action=formPresentaIntervento">Nuova segnalazione</a>
-            <a class="voce logout" href="index.php?action=logout">Esci</a>
-        </nav>
-    </aside>
+    {include file="_sidebar.tpl"}
 
     <main class="contenuto">
 
@@ -43,7 +29,7 @@
         <section class="griglia-card">
             <a class="card-contatore" href="index.php?action=dashboardCondomino"><div class="numero">{$contatori.totali}</div><div class="etichetta">Lavori totali</div></a>
             <a class="card-contatore" href="index.php?action=dashboardCondomino&stato=presentato"><div class="numero">{$contatori.presentato}</div><div class="etichetta">Presentati</div></a>
-            <a class="card-contatore" href="index.php?action=dashboardCondomino&stato=accettato"><div class="numero">{$contatori.accettato}</div><div class="etichetta">Da fare</div></a>
+            <a class="card-contatore" href="index.php?action=dashboardCondomino&stato=accettato"><div class="numero">{$contatori.accettato}</div><div class="etichetta">Accettato</div></a>
             <a class="card-contatore" href="index.php?action=dashboardCondomino&stato=in_corso"><div class="numero">{$contatori.in_corso}</div><div class="etichetta">In corso</div></a>
             <a class="card-contatore" href="index.php?action=dashboardCondomino&stato=completato"><div class="numero">{$contatori.completato}</div><div class="etichetta">Completati</div></a>
             <a class="card-contatore" href="index.php?action=dashboardCondomino&stato=negato"><div class="numero">{$contatori.negato}</div><div class="etichetta">Negati</div></a>
@@ -73,6 +59,8 @@
                 {/foreach}
             {/if}
         </section>
+
+        {include file="_banner_esito.tpl"}
 
     </main>
 </div>

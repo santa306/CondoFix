@@ -12,13 +12,7 @@
 <body>
 <div class="layout-app">
 
-    <aside class="sidebar">
-        <div class="sidebar-logo"><img src="img/logo.jpeg" alt="CondoFix"><span>CondoFix</span></div>
-        <nav class="sidebar-menu">
-            <a class="voce" href="index.php?action=dashboardFornitore">I miei lavori</a>
-            <a class="voce logout" href="index.php?action=logout">Esci</a>
-        </nav>
-    </aside>
+    {include file="_sidebar.tpl"}
 
     <main class="contenuto">
 
@@ -71,11 +65,11 @@
             {if $numeroNote == 0}
                 <p class="vuoto-inline">Nessuna nota operativa per ora.</p>
             {else}
-                <ul class="lista-note">
+                <ul class="timeline">
                     {foreach $note as $n}
-                        <li class="nota">
-                            <span class="nota-data">{$n->getTimestamp()->format('d/m/Y H:i')}</span>
-                            <span class="nota-testo">{$n->getTesto()|escape}</span>
+                        <li class="timeline-punto">
+                            <p class="timeline-testo">{$n->getTesto()|escape}</p>
+                            <span class="timeline-data">{$n->getTimestamp()->format('d/m/Y H:i')}</span>
                         </li>
                     {/foreach}
                 </ul>

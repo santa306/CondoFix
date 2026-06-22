@@ -52,6 +52,9 @@ class ViewDashboardAdmin extends ViewBase
         $this->assign('successo', Session::getFlash('successo'));
         $this->assign('errore',   Session::getFlash('errore'));
 
+        // Banner di esito (riepilogo azione: crea lavoro / accetta / nega).
+        $this->assign('banner', Session::getBanner());
+
         $this->render('dashboard_admin.tpl');
     }
 }

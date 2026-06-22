@@ -88,7 +88,7 @@ class CLogin
         // 5. APRO LA SESSIONE e reindirizzo
         //    Session::login() rigenera l'id di sessione (anti session-fixation)
         //    e salva userId + ruolo + IP.
-        Session::login($utente->getId(), $ruolo);
+        Session::login($utente->getId(), $ruolo, $utente->getNome(), $utente->getCognome());
         Session::setFlash('successo', 'Benvenuto, ' . $utente->getNome() . '!');
 
         // Reindirizzo alla dashboard giusta. Il redirect lo fa il Control

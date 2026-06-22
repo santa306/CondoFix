@@ -54,7 +54,20 @@ class CNegaIntervento
         $pm->update();
 
         // 5. ESITO
-        Session::setFlash('successo', 'Intervento rifiutato.');
+        $righe = [
+            'Titolo'      => $intervento->getTitolo(),
+            'Descrizione' => $intervento->getDescrizione(),
+            'Condominio'  => $intervento->getCondominio() ? $intervento->getCondominio()->getNome() : '—',
+        ];
+        if (!empty(trim((string) $motivazione))) {
+            $righe['Motivazione'] = trim($motivazione);
+        }
+        Session::setBanner([
+            'tipo'        => 'errore',
+            'titolo'      => 'Intervento negato',
+            'sottotitolo' => 'La segnalazione è stata rifiutata.',
+            'righe'       => $righe,
+        ]);
         header('Location: index.php?action=dashboardAdmin');
         exit;
     }
