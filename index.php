@@ -18,6 +18,9 @@ try {
         case 'login':
             (new CLogin())->mostraForm();
             break;
+        case 'vetrina':
+            (new CVetrinaPubblica())->mostra();
+            break;
         case 'doLogin':                    // POST del form di login
             (new CLogin())->esegui();
             break;
@@ -28,6 +31,12 @@ try {
         // Blocco B: dashboard amministratore (ora collegata al Control vero)
         case 'dashboardAdmin':
             (new CDashboardAdmin())->mostra();
+            break;
+        case 'formCreaIntervento':
+            (new CCreaIntervento())->mostraForm();
+            break;
+        case 'creaIntervento':
+            (new CCreaIntervento())->esegui();
             break;
         case 'dashboardFornitore':
             (new CDashboardFornitore())->mostra();
@@ -94,6 +103,8 @@ try {
     http_response_code(500);
     echo 'Si e\' verificato un errore: ' . htmlspecialchars($e->getMessage());
 }
+
+
 
 
 

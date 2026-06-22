@@ -75,6 +75,12 @@ class CAccettaIntervento
         $accettato->setPriorita($priorita);
         $accettato->setFornitore($fornitore);
         $intervento->setStato($accettato);
+
+        // Nota automatica di avanzamento (con timestamp automatico).
+        $nota = new Nota();
+        $nota->setTesto('Lavoro accettato e assegnato al fornitore.');
+        $intervento->addNota($nota);
+
         $pm->update();
 
         // 6. ESITO

@@ -11,11 +11,11 @@
     <link rel="stylesheet" href="css/style.css">
 </head>
 <body>
-<div class="layout-admin">
+<div class="layout-app">
 
     {* ---------- SIDEBAR ---------- *}
     <aside class="sidebar">
-        <div class="sidebar-logo">CondoFix</div>
+        <div class="sidebar-logo"><img src="img/logo.jpeg" alt="CondoFix"><span>CondoFix</span></div>
 
         <div class="sidebar-utente">
             <div class="avatar"></div>
@@ -27,9 +27,6 @@
 
         <nav class="sidebar-menu">
             <a class="voce attiva" href="index.php?action=dashboardAdmin">Dashboard</a>
-            <a class="voce" href="index.php?action=listaCondomini">Condomini</a>
-            <a class="voce" href="index.php?action=listaFornitori">Lavoratori</a>
-            <a class="voce" href="index.php?action=listaLavori">Lavori</a>
             <a class="voce logout" href="index.php?action=logout">Esci</a>
         </nav>
     </aside>
@@ -49,26 +46,26 @@
 
         {* ---------- CARD CONTATORI ---------- *}
         <section class="griglia-card">
-            <div class="card-contatore">
+            <a class="card-contatore" href="index.php?action=dashboardAdmin">
                 <div class="numero">{$contatori.totali}</div>
                 <div class="etichetta">Lavori totali</div>
-            </div>
-            <div class="card-contatore">
+            </a>
+            <a class="card-contatore" href="index.php?action=dashboardAdmin&stato=presentato">
                 <div class="numero">{$contatori.presentati}</div>
                 <div class="etichetta">Presentati</div>
-            </div>
-            <div class="card-contatore">
+            </a>
+            <a class="card-contatore" href="index.php?action=dashboardAdmin&stato=accettato">
                 <div class="numero">{$contatori.da_fare}</div>
                 <div class="etichetta">Da fare</div>
-            </div>
-            <div class="card-contatore">
+            </a>
+            <a class="card-contatore" href="index.php?action=dashboardAdmin&stato=in_corso">
                 <div class="numero">{$contatori.in_corso}</div>
                 <div class="etichetta">In corso</div>
-            </div>
-            <div class="card-contatore">
+            </a>
+            <a class="card-contatore" href="index.php?action=dashboardAdmin&stato=completato">
                 <div class="numero">{$contatori.completati}</div>
                 <div class="etichetta">Completati</div>
-            </div>
+            </a>
             <div class="card-contatore">
                 <div class="numero">{$contatori.condomini}</div>
                 <div class="etichetta">Condomini</div>
@@ -80,8 +77,17 @@
         </section>
 
         {* ---------- LAVORI RECENTI ---------- *}
+        {* --- Barra di ricerca per titolo --- *}
+        <form class="barra-ricerca" method="get" action="index.php">
+            <input type="hidden" name="action" value="dashboardAdmin">
+            <input type="text" name="cerca" value="{$cerca|escape}" placeholder="Cerca un lavoro per nome...">
+            <button type="submit" class="btn-primario">Cerca</button>
+            {if $cerca != ''}<a class="ricerca-azzera" href="index.php?action=dashboardAdmin">Azzera</a>{/if}
+        </form>
+        {if $cerca != ''}<p class="ricerca-esito">Risultati per: <strong>{$cerca|escape}</strong></p>{/if}
+
         <section class="lavori-recenti">
-            <h2>Lavori recenti</h2>
+            <h2>Tutti i lavori</h2>
 
             {if $recenti}
                 {foreach $recenti as $i}
@@ -107,3 +113,4 @@
 </div>
 </body>
 </html>
+

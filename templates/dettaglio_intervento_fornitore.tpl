@@ -1,11 +1,6 @@
-{* templates/dettaglio_intervento.tpl *}
-{* Dettaglio di un singolo intervento (lato Fornitore).                     *}
-{* Riferimento UI: sketch_fornitore.pdf (stato, dati, storico note con      *}
-{* timestamp, galleria foto).                                               *}
-{*                                                                          *}
-{* Dati passati dalla View:                                                 *}
-{*   titolo, intervento, tipoStato, note, numeroNote, foto, numeroFoto,     *}
-{*   errore, successo.                                                      *}
+{* templates/dettaglio_intervento_fornitore.tpl *}
+{* Dettaglio lavoro (Fornitore) — layout unificato. *}
+{* Variabili: titolo, intervento, tipoStato, note, numeroNote, foto, numeroFoto, errore, successo. *}
 <!DOCTYPE html>
 <html lang="it">
 <head>
@@ -15,78 +10,64 @@
     <link rel="stylesheet" href="css/style.css">
 </head>
 <body>
+<div class="layout-app">
 
-    {* --- Barra superiore --- *}
-    <div class="barra-top">
-        <strong class="logo-piccolo">CondoFix</strong>
-        <a href="index.php?action=logout">Esci</a>
-    </div>
+    <aside class="sidebar">
+        <div class="sidebar-logo"><img src="img/logo.jpeg" alt="CondoFix"><span>CondoFix</span></div>
+        <nav class="sidebar-menu">
+            <a class="voce" href="index.php?action=dashboardFornitore">I miei lavori</a>
+            <a class="voce logout" href="index.php?action=logout">Esci</a>
+        </nav>
+    </aside>
 
     <main class="contenuto">
 
-        {* Link di ritorno alla lista *}
         <a class="link-indietro" href="index.php?action=dashboardFornitore">&larr; I miei lavori</a>
 
-        {* --- Messaggi flash --- *}
-        {if $errore}
-            <div class="avviso avviso-errore">{$errore|escape}</div>
-        {/if}
-        {if $successo}
-            <div class="avviso avviso-successo">{$successo|escape}</div>
-        {/if}
+        {if $errore}<div class="avviso avviso-errore">{$errore|escape}</div>{/if}
+        {if $successo}<div class="avviso avviso-successo">{$successo|escape}</div>{/if}
 
-        {* --- Intestazione: titolo + badge stato --- *}
         <div class="dettaglio-testa">
             <h1>{$intervento->getTitolo()|escape}</h1>
             {if $tipoStato == 'accettato'}
-                <span class="badge badge-dafare">Da fare</span>
+                <span class="badge badge-accettato">Da fare</span>
             {elseif $tipoStato == 'in_corso'}
-                <span class="badge badge-incorso">In corso</span>
+                <span class="badge badge-in_corso">In corso</span>
             {elseif $tipoStato == 'completato'}
                 <span class="badge badge-completato">Completato</span>
             {else}
-                <span class="badge">{$tipoStato|escape}</span>
+                <span class="badge badge-{$tipoStato|escape}">{$tipoStato|replace:'_':' '|escape}</span>
             {/if}
         </div>
 
-        {* --- Dati del lavoro --- *}
         <section class="riquadro">
             <p><strong>Condominio:</strong> {$intervento->getCondominio()->getNome()|escape}
                ({$intervento->getCondominio()->getIndirizzo()|escape},
                 {$intervento->getCondominio()->getCitta()|escape})</p>
-
             {if $intervento->getStato()->getPriorita()}
                 <p><strong>Priorità:</strong> {$intervento->getStato()->getPriorita()|escape}</p>
             {/if}
-
-            <p><strong>Data creazione:</strong>
-               {$intervento->getDataCreazione()->format('d/m/Y H:i')}</p>
-
-            <p class="descrizione-completa">
-                <strong>Descrizione</strong><br>
-                {$intervento->getDescrizione()|escape}
-            </p>
+            <p><strong>Data creazione:</strong> {$intervento->getDataCreazione()->format('d/m/Y H:i')}</p>
+            <p class="descrizione-completa"><strong>Descrizione</strong><br>
+               {$intervento->getDescrizione()|escape}</p>
         </section>
 
-        {* --- Azione coerente con lo stato --- *}
         <div class="dettaglio-azioni">
             {if $tipoStato == 'accettato'}
                 <form method="post" action="index.php?action=avviaIntervento" class="form-inline">
                     <input type="hidden" name="id" value="{$intervento->getId()}">
-                    <button type="submit" class="btn btn-primario">Inizia lavoro</button>
+                    <button type="submit" class="btn-primario">Inizia lavoro</button>
                 </form>
             {elseif $tipoStato == 'in_corso'}
                 <form method="post" action="index.php?action=completaIntervento" class="form-inline">
                     <input type="hidden" name="id" value="{$intervento->getId()}">
-                    <button type="submit" class="btn btn-verde">Completa lavoro</button>
+                    <button type="submit" class="btn-verde">Completa lavoro</button>
                 </form>
             {/if}
         </div>
 
-        {* --- Storico note operative --- *}
         <section class="riquadro">
             <h2>Storico note ({$numeroNote})</h2>
-
             {if $numeroNote == 0}
                 <p class="vuoto-inline">Nessuna nota operativa per ora.</p>
             {else}
@@ -99,46 +80,40 @@
                     {/foreach}
                 </ul>
             {/if}
+            {if $tipoStato == 'accettato' || $tipoStato == 'in_corso'}
+                <form method="post" action="index.php?action=aggiungiNota" class="form-nota">
+                    <input type="hidden" name="id" value="{$intervento->getId()}">
+                    <textarea name="testo" rows="2" placeholder="Aggiungi una nota operativa..." required></textarea>
+                    <button type="submit" class="btn-primario">Aggiungi nota</button>
+                </form>
+            {/if}
+        </section>
 
-{* --- Form aggiungi nota (verticale 5) --- *}
-{if $tipoStato == 'accettato' || $tipoStato == 'in_corso'}
-    <form method="post" action="index.php?action=aggiungiNota" class="form-nota">
-        <input type="hidden" name="id" value="{$intervento->getId()}">
-        <textarea name="testo" rows="2"
-                  placeholder="Aggiungi una nota operativa..." required></textarea>
-        <button type="submit" class="btn btn-primario">Aggiungi nota</button>
-    </form>
-{/if}
-
-        {* --- Galleria foto --- *}
         <section class="riquadro">
             <h2>Foto lavoro ({$numeroFoto})</h2>
-
             {if $numeroFoto == 0}
                 <p class="vuoto-inline">Nessuna foto allegata.</p>
             {else}
                 <div class="galleria-foto">
                     {foreach $foto as $f}
                         <a href="{$f->getPercorso()|escape}" target="_blank" class="foto-thumb">
-                            <img src="{$f->getPercorso()|escape}"
-                                 alt="{$f->getNomeOriginale()|escape}">
+                            <img src="{$f->getPercorso()|escape}" alt="{$f->getNomeOriginale()|escape}">
                         </a>
                     {/foreach}
                 </div>
             {/if}
-
-{* --- Form carica foto (verticale 6) --- *}
-{if $tipoStato == 'accettato' || $tipoStato == 'in_corso'}
-    <form method="post" action="index.php?action=caricaFoto"
-          enctype="multipart/form-data" class="form-foto">
-        <input type="hidden" name="id" value="{$intervento->getId()}">
-        <input type="file" name="foto" accept="image/*" required>
-        <button type="submit" class="btn btn-primario">Carica foto</button>
-    </form>
-{/if}
+            {if $tipoStato == 'accettato' || $tipoStato == 'in_corso'}
+                <form method="post" action="index.php?action=caricaFoto"
+                      enctype="multipart/form-data" class="form-foto">
+                    <input type="hidden" name="id" value="{$intervento->getId()}">
+                    <input type="file" name="foto" accept="image/*" required>
+                    <button type="submit" class="btn-primario">Carica foto</button>
+                </form>
+            {/if}
+        </section>
 
     </main>
-
+</div>
 </body>
 </html>
 

@@ -45,6 +45,12 @@ class CNegaIntervento
             $negato->setMotivazione(trim($motivazione));
         }
         $intervento->setStato($negato);
+
+        // Nota automatica di avanzamento (con timestamp automatico).
+        $nota = new Nota();
+        $nota->setTesto('Segnalazione rifiutata.');
+        $intervento->addNota($nota);
+
         $pm->update();
 
         // 5. ESITO

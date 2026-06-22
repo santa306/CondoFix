@@ -22,7 +22,19 @@ class ViewDashboardCondomino extends ViewBase
     // @param Intervento[] $interventi  i suoi interventi (già ordinati DESC)
     // @param array        $contatori   conteggi per stato (dal Control)
     // -------------------------------------------------------
-    public function mostra(Condomino $condomino, array $interventi, array $contatori): void
+    // INPUT: termine di ricerca per titolo (da GET, opzionale).
+    public function getCerca(): string
+    {
+        return trim($this->get('cerca'));
+    }
+
+    // INPUT: filtro per stato (da GET, opzionale; click su una card contatore).
+    public function getStato(): string
+    {
+        return trim($this->get('stato'));
+    }
+
+    public function mostra(Condomino $condomino, array $interventi, array $contatori, string $cerca = '', string $stato = ''): void
     {
         // Titolo della pagina (come fa ViewLogin)
         $this->assign('titolo', 'CondoFix — Dashboard');
@@ -34,6 +46,8 @@ class ViewDashboardCondomino extends ViewBase
         // Lista interventi e contatori (li passa il Control già pronti)
         $this->assign('interventi', $interventi);
         $this->assign('contatori',  $contatori);
+        $this->assign('cerca',      $cerca);
+        $this->assign('stato',      $stato);
 
         // Messaggio flash di successo (es. dopo aver creato una segnalazione)
         $this->assign('successo', Session::getFlash('successo'));

@@ -55,10 +55,42 @@ class CDashboardAdmin
             'lavoratori'  => count($pm->utente()->findAllFornitori()),
         ];
 
-        // 2d. Lavori recenti: tutti gli interventi, dal più recente.
-        $recenti = $pm->intervento()->findRecenti(5);
+        // 2d. Lista lavori: se c'e' una ricerca per titolo mostro i risultati,
+        //     altrimenti i lavori recenti. Il termine cercato lo legge la View
+        //     (unico punto che tocca l'input HTTP).
+        $view  = new ViewDashboardAdmin();
+        $cerca = $view->getCerca();
+        $stato = $view->getStato();
+
+        if ($cerca !== '') {
+            // ricerca per titolo: cerca in tutto il sistema
+            $recenti = $pm->intervento()->cercaTutti($cerca);
+        } elseif ($stato !== '') {
+            // filtro per stato (click su una card): parto da TUTTI i lavori
+            $recenti = $this->filtraPerStato($pm->intervento()->findRecenti(100000), $stato);
+        } else {
+            // vista normale: TUTTI i lavori del sistema (dal piu' recente).
+            // Uso findRecenti con un limite alto per riusare il metodo esistente.
+            $recenti = $pm->intervento()->findRecenti(100000);
+        }
 
         // 3. PASSO TUTTO ALLA VIEW -----------------------------------------
-        (new ViewDashboardAdmin())->mostra($admin, $contatori, $recenti);
+        $view->mostra($admin, $contatori, $recenti, $cerca, $stato);
+    }
+
+    /**
+     * Filtra una lista di interventi per stato (click su una card contatore).
+     * @param Intervento[] $interventi
+     * @return Intervento[]
+     */
+    private function filtraPerStato(array $interventi, string $stato): array
+    {
+        $out = [];
+        foreach ($interventi as $i) {
+            if ($i->getStato()?->getTipo() === $stato) {
+                $out[] = $i;
+            }
+        }
+        return $out;
     }
 }
