@@ -21,6 +21,9 @@ try {
         case 'vetrina':
             (new CVetrinaPubblica())->mostra();
             break;
+        case 'vetrinaDettaglio':
+            (new CVetrinaPubblica())->mostraDettaglio();
+            break;
         case 'doLogin':                    // POST del form di login
             (new CLogin())->esegui();
             break;
@@ -103,6 +106,7 @@ try {
     http_response_code(500);
     echo 'Si e\' verificato un errore: ' . htmlspecialchars($e->getMessage());
 }
+
 
 
 

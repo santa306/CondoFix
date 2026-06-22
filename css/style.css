@@ -579,37 +579,17 @@ a.card-contatore:hover { box-shadow: 0 4px 16px rgba(31, 45, 54, 0.12); transfor
 }
 .btn-esplora:hover { background: rgba(44, 95, 124, 0.06); }
 
-/* === LOGO (sidebar + login) — RIPRISTINO === */
-.sidebar-logo {
-    display: flex;
-    align-items: center;
-    gap: 0.5rem;
-}
-.sidebar-logo img {
-    width: 34px;
-    height: 34px;
-    object-fit: contain;
-    border-radius: 6px;
-}
-.sidebar-logo span {
-    font-size: 1.3rem;
-    font-weight: 700;
-    color: var(--colore-primario);
-}
-.logo-login {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    gap: 0.4rem;
-    margin-bottom: 0.5rem;
-}
-.logo-login img {
-    width: 90px;
-    height: 90px;
-    object-fit: contain;
-}
-.logo-login h1 {
-    margin: 0;
-    color: var(--colore-primario);
-    font-size: 1.6rem;
-}
+/* Vetrina: card cliccabili e dettaglio */
+a.card-lavoro-pubblica { text-decoration: none; color: inherit; display: block; transition: box-shadow .15s, transform .15s; }
+a.card-lavoro-pubblica:hover { box-shadow: 0 4px 16px rgba(31,45,54,.12); transform: translateY(-2px); }
+.vedi-dettaglio { margin-left: auto; color: var(--colore-primario); font-weight: 600; }
+.nota-demo { margin-top: 1.2rem; padding: 0.9rem 1.1rem; background: #eef4f8; border-radius: 10px; color: #44525c; font-size: 0.92rem; }
+.nota-demo a { color: var(--colore-primario); font-weight: 600; }
+
+/* === LOGO (sidebar + login) === */
+.sidebar-logo { display: flex; align-items: center; gap: 0.5rem; }
+.sidebar-logo img { width: 34px; height: 34px; object-fit: contain; border-radius: 6px; }
+.sidebar-logo span { font-size: 1.3rem; font-weight: 700; color: var(--colore-primario); }
+.logo-login { display: flex; flex-direction: column; align-items: center; gap: 0.4rem; margin-bottom: 0.5rem; }
+.logo-login img { width: 90px; height: 90px; object-fit: contain; }
+.logo-login h1 { margin: 0; color: var(--colore-primario); font-size: 1.6rem; }
