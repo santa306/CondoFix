@@ -12,11 +12,7 @@
 //     ├── InCorso      → fornitore ha avviato i lavori
 //     └── Completato   → fornitore ha terminato; admin può allegare fattura
 //
-// FIX rispetto al codice originale:
-//   - InCorso e Completato non estendono più Accettato (era semanticamente sbagliato:
-//     "InCorso IS A Accettato" è falso).
-//   - priorita e fornitore sono ora in Stato come campi nullable: in SINGLE_TABLE
-//     vanno tutti nella stessa tabella, quindi non c'è spreco di colonne.
+
 
 use Doctrine\ORM\Mapping as ORM;
 
@@ -67,3 +63,4 @@ abstract class Stato
     // Metodo utile per ottenere il nome del tipo come stringa (usato nei template)
     abstract public function getTipo(): string;
 }
+//esiste Perché la colonna tipo la gestisce Doctrine internamente per il mapping, ma nel codice e nei template ti serve un modo per chiedere all'oggetto "che stato sei?"

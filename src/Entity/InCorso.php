@@ -3,8 +3,7 @@
 // Il fornitore ha avviato i lavori.
 // priorita e fornitore sono ereditati da Stato.
 //
-// FIX: estende Stato direttamente, non Accettato.
-// "InCorso" NON è un tipo di "Accettato" — sono due stati distinti del workflow.
+
 
 use Doctrine\ORM\Mapping as ORM;
 

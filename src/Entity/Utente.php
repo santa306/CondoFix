@@ -4,13 +4,13 @@
 // Strategia SINGLE_TABLE: una sola tabella 'utenti' con una colonna 'ruolo'
 // che discrimina il tipo di utente.
 
-use Doctrine\ORM\Mapping as ORM;
+use Doctrine\ORM\Mapping as ORM;// permette sotto chiamarlo ora solo ORM invece di [Doctrine\ORM\Mapping\Entity] 
 
 #[ORM\Entity]
-#[ORM\Table(name: 'utenti')]
-#[ORM\InheritanceType('SINGLE_TABLE')]
-#[ORM\DiscriminatorColumn(name: 'ruolo', type: 'string')]
-#[ORM\DiscriminatorMap([
+#[ORM\Table(name: 'utenti')]//la tabella si chiama utenti senza si chiamerebbe Utente come il nome del file
+#[ORM\InheritanceType('SINGLE_TABLE')]//la nostra strategia tutte le classi non hanno una tabella per ognuna
+#[ORM\DiscriminatorColumn(name: 'ruolo', type: 'string')]//è la colonna discriminante che ti permette di definire un personaggio o l'altro
+#[ORM\DiscriminatorMap([//se leggi amministratore istanzi una classe amministratore e cosi via
     'amministratore' => Amministratore::class,
     'condomino'      => Condomino::class,
     'fornitore'      => Fornitore::class,
@@ -21,10 +21,10 @@ abstract class Utente
     // ATTRIBUTI COMUNI A TUTTI GLI UTENTI
     // -------------------------------------------------------
 
-    #[ORM\Id]
-    #[ORM\Column(type: 'integer')]
+    #[ORM\Id]//chiave primaria
+    #[ORM\Column(type: 'integer')]//riferito sempre a id, dice che è un intero
     #[ORM\GeneratedValue]
-    protected int|null $id = null;
+    protected int|null $id = null;//un utente appena creato in memoria non ha ancora id (null), lo ottiene solo dopo essere stato salvato.
 
     #[ORM\Column(type: 'string')]
     protected string $nome;
@@ -62,9 +62,10 @@ abstract class Utente
     public function setPassword(string $passwordChiara): void {
         $this->password = password_hash($passwordChiara, PASSWORD_BCRYPT);
     }
-
-    // Verifica se la password fornita corrisponde all'hash salvato
-    public function verificaPassword(string $passwordChiara): bool {
-        return password_verify($passwordChiara, $this->password);
+//non salva la password così com'è: prima la passa in password_hash() con algoritmo bcrypt, poi salva l'hash
+    
+// Verifica se la password fornita corrisponde all'hash salvato
+    public function verificaPassword(string $passwordChiara): bool {//restituirà un true false
+        return password_verify($passwordChiara, $this->password);//senza mai decriptare
     }
 }

@@ -9,7 +9,7 @@ class Amministratore extends Utente
 {
     // Attributo specifico dell'amministratore
     #[ORM\Column(type: 'string', nullable: true)]
-    private ?string $telefono = null;
+    private ?string $telefono = null;//potrebbe non averlo
 
     // -------------------------------------------------------
     // GETTER E SETTER

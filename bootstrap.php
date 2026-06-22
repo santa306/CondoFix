@@ -1,30 +1,35 @@
 <?php
 // bootstrap.php
-// Configurazione Doctrine ORM 3.x (compatibile con il setup esistente del progetto).
+// Configurazione Doctrine ORM 3.x.
 // Crea la variabile globale $entityManager usata da PersistentManager.
 
+//require_once uno per richiesta http
 require_once __DIR__ . "/vendor/autoload.php";
-
-use Doctrine\DBAL\DriverManager;
-use Doctrine\ORM\EntityManager;
+//driverManager apre la connessione
+use Doctrine\DBAL\DriverManager; //DBAL: Database abstracion layer= strato + basso parla con mysql
+use Doctrine\ORM\EntityManager; //ORM: Object-Relational Mapping: strato alto= mappa gli oggetti e tabelle
 use Doctrine\ORM\ORMSetup;
+//ENtityManager e ORMSetup vinono in ORM
+
 
 // 1. Percorso delle Entity (ora in src/Entity)
-$paths = [__DIR__ . "/src/Entity"];
-$isDevMode = true;
+$paths = [__DIR__ . "/src/Entity"]; //Dice dove sono le entity èun array perhè possono essere sparse qua e là entity
+$isDevMode = true; //entri in modalità sviluppatore facendo si che non si usi la cache dei metadati per rileggere ogni volta i mapping su richiesta, è piu lento
 
 // Configurazione per leggere gli Attributi PHP 8 (#[ORM\...])
-$config = ORMSetup::createAttributeMetadataConfiguration($paths, $isDevMode);
+$config = ORMSetup::createAttributeMetadataConfiguration($paths, $isDevMode);//come leggerne il mapping
+//$paths, $isDevMode ti dice dove cercare e se attivare la cache
+
 
 // 2. Parametri database (XAMPP)
 $dbParams = [
     'driver'   => 'pdo_mysql',
     'user'     => 'root',
     'password' => '',
-    'dbname'   => 'mio_database',   // stesso DB del progetto esistente
+    'dbname'   => 'mio_database',
 ];
+//s icrea l'entita che vive in DBAL
+$connection = DriverManager::getConnection($dbParams, $config);//non apre subito la connessione tcp a mySql, si apre solo alla prima query
 
-$connection = DriverManager::getConnection($dbParams, $config);
-
-// 3. EntityManager (Doctrine 3.x: si passa connection + config)
-$entityManager = new EntityManager($connection, $config);
+// 3. EntityManager (Doctrine 3.x: si passa connection per parlare con il db + config per sapere come mappare)
+$entityManager = new EntityManager($connection, $config);//variabile glogael ovviamente

@@ -2,10 +2,6 @@
 // src/Entity/Foto.php
 // Fotografia allegata a un Intervento (dal condomino o dal fornitore).
 // Separata da Intervento perché un intervento può avere più foto.
-//
-// FIX rispetto al codice originale:
-//   - $foto era un singolo ?string dentro Intervento: non permetteva più foto.
-//   - Ora è una Entity separata con relazione ManyToOne verso Intervento.
 
 use Doctrine\ORM\Mapping as ORM;
 

@@ -3,8 +3,6 @@
 // Il fornitore ha terminato i lavori.
 // L'amministratore può ora allegare la fattura.
 // priorita e fornitore sono ereditati da Stato.
-//
-// FIX: estende Stato direttamente, non Accettato.
 
 use Doctrine\ORM\Mapping as ORM;
 

@@ -10,7 +10,7 @@
 //     - la persistenza passa SOLO da PersistentManager
 //     - lo stato di sessione passa SOLO da Session
 //   Questa è la regola architetturale che separa Presentation / Control /
-//   Foundation. È il punto valutato dal professore.
+//   Foundation.
 //
 // SCHEMA DI OGNI METODO CONTROL (lo stesso del controllore di esempio):
 //   1. istanzio la View e leggo da lei l'input

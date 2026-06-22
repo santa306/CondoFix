@@ -11,7 +11,7 @@
 //   - Stato collegato con OneToOne con cascade persist/remove
 
 use Doctrine\ORM\Mapping as ORM;
-use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\Common\Collections\ArrayCollection;//serve per foto e note
 use Doctrine\Common\Collections\Collection;
 
 #[ORM\Entity]
@@ -43,8 +43,8 @@ class Intervento
 
     // Condominio in cui si svolge l'intervento
     #[ORM\ManyToOne(targetEntity: Condominio::class)]
-    #[ORM\JoinColumn(nullable: false)]
-    private Condominio|null $condominio = null;
+    #[ORM\JoinColumn(nullable: false)]//un intervento deve avere un condominio (non ha senso un guasto senza edificio)
+    private Condominio|null $condominio = null;//diventa fk condominio_id
 
     // Condomino che ha inviato la segnalazione (nullable: admin può creare interventi)
     #[ORM\ManyToOne(targetEntity: Condomino::class)]
@@ -54,7 +54,7 @@ class Intervento
     // Stato corrente dell'intervento (OneToOne con cascade)
     // cascade: ['persist', 'remove'] -> quando salvo/elimino l'intervento,
     // salvo/elimino anche lo stato automaticamente
-    #[ORM\OneToOne(targetEntity: Stato::class, cascade: ['persist', 'remove'])]
+    #[ORM\OneToOne(targetEntity: Stato::class, cascade: ['persist', 'remove'])]//se volessimo che lo stato si cancella quando diventa orfano dovremmo mettere orphanRemoval: true
     #[ORM\JoinColumn(nullable: false)]
     private Stato|null $stato = null;
 
@@ -113,7 +113,7 @@ class Intervento
     {
         if (!$this->note->contains($nota)) {
             $this->note->add($nota);
-            $nota->setIntervento($this);
+            $nota->setIntervento($this);//definisce nota proprietario
         }
     }
 
@@ -130,8 +130,8 @@ class Intervento
     {
         if (!$this->foto->contains($foto)) {
             $this->foto->add($foto);
-            $foto->setIntervento($this);
-        }
+            $foto->setIntervento($this);//fa si che anche foto sappia a che intervento appartenga
+        }// foto proprietaria
     }
 
     public function removeFoto(Foto $foto): void

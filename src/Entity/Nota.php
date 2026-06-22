@@ -1,12 +1,8 @@
 <?php
 // src/Entity/Nota.php
-// Nota operativa aggiunta dal Fornitore durante l'esecuzione di un intervento.
+// Nota operativa aggiunta dal Fornitore/Admin durante l'esecuzione di un intervento.
 // Ogni nota ha un testo, un timestamp automatico e appartiene a un Intervento.
-//
-// FIX rispetto al codice originale:
-//   - La classe era completamente vuota.
-//   - La nota è collegata a Intervento (non a InCorso):
-//     rimane accessibile anche quando lo stato diventa Completato.
+
 
 use Doctrine\ORM\Mapping as ORM;
 

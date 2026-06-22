@@ -8,12 +8,13 @@ use Doctrine\ORM\Mapping as ORM;
 class Condomino extends Utente
 {
     // Ogni condomino appartiene a UN condominio
-    // (molti condomini -> 1 condominio)
-    #[ORM\ManyToOne(targetEntity: Condominio::class)]
+    // (molti condomini -> 1 condominio) relazione ONEtoMANY
+    //questo diventa condominio_id la FK di condominio in condomine
+    #[ORM\ManyToOne(targetEntity: Condominio::class)]//targetEntity dice verso quale Entity punta
     #[ORM\JoinColumn(nullable: true)]
     private Condominio|null $condominio = null;
 
-    // Numero interno/appartamento (es. "Scala A, Int. 5")
+    // Numero interno/appartamento
     #[ORM\Column(type: 'string', nullable: true)]
     private ?string $interno = null;
 

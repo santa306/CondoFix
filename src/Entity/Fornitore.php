@@ -14,7 +14,8 @@ class Fornitore extends Utente
     #[ORM\Column(type: 'string', nullable: true)]
     private ?string $partitaIva = null;
 
-    // Specializzazione del fornitore (es. Idraulico, Elettricista)
+    // Specializzazione del fornitore (Idraulico, Elettricista)
+    //diventa la colonna categoria_id
     #[ORM\ManyToOne(targetEntity: Categoria::class)]
     private Categoria|null $categoria = null;
 
