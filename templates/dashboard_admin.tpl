@@ -27,6 +27,7 @@
 
         <nav class="sidebar-menu">
             <a class="voce attiva" href="index.php?action=dashboardAdmin">Dashboard</a>
+            <a class="voce" href="index.php?action=formCreaIntervento">Nuovo lavoro</a>
             <a class="voce logout" href="index.php?action=logout">Esci</a>
         </nav>
     </aside>
@@ -113,4 +114,5 @@
 </div>
 </body>
 </html>
+
 
