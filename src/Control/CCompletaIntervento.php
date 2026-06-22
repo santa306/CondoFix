@@ -1,23 +1,32 @@
 <?php
 // src/Control/CCompletaIntervento.php
 //
-// CONTROLLORE — operazione di sistema "Completa lavoro" (SSD 5, fornitore).
+// CONTROLLORE — operazione di sistema "Completa lavoro".
 //
 // Transizione di stato del workflow:  IN CORSO -> COMPLETATO.
 //
-// Gemella di CAvviaIntervento: stesso schema (carica, verifica proprieta',
-// verifica stato di partenza con instanceof, crea nuovo stato trasferendo
-// i dati comuni, salva, redirect con flash). Cambia solo:
-//   - stato di partenza richiesto: InCorso
-//   - stato di arrivo: Completato
-//   - il timestamp impostato: dataCompletamento
+// Gemella di CAvviaIntervento. Possono completare un lavoro DUE ruoli:
+//   - il Fornitore assegnato (solo sui propri lavori)
+//   - l'Amministratore (su qualsiasi lavoro, per supervisione)
+// Comportamento e pagine di ritorno si adattano al ruolo.
 
 class CCompletaIntervento
 {
     public function esegui(): void
     {
-        // 1. PERMESSI
-        Session::requireRole('fornitore');
+        // 1. PERMESSI: fornitore OPPURE amministratore
+        Session::requireAnyRole(['fornitore', 'amministratore']);
+        $ruolo = Session::getRuolo();
+        $isAdmin = ($ruolo === 'amministratore');
+
+        $tornaDashboard = $isAdmin
+            ? 'index.php?action=dashboardAdmin'
+            : 'index.php?action=dashboardFornitore';
+        $tornaDettaglio = function (int $id) use ($isAdmin) {
+            return $isAdmin
+                ? 'index.php?action=dettaglioInterventoAdmin&id=' . $id
+                : 'index.php?action=dettaglioInterventoFornitore&id=' . $id;
+        };
 
         // 2. INPUT (dalla View)
         $view = new ViewCompletaIntervento();
@@ -25,7 +34,7 @@ class CCompletaIntervento
 
         if ($id <= 0) {
             Session::setFlash('errore', 'Intervento non valido.');
-            header('Location: index.php?action=dashboardFornitore');
+            header('Location: ' . $tornaDashboard);
             exit;
         }
 
@@ -35,42 +44,49 @@ class CCompletaIntervento
 
         if ($intervento === null) {
             Session::setFlash('errore', 'Intervento non trovato.');
-            header('Location: index.php?action=dashboardFornitore');
+            header('Location: ' . $tornaDashboard);
             exit;
         }
 
         $vecchio = $intervento->getStato();
 
-        // 4. CONTROLLO DI PROPRIETA'
-        $fornitoreAssegnato = $vecchio?->getFornitore();
-        if ($fornitoreAssegnato === null
-            || $fornitoreAssegnato->getId() !== Session::getUserId()) {
-            Session::setFlash('errore', 'Questo lavoro non e\' assegnato a te.');
-            header('Location: index.php?action=dashboardFornitore');
-            exit;
+        // 4. CONTROLLO DI PROPRIETA' — solo per il fornitore
+        if (!$isAdmin) {
+            $fornitoreAssegnato = $vecchio?->getFornitore();
+            if ($fornitoreAssegnato === null
+                || $fornitoreAssegnato->getId() !== Session::getUserId()) {
+                Session::setFlash('errore', 'Questo lavoro non e\' assegnato a te.');
+                header('Location: ' . $tornaDashboard);
+                exit;
+            }
         }
 
         // 5. CONTROLLO DI STATO: posso completare solo un lavoro IN CORSO
         if (!($vecchio instanceof InCorso)) {
             Session::setFlash('errore',
                 'Il lavoro non e\' "In corso": impossibile completarlo.');
-            header('Location: index.php?action=dettaglioInterventoFornitore&id=' . $id);
+            header('Location: ' . $tornaDettaglio($id));
             exit;
         }
 
-        // 6. TRANSIZIONE: creo il nuovo stato e trasferisco i dati comuni
+        // 6. TRANSIZIONE: nuovo stato + dati comuni
         $nuovo = new Completato();
         $nuovo->setPriorita($vecchio->getPriorita());
         $nuovo->setFornitore($vecchio->getFornitore());
-        $nuovo->setDataCompletamento(new DateTime());   // timestamp di chiusura lavori
+        $nuovo->setDataCompletamento(new DateTime());
 
         $intervento->setStato($nuovo);
+
+        // Nota automatica di avanzamento (con timestamp automatico).
+        $nota = new Nota();
+        $nota->setTesto('Lavoro completato.');
+        $intervento->addNota($nota);
+
         $pm->update();
 
         // 7. ESITO
         Session::setFlash('successo', 'Lavoro completato!');
-        header('Location: index.php?action=dettaglioInterventoFornitore&id=' . $id);
+        header('Location: ' . $tornaDettaglio($id));
         exit;
     }
 }
-

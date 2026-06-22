@@ -22,7 +22,19 @@ class ViewDashboardAdmin extends ViewBase
      * @param array               $contatori  i 7 contatori delle card
      * @param array               $recenti    gli interventi recenti (oggetti Intervento)
      */
-    public function mostra(?Amministratore $admin, array $contatori, array $recenti): void
+    // INPUT: termine di ricerca per titolo (da GET, opzionale).
+    public function getCerca(): string
+    {
+        return trim($this->get('cerca'));
+    }
+
+    // INPUT: filtro per stato (da GET, opzionale; click su una card contatore).
+    public function getStato(): string
+    {
+        return trim($this->get('stato'));
+    }
+
+    public function mostra(?Amministratore $admin, array $contatori, array $recenti, string $cerca = '', string $stato = ''): void
     {
         // Nome da mostrare nel saluto e nella sidebar.
         $nomeCompleto = $admin
@@ -33,6 +45,8 @@ class ViewDashboardAdmin extends ViewBase
         $this->assign('nomeCompleto', $nomeCompleto);
         $this->assign('contatori',    $contatori);
         $this->assign('recenti',      $recenti);
+        $this->assign('cerca',        $cerca);
+        $this->assign('stato',        $stato);
 
         // Messaggi flash lasciati dal login o da un'altra operazione.
         $this->assign('successo', Session::getFlash('successo'));

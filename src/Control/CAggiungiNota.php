@@ -1,22 +1,31 @@
 <?php
 // src/Control/CAggiungiNota.php
 //
-// CONTROLLORE — operazione di sistema "Aggiungi nota operativa" (fornitore).
+// CONTROLLORE — operazione di sistema "Aggiungi nota operativa".
 //
-// Il fornitore, dalla pagina di dettaglio, scrive una nota operativa
-// (es. "smontato il sifone") che viene aggiunta allo storico dell'intervento.
+// Aggiunge una nota allo storico dell'intervento. Possono farlo DUE ruoli:
+//   - il Fornitore assegnato (solo sui propri lavori)
+//   - l'Amministratore (su qualsiasi lavoro, per supervisione)
 //
-// Non e' una transizione di stato: lavora sulla collection Note dell'intervento
-// tramite $intervento->addNota(...). Il timestamp della nota e' automatico
-// (impostato nel costruttore di Nota). Pattern POST-redirect-GET: dopo il
-// salvataggio si torna al dettaglio con un flash.
+// Non e' una transizione di stato: lavora sulla collection Note via
+// $intervento->addNota(). Timestamp automatico. Pattern POST-redirect-GET.
 
 class CAggiungiNota
 {
     public function esegui(): void
     {
-        // 1. PERMESSI
-        Session::requireRole('fornitore');
+        // 1. PERMESSI: fornitore OPPURE amministratore
+        Session::requireAnyRole(['fornitore', 'amministratore']);
+        $isAdmin = (Session::getRuolo() === 'amministratore');
+
+        $tornaDashboard = $isAdmin
+            ? 'index.php?action=dashboardAdmin'
+            : 'index.php?action=dashboardFornitore';
+        $tornaDettaglio = function (int $id) use ($isAdmin) {
+            return $isAdmin
+                ? 'index.php?action=dettaglioInterventoAdmin&id=' . $id
+                : 'index.php?action=dettaglioInterventoFornitore&id=' . $id;
+        };
 
         // 2. INPUT (dalla View)
         $view  = new ViewAggiungiNota();
@@ -25,7 +34,7 @@ class CAggiungiNota
 
         if ($id <= 0) {
             Session::setFlash('errore', 'Intervento non valido.');
-            header('Location: index.php?action=dashboardFornitore');
+            header('Location: ' . $tornaDashboard);
             exit;
         }
 
@@ -33,7 +42,7 @@ class CAggiungiNota
         $testo = trim($testo);
         if ($testo === '') {
             Session::setFlash('errore', 'La nota non puo\' essere vuota.');
-            header('Location: index.php?action=dettaglioInterventoFornitore&id=' . $id);
+            header('Location: ' . $tornaDettaglio($id));
             exit;
         }
 
@@ -43,33 +52,31 @@ class CAggiungiNota
 
         if ($intervento === null) {
             Session::setFlash('errore', 'Intervento non trovato.');
-            header('Location: index.php?action=dashboardFornitore');
+            header('Location: ' . $tornaDashboard);
             exit;
         }
 
-        // 5. CONTROLLO DI PROPRIETA': il lavoro deve essere assegnato a me
-        $fornitoreAssegnato = $intervento->getStato()?->getFornitore();
-        if ($fornitoreAssegnato === null
-            || $fornitoreAssegnato->getId() !== Session::getUserId()) {
-            Session::setFlash('errore', 'Questo lavoro non e\' assegnato a te.');
-            header('Location: index.php?action=dashboardFornitore');
-            exit;
+        // 5. CONTROLLO DI PROPRIETA' — solo per il fornitore
+        if (!$isAdmin) {
+            $fornitoreAssegnato = $intervento->getStato()?->getFornitore();
+            if ($fornitoreAssegnato === null
+                || $fornitoreAssegnato->getId() !== Session::getUserId()) {
+                Session::setFlash('errore', 'Questo lavoro non e\' assegnato a te.');
+                header('Location: ' . $tornaDashboard);
+                exit;
+            }
         }
 
         // 6. CREO LA NOTA e la collego all'intervento
-        //    addNota() imposta gia' il lato inverso ($nota->setIntervento()).
-        //    Il timestamp e' automatico (costruttore di Nota).
         $nota = new Nota();
         $nota->setTesto($testo);
         $intervento->addNota($nota);
 
-        // Il cascade persist sulla collection note salva la nota con l'update.
         $pm->update();
 
         // 7. ESITO
         Session::setFlash('successo', 'Nota aggiunta.');
-        header('Location: index.php?action=dettaglioInterventoFornitore&id=' . $id);
+        header('Location: ' . $tornaDettaglio($id));
         exit;
     }
 }
-

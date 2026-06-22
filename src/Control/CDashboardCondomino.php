@@ -43,19 +43,41 @@ class CDashboardCondomino
             return;
         }
 
-        // 3. CHIEDO ALLA FOUNDATION I SUOI INTERVENTI
-        //    findBySegnalante restituisce già gli interventi ordinati per
-        //    dataCreazione DESC (i più recenti per primi).
-        $interventi = $pm->intervento()->findBySegnalante($condomino);
+        // 3. RICAVO IL CONDOMINIO del condomino loggato.
+        //    Il condomino vede TUTTI i lavori del proprio condominio (in ogni
+        //    stato), anche quelli segnalati da altri condomini del palazzo o
+        //    creati dall'amministratore.
+        $condominio = $condomino->getCondominio();
+        if ($condominio === null) {
+            // Profilo non associato a un condominio: niente lavori da mostrare.
+            $tutte = [];
+        } else {
+            $tutte = $pm->intervento()->findByCondominio($condominio);
+        }
 
-        // 4. CALCOLO I CONTATORI PER LE CARD
-        //    Li calcolo qui (nel Control) scorrendo la lista UNA volta sola:
-        //    così non faccio query extra e la View resta passiva.
-        $contatori = $this->contaPerStato($interventi);
+        // 4. CALCOLO I CONTATORI PER LE CARD (sempre sul totale del condominio)
+        $contatori = $this->contaPerStato($tutte);
 
-        // 5. PASSO TUTTO ALLA VIEW
-        $view = new ViewDashboardCondomino();
-        $view->mostra($condomino, $interventi, $contatori);
+        // 5. LISTA: parto da tutti i lavori del condominio, poi applico
+        //    (se presenti) la ricerca per titolo e/o il filtro per stato.
+        //    I parametri li legge la View dall'URL.
+        $view  = new ViewDashboardCondomino();
+        $cerca = $view->getCerca();
+        $stato = $view->getStato();
+
+        if ($cerca !== '' && $condominio !== null) {
+            $interventi = $pm->intervento()->cercaByCondominio($condominio, $cerca);
+        } else {
+            $interventi = $tutte;
+        }
+
+        // Filtro per stato (quando l'utente clicca una card contatore).
+        if ($stato !== '') {
+            $interventi = $this->filtraPerStato($interventi, $stato);
+        }
+
+        // 6. PASSO TUTTO ALLA VIEW
+        $view->mostra($condomino, $interventi, $contatori, $cerca, $stato);
     }
 
     // =======================================================
@@ -97,5 +119,24 @@ class CDashboardCondomino
         }
 
         return $c;
+    }
+
+    /**
+     * Filtra una lista di interventi tenendo solo quelli di un certo stato.
+     * Usato quando l'utente clicca una card contatore nella dashboard.
+     *
+     * @param Intervento[] $interventi
+     * @param string       $stato  es. 'completato', 'in_corso', ...
+     * @return Intervento[]
+     */
+    private function filtraPerStato(array $interventi, string $stato): array
+    {
+        $out = [];
+        foreach ($interventi as $i) {
+            if ($i->getStato()?->getTipo() === $stato) {
+                $out[] = $i;
+            }
+        }
+        return $out;
     }
 }

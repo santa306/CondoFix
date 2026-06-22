@@ -1,6 +1,6 @@
 {* templates/dettaglio_intervento.tpl *}
-{* Dettaglio intervento — riferimento UI: sketch_condomino.pdf (caso 8).       *}
-{* La View passa: intervento, stato, note[], foto[], errore, successo.         *}
+{* Dettaglio intervento (Condomino) — struttura unificata (sidebar admin). *}
+{* Variabili dalla View: titolo, intervento, stato, note[], foto[], errore, successo. *}
 <!DOCTYPE html>
 <html lang="it">
 <head>
@@ -9,59 +9,36 @@
     <title>{$titolo|escape}</title>
     <link rel="stylesheet" href="css/style.css">
 </head>
-<body class="app">
+<body>
+<div class="layout-app">
 
-    {* ===== SIDEBAR ===== *}
     <aside class="sidebar">
-        <div class="sidebar-brand">
-            <svg class="brand-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 21h18"/><path d="M5 21V7l8-4v18"/><path d="M19 21V11l-6-4"/><path d="M9 9v.01"/><path d="M9 12v.01"/><path d="M9 15v.01"/></svg>
-            <span>CondoFix</span>
-        </div>
+        <div class="sidebar-logo"><img src="img/logo.jpeg" alt="CondoFix"><span>CondoFix</span></div>
         <nav class="sidebar-menu">
-            <a href="index.php?action=dashboardCondomino" class="voce-menu">
-                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="7" height="7"/><rect x="14" y="3" width="7" height="7"/><rect x="14" y="14" width="7" height="7"/><rect x="3" y="14" width="7" height="7"/></svg>
-                Dashboard
-            </a>
+            <a class="voce" href="index.php?action=dashboardCondomino">Dashboard</a>
+            <a class="voce" href="index.php?action=formPresentaIntervento">Nuova segnalazione</a>
+            <a class="voce logout" href="index.php?action=logout">Esci</a>
         </nav>
-        <a href="index.php?action=logout" class="voce-menu voce-esci">
-            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"/><polyline points="16 17 21 12 16 7"/><line x1="21" y1="12" x2="9" y2="12"/></svg>
-            Esci
-        </a>
     </aside>
 
-    {* ===== CONTENUTO ===== *}
     <main class="contenuto">
 
-        <a href="index.php?action=dashboardCondomino" class="link-indietro">
-            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="19" y1="12" x2="5" y2="12"/><polyline points="12 19 5 12 12 5"/></svg>
-            Torna alla dashboard
-        </a>
+        <a class="link-indietro" href="index.php?action=dashboardCondomino">&larr; Torna alla dashboard</a>
 
         {if $errore}<div class="avviso avviso-errore">{$errore|escape}</div>{/if}
         {if $successo}<div class="avviso avviso-successo">{$successo|escape}</div>{/if}
 
         {assign var="tipo" value=$stato->getTipo()}
 
-        <header class="dettaglio-header">
+        <div class="dettaglio-testa">
             <h1>{$intervento->getTitolo()|escape}</h1>
-            <span class="badge badge-{$tipo|escape}">
-                {if $tipo == 'in_corso'}In Corso
-                {elseif $tipo == 'presentato'}Presentato
-                {elseif $tipo == 'accettato'}Accettato
-                {elseif $tipo == 'completato'}Completato
-                {elseif $tipo == 'negato'}Negato
-                {else}{$tipo|escape}{/if}
-            </span>
+            <span class="badge badge-{$tipo|escape}">{$tipo|replace:'_':' '|escape}</span>
             {if $tipo == 'presentato'}
-                <a href="index.php?action=formModificaIntervento&amp;id={$intervento->getId()}" class="btn-secondario btn-modifica">
-                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"/><path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"/></svg>
-                    Modifica
-                </a>
+                <a href="index.php?action=formModificaIntervento&id={$intervento->getId()}" class="btn-secondario">Modifica</a>
             {/if}
-        </header>
+        </div>
 
-        {* ===== SCHEDA DATI ===== *}
-        <div class="scheda">
+        <section class="scheda">
             <div class="riga-dato">
                 <span class="etichetta-dato">Condominio</span>
                 <span>{if $intervento->getCondominio()}{$intervento->getCondominio()->getNome()|escape}{else}—{/if}</span>
@@ -88,43 +65,37 @@
                 <span>{$stato->getMotivazione()|escape}</span>
             </div>
             {/if}
-        </div>
+        </section>
 
-        {* ===== DESCRIZIONE ===== *}
-        <section class="blocco">
+        <section class="scheda">
             <h2>Descrizione</h2>
             <p class="testo-descrizione">{$intervento->getDescrizione()|escape|nl2br}</p>
         </section>
 
-        {* ===== STORICO NOTE ===== *}
-        <section class="blocco">
+        <section class="scheda">
             <h2>Storico</h2>
             {if $note|@count == 0}
                 <p class="vuoto-inline">Nessuna nota presente.</p>
             {else}
                 <ul class="timeline">
                     {foreach $note as $n}
-                        <li>
-                            <div class="timeline-punto"></div>
-                            <div class="timeline-contenuto">
-                                <p class="timeline-testo">{$n->getTesto()|escape}</p>
-                                <span class="timeline-data">{$n->getTimestamp()->format('d/m/Y H:i')}</span>
-                            </div>
+                        <li class="timeline-punto">
+                            <p class="timeline-testo">{$n->getTesto()|escape}</p>
+                            <span class="timeline-data">{$n->getTimestamp()->format('d/m/Y H:i')}</span>
                         </li>
                     {/foreach}
                 </ul>
             {/if}
         </section>
 
-        {* ===== GALLERIA FOTO ===== *}
-        <section class="blocco">
+        <section class="scheda">
             <h2>Foto lavoro</h2>
             {if $foto|@count == 0}
                 <p class="vuoto-inline">Nessuna foto allegata.</p>
             {else}
-                <div class="galleria">
+                <div class="galleria-foto">
                     {foreach $foto as $f}
-                        <a href="{$f->getPercorso()|escape}" target="_blank" class="galleria-foto">
+                        <a href="{$f->getPercorso()|escape}" target="_blank" class="foto-thumb">
                             <img src="{$f->getPercorso()|escape}" alt="{$f->getNomeOriginale()|escape}">
                         </a>
                     {/foreach}
@@ -132,15 +103,15 @@
             {/if}
         </section>
 
-        {* ===== FATTURA (solo se completato e presente) ===== *}
         {if $tipo == 'completato' && $stato->getFattura()}
-        <section class="blocco">
+        <section class="scheda">
             <h2>Fattura</h2>
             <a href="{$stato->getFattura()|escape}" target="_blank" class="btn-secondario">Apri fattura</a>
         </section>
         {/if}
 
     </main>
-
+</div>
 </body>
 </html>
+

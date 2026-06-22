@@ -1,11 +1,6 @@
 {* templates/dashboard_condomino.tpl *}
-{* Dashboard del Condomino — riferimento UI: sketch_condomino.pdf (caso d'uso 7). *}
-{* La View passa: titolo, nome, cognome, interventi[], contatori{}, successo.    *}
-{*                                                                               *}
-{* Regole template (come login.tpl):                                            *}
-{*   - sempre |escape sulle variabili che vengono dai dati                       *}
-{*   - niente PHP qui dentro                                                     *}
-{*   - link e form puntano a index.php?action=...                                *}
+{* Dashboard del Condomino — struttura identica all'Amministratore. *}
+{* La View passa: titolo, nome, cognome, interventi[], contatori{}, successo. *}
 <!DOCTYPE html>
 <html lang="it">
 <head>
@@ -14,110 +9,73 @@
     <title>{$titolo|escape}</title>
     <link rel="stylesheet" href="css/style.css">
 </head>
-<body class="app">
+<body>
+<div class="layout-app">
 
-    {* ===== SIDEBAR ===== *}
     <aside class="sidebar">
-        <div class="sidebar-logo">CondoFix</div>
-
+        <div class="sidebar-logo"><img src="img/logo.jpeg" alt="CondoFix"><span>CondoFix</span></div>
         <div class="sidebar-utente">
             <div class="avatar"></div>
             <div>
-                <div class="utente-nome">{$nome|escape} {$cognome|escape}</div>
-                <div class="utente-ruolo">Condomino</div>
+                <div class="nome">{$nome|escape} {$cognome|escape}</div>
+                <div class="ruolo">Condomino</div>
             </div>
         </div>
-
         <nav class="sidebar-menu">
-            <a href="index.php?action=dashboardCondomino" class="voce-menu attiva">Dashboard</a>
-            <a href="index.php?action=dashboardCondomino" class="voce-menu">Lavori</a>
-            <a href="index.php?action=logout" class="voce-menu voce-esci">Esci</a>
+            <a class="voce attiva" href="index.php?action=dashboardCondomino">Dashboard</a>
+            <a class="voce" href="index.php?action=formPresentaIntervento">Nuova segnalazione</a>
+            <a class="voce logout" href="index.php?action=logout">Esci</a>
         </nav>
     </aside>
 
-    {* ===== CONTENUTO ===== *}
     <main class="contenuto">
 
-        {if $successo}
-            <div class="avviso avviso-successo">{$successo|escape}</div>
-        {/if}
+        {if $successo}<div class="avviso avviso-successo">{$successo|escape}</div>{/if}
 
         <div class="intestazione">
             <div>
                 <h1>Dashboard</h1>
                 <p class="benvenuto">Benvenuto, {$nome|escape} {$cognome|escape}</p>
             </div>
-            <a href="index.php?action=formPresentaIntervento" class="btn-primario">
-                + Nuova Segnalazione
-            </a>
+            <a href="index.php?action=formPresentaIntervento" class="btn-primario">+ Nuova Segnalazione</a>
         </div>
 
-        {* ===== CARD CONTATORI ===== *}
-        <section class="griglia-contatori">
-            <div class="card-contatore">
-                <div class="numero">{$contatori.totali}</div>
-                <div class="etichetta">Lavori Totali</div>
-            </div>
-            <div class="card-contatore">
-                <div class="numero">{$contatori.presentato}</div>
-                <div class="etichetta">Presentati</div>
-            </div>
-            <div class="card-contatore">
-                <div class="numero">{$contatori.accettato}</div>
-                <div class="etichetta">Da Fare</div>
-            </div>
-            <div class="card-contatore">
-                <div class="numero">{$contatori.in_corso}</div>
-                <div class="etichetta">In Corso</div>
-            </div>
-            <div class="card-contatore">
-                <div class="numero">{$contatori.completato}</div>
-                <div class="etichetta">Completati</div>
-            </div>
-            <div class="card-contatore">
-                <div class="numero">{$contatori.negato}</div>
-                <div class="etichetta">Negati</div>
-            </div>
+        <section class="griglia-card">
+            <a class="card-contatore" href="index.php?action=dashboardCondomino"><div class="numero">{$contatori.totali}</div><div class="etichetta">Lavori totali</div></a>
+            <a class="card-contatore" href="index.php?action=dashboardCondomino&stato=presentato"><div class="numero">{$contatori.presentato}</div><div class="etichetta">Presentati</div></a>
+            <a class="card-contatore" href="index.php?action=dashboardCondomino&stato=accettato"><div class="numero">{$contatori.accettato}</div><div class="etichetta">Da fare</div></a>
+            <a class="card-contatore" href="index.php?action=dashboardCondomino&stato=in_corso"><div class="numero">{$contatori.in_corso}</div><div class="etichetta">In corso</div></a>
+            <a class="card-contatore" href="index.php?action=dashboardCondomino&stato=completato"><div class="numero">{$contatori.completato}</div><div class="etichetta">Completati</div></a>
+            <a class="card-contatore" href="index.php?action=dashboardCondomino&stato=negato"><div class="numero">{$contatori.negato}</div><div class="etichetta">Negati</div></a>
         </section>
 
-        {* ===== LAVORI RECENTI ===== *}
-        <section class="sezione-lista">
-            <h2>Lavori recenti</h2>
+        {* --- Barra di ricerca per titolo --- *}
+        <form class="barra-ricerca" method="get" action="index.php">
+            <input type="hidden" name="action" value="dashboardCondomino">
+            <input type="text" name="cerca" value="{$cerca|escape}" placeholder="Cerca una segnalazione per nome...">
+            <button type="submit" class="btn-primario">Cerca</button>
+            {if $cerca != ''}<a class="ricerca-azzera" href="index.php?action=dashboardCondomino">Azzera</a>{/if}
+        </form>
+        {if $cerca != ''}<p class="ricerca-esito">Risultati per: <strong>{$cerca|escape}</strong></p>{/if}
 
+        <section class="lavori-recenti">
+            <h2>Lavori recenti</h2>
             {if $interventi|@count == 0}
-                <p class="lista-vuota">
-                    Non hai ancora inviato segnalazioni.
-                    <a href="index.php?action=formPresentaIntervento">Creane una</a>.
-                </p>
+                <p class="vuoto">Non hai ancora inviato segnalazioni. <a href="index.php?action=formPresentaIntervento">Creane una</a>.</p>
             {else}
                 {foreach $interventi as $i}
-                    <a class="card-lavoro"
-                       href="index.php?action=dettaglioIntervento&amp;id={$i->getId()}">
-                        <div class="card-lavoro-testo">
-                            <h3>{$i->getTitolo()|escape}</h3>
-                            {if $i->getCondominio()}
-                                <p class="meta">{$i->getCondominio()->getNome()|escape}</p>
-                            {/if}
-                            <p class="descrizione">{$i->getDescrizione()|truncate:90|escape}</p>
-                        </div>
-                        <div class="card-lavoro-stato">
-                            {assign var="tipo" value=$i->getStato()->getTipo()}
-                            <span class="badge badge-{$tipo|escape}">
-                                {if $tipo == 'in_corso'}In Corso
-                                {elseif $tipo == 'presentato'}Presentato
-                                {elseif $tipo == 'accettato'}Accettato
-                                {elseif $tipo == 'completato'}Completato
-                                {elseif $tipo == 'negato'}Negato
-                                {else}{$tipo|escape}{/if}
-                            </span>
-                            <p class="data">{$i->getDataCreazione()->format('d/m/Y')}</p>
-                        </div>
+                    <a class="riga-lavoro" href="index.php?action=dettaglioIntervento&id={$i->getId()}">
+                        <div class="riga-titolo">{$i->getTitolo()|escape}</div>
+                        <div class="riga-meta">{if $i->getCondominio()}{$i->getCondominio()->getNome()|escape}{/if}</div>
+                        {assign var="tipo" value=$i->getStato()->getTipo()}
+                        <span class="badge badge-{$tipo|escape}">{$tipo|replace:'_':' '|escape}</span>
                     </a>
                 {/foreach}
             {/if}
         </section>
 
     </main>
-
+</div>
 </body>
 </html>
+

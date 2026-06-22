@@ -16,7 +16,7 @@
 <body class="pagina-login">
 
     <main class="card-login">
-        <h1 class="logo">CondoFix</h1>
+        <div class="logo-login"><img src="img/logo.jpeg" alt="CondoFix"><h1>CondoFix</h1></div>
         <p class="sottotitolo">Gestione interventi condominiali</p>
 
         {* --- Messaggi flash --- *}
@@ -40,7 +40,11 @@
 
             <button type="submit" class="btn-accedi">Accedi</button>
         </form>
+        <a href="index.php?action=vetrina" class="btn-esplora">Esplora senza accedere</a>
     </main>
 
 </body>
 </html>
+
+
+
