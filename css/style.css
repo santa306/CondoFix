@@ -1,0 +1,675 @@
+/* ============================================================ */
+/* CondoFix — FOGLIO DI STILE UNIFICATO                          */
+/* Layout di riferimento: Amministratore (sidebar + contenuto).  */
+/* Tutte le pagine interne usano la stessa struttura:            */
+/*   <body><div class="layout-app">                              */
+/*     <aside class="sidebar">...</aside>                         */
+/*     <main class="contenuto">...</main>                        */
+/*   </div></body>                                               */
+/* ============================================================ */
+
+:root {
+    --colore-primario: #2c5f7c;
+    --colore-primario-scuro: #1f4659;
+    --colore-sfondo: #eef2f5;
+    --colore-testo: #1f2d36;
+    --colore-bordo: #cdd8e0;
+    --rosso: #b3261e;
+    --rosso-sfondo: #fbe9e7;
+    --verde: #1b6b3a;
+    --verde-sfondo: #e6f4ea;
+    --giallo-sfondo: #fff4e0;
+    --giallo-testo: #b07d18;
+    --blu-sfondo: #e8eef7;
+    --blu-testo: #3b5b9a;
+    --raggio: 10px;
+}
+
+* { box-sizing: border-box; }
+
+body {
+    margin: 0;
+    font-family: system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
+    color: var(--colore-testo);
+    background: var(--colore-sfondo);
+    line-height: 1.5;
+}
+
+a { color: var(--colore-primario); }
+
+/* ============================================================ */
+/* LOGIN — pagina centrata (unica pagina senza sidebar)          */
+/* ============================================================ */
+body.pagina-login {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    min-height: 100vh;
+    padding: 1rem;
+}
+.card-login {
+    background: #fff;
+    border: 1px solid var(--colore-bordo);
+    border-radius: var(--raggio);
+    padding: 2rem;
+    width: 100%;
+    max-width: 380px;
+    box-shadow: 0 4px 20px rgba(31, 45, 54, 0.08);
+}
+.card-login h1 {
+    color: var(--colore-primario);
+    margin: 0 0 1.5rem;
+    text-align: center;
+}
+.form-login label { display: block; margin: 0.8rem 0 0.3rem; font-weight: 600; font-size: 0.9rem; }
+.form-login input {
+    width: 100%;
+    padding: 0.6rem 0.75rem;
+    border: 1px solid var(--colore-bordo);
+    border-radius: 8px;
+    font-size: 0.95rem;
+}
+.form-login input:focus { outline: none; border-color: var(--colore-primario); }
+.form-login button { width: 100%; margin-top: 1.2rem; }
+
+/* ============================================================ */
+/* LAYOUT APP — sidebar + contenuto (tutte le pagine interne)    */
+/* ============================================================ */
+.layout-app {
+    display: flex;
+    min-height: 100vh;
+}
+
+/* ---------- SIDEBAR ---------- */
+.sidebar {
+    width: 230px;
+    flex-shrink: 0;
+    background: #fff;
+    border-right: 1px solid var(--colore-bordo);
+    padding: 1.5rem 1rem;
+    display: flex;
+    flex-direction: column;
+    gap: 1.2rem;
+}
+.sidebar-logo {
+    font-size: 1.3rem;
+    font-weight: 700;
+    color: var(--colore-primario);
+    padding: 0 0.5rem;
+}
+.sidebar-utente {
+    display: flex;
+    align-items: center;
+    gap: 0.6rem;
+    padding: 0.6rem 0.5rem;
+    border-top: 1px solid var(--colore-bordo);
+    border-bottom: 1px solid var(--colore-bordo);
+}
+.sidebar-utente .avatar {
+    width: 38px;
+    height: 38px;
+    border-radius: 50%;
+    background: var(--colore-sfondo);
+    border: 1px solid var(--colore-bordo);
+    flex-shrink: 0;
+}
+.sidebar-utente .nome  { font-weight: 600; font-size: 0.92rem; }
+.sidebar-utente .ruolo { font-size: 0.78rem; color: #6a7c88; }
+
+.sidebar-menu { display: flex; flex-direction: column; gap: 0.2rem; }
+.voce {
+    display: block;
+    padding: 0.6rem 0.75rem;
+    border-radius: 8px;
+    color: #44535e;
+    text-decoration: none;
+    font-size: 0.95rem;
+    font-weight: 500;
+}
+.voce:hover { background: var(--colore-sfondo); color: var(--colore-testo); }
+.voce.attiva {
+    background: var(--colore-primario);
+    color: #fff;
+}
+.voce.logout { margin-top: auto; color: var(--rosso); }
+.voce.logout:hover { background: var(--rosso-sfondo); }
+
+/* ---------- CONTENUTO ---------- */
+.contenuto {
+    flex: 1;
+    padding: 1.75rem 2rem;
+    max-width: 1000px;
+}
+.titolo-pagina { margin: 0 0 0.25rem; color: var(--colore-primario); }
+.benvenuto, .saluto { margin: 0 0 1rem; color: #6a7c88; font-size: 0.95rem; }
+.conteggio { font-weight: 600; margin: 0.5rem 0 1rem; }
+
+.link-indietro {
+    display: inline-block;
+    margin-bottom: 1rem;
+    color: var(--colore-primario);
+    text-decoration: none;
+    font-size: 0.9rem;
+}
+.link-indietro:hover { text-decoration: underline; }
+
+/* ============================================================ */
+/* AVVISI FLASH                                                  */
+/* ============================================================ */
+.avviso {
+    padding: 0.75rem 1rem;
+    border-radius: 8px;
+    margin-bottom: 1rem;
+    font-size: 0.92rem;
+}
+.avviso-successo { background: var(--verde-sfondo); color: var(--verde); }
+.avviso-errore   { background: var(--rosso-sfondo); color: var(--rosso); }
+
+/* ============================================================ */
+/* CARD CONTATORI (dashboard)                                    */
+/* ============================================================ */
+.griglia-card {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(140px, 1fr));
+    gap: 0.9rem;
+    margin-bottom: 2rem;
+}
+.card-contatore {
+    background: #fff;
+    border: 1px solid var(--colore-bordo);
+    border-radius: var(--raggio);
+    padding: 1.1rem 1.25rem;
+    box-shadow: 0 2px 8px rgba(31, 45, 54, 0.05);
+}
+.card-contatore:hover { box-shadow: 0 4px 16px rgba(31, 45, 54, 0.08); transform: translateY(-1px); }
+.card-contatore .numero    { font-size: 1.8rem; font-weight: 700; color: var(--colore-primario); }
+.card-contatore .etichetta { font-size: 0.82rem; color: #6a7c88; margin-top: 0.2rem; }
+
+/* ============================================================ */
+/* LISTA LAVORI / RIGHE                                          */
+/* ============================================================ */
+.lavori-recenti h2, .sezione h2 { font-size: 1.1rem; color: var(--colore-testo); margin: 0 0 0.8rem; }
+.riga-lavoro {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    background: #fff;
+    border: 1px solid var(--colore-bordo);
+    border-radius: var(--raggio);
+    padding: 0.9rem 1.1rem;
+    margin-bottom: 0.6rem;
+    text-decoration: none;
+    color: var(--colore-testo);
+}
+.riga-lavoro:hover { box-shadow: 0 2px 10px rgba(31, 45, 54, 0.07); }
+.riga-titolo { font-weight: 600; flex: 1; }
+.riga-meta   { color: #6a7c88; font-size: 0.88rem; }
+
+/* ============================================================ */
+/* CARD LAVORO (dashboard fornitore)                             */
+/* ============================================================ */
+.card-lavoro {
+    background: #fff;
+    border: 1px solid var(--colore-bordo);
+    border-radius: var(--raggio);
+    padding: 1.1rem 1.25rem;
+    margin-bottom: 1rem;
+    box-shadow: 0 2px 8px rgba(31, 45, 54, 0.05);
+}
+.card-lavoro-testa {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 0.75rem;
+}
+.card-lavoro-titolo { margin: 0; font-size: 1.15rem; color: var(--colore-testo); }
+.card-lavoro-condominio { margin: 0.3rem 0 0; font-weight: 600; color: var(--colore-primario); }
+.card-lavoro-descrizione { margin: 0.5rem 0; color: #44535e; }
+.card-lavoro-data { margin: 0.25rem 0 0.9rem; font-size: 0.82rem; color: #8a99a4; }
+.card-lavoro-azioni { display: flex; gap: 0.6rem; align-items: center; flex-wrap: wrap; }
+
+/* ============================================================ */
+/* RIQUADRI (dettaglio: dati, note, foto)                        */
+/* ============================================================ */
+.riquadro {
+    background: #fff;
+    border: 1px solid var(--colore-bordo);
+    border-radius: var(--raggio);
+    padding: 1.1rem 1.25rem;
+    margin-bottom: 1rem;
+    box-shadow: 0 2px 8px rgba(31, 45, 54, 0.05);
+}
+.riquadro h2 { margin: 0 0 0.8rem; font-size: 1.1rem; color: var(--colore-testo); }
+.riquadro p  { margin: 0.4rem 0; }
+.descrizione-completa { margin-top: 0.8rem; line-height: 1.5; }
+.dettaglio-testa { display: flex; align-items: center; gap: 0.9rem; margin-bottom: 1rem; }
+.dettaglio-testa h1 { margin: 0; color: var(--colore-primario); }
+.dettaglio-azioni { margin-bottom: 1rem; }
+.vuoto, .vuoto-inline { color: #8a99a4; font-style: italic; }
+.vuoto {
+    padding: 1.5rem; background: #fff; border: 1px dashed var(--colore-bordo);
+    border-radius: var(--raggio); text-align: center;
+}
+
+/* ============================================================ */
+/* BADGE DI STATO                                                */
+/* ============================================================ */
+.badge {
+    display: inline-block;
+    padding: 0.25rem 0.7rem;
+    border-radius: 999px;
+    font-size: 0.78rem;
+    font-weight: 700;
+    white-space: nowrap;
+    text-transform: capitalize;
+}
+.badge-presentato { background: var(--blu-sfondo);  color: var(--colore-primario); }
+.badge-accettato  { background: var(--giallo-sfondo); color: var(--giallo-testo); }
+.badge-dafare     { background: var(--giallo-sfondo); color: var(--giallo-testo); }
+.badge-in_corso   { background: var(--blu-sfondo);   color: var(--blu-testo); }
+.badge-incorso    { background: var(--blu-sfondo);   color: var(--blu-testo); }
+.badge-completato { background: var(--verde-sfondo); color: var(--verde); }
+.badge-negato     { background: var(--rosso-sfondo); color: var(--rosso); }
+
+/* ============================================================ */
+/* NOTE E FOTO (dettaglio)                                       */
+/* ============================================================ */
+.lista-note { list-style: none; margin: 0; padding: 0; }
+.nota { display: flex; flex-direction: column; gap: 0.15rem; padding: 0.6rem 0; border-bottom: 1px solid #eef2f5; }
+.nota:last-child { border-bottom: none; }
+.nota-data { font-size: 0.78rem; color: #8a99a4; }
+.nota-testo { color: var(--colore-testo); }
+
+.galleria-foto { display: flex; flex-wrap: wrap; gap: 0.7rem; }
+.foto-thumb {
+    display: block; width: 120px; height: 120px;
+    border-radius: 8px; overflow: hidden; border: 1px solid var(--colore-bordo);
+}
+.foto-thumb img { width: 100%; height: 100%; object-fit: cover; display: block; }
+
+/* ============================================================ */
+/* FORM (note, foto, generici)                                   */
+/* ============================================================ */
+.form-nota, .form-foto, .form-generico { margin-top: 1rem; display: flex; flex-direction: column; gap: 0.6rem; }
+.form-foto { flex-direction: row; flex-wrap: wrap; align-items: center; }
+.form-inline { margin: 0; }
+textarea, input[type="text"], input[type="email"], input[type="password"], select, input[type="file"] {
+    width: 100%;
+    box-sizing: border-box;
+    padding: 0.6rem 0.75rem;
+    border: 1px solid var(--colore-bordo);
+    border-radius: 8px;
+    font-family: inherit;
+    font-size: 0.95rem;
+}
+textarea:focus, input:focus, select:focus { outline: none; border-color: var(--colore-primario); }
+.form-foto input[type="file"] { flex: 1 1 auto; min-width: 0; background: #fff; }
+label { font-weight: 600; font-size: 0.9rem; }
+
+/* ============================================================ */
+/* PULSANTI                                                      */
+/* ============================================================ */
+.btn, button, .btn-primario, .btn-secondario, .btn-verde, .btn-rosso {
+    display: inline-block;
+    padding: 0.55rem 1rem;
+    border-radius: 8px;
+    border: 1px solid transparent;
+    font-size: 0.92rem;
+    font-weight: 600;
+    cursor: pointer;
+    text-decoration: none;
+    font-family: inherit;
+    transition: background 0.15s, border-color 0.15s;
+}
+.btn-primario, button[type="submit"] { background: var(--colore-primario); color: #fff; }
+.btn-primario:hover { background: var(--colore-primario-scuro); }
+.btn-verde  { background: var(--verde); color: #fff; }
+.btn-verde:hover { filter: brightness(1.08); }
+.btn-rosso  { background: var(--rosso); color: #fff; }
+.btn-rosso:hover { filter: brightness(1.08); }
+.btn-secondario { background: #fff; color: var(--colore-primario); border-color: var(--colore-bordo); }
+.btn-secondario:hover { background: var(--colore-sfondo); }
+
+/* ============================================================ */
+/* RESPONSIVE — sidebar in cima su schermi stretti              */
+/* ============================================================ */
+@media (max-width: 760px) {
+    .layout-app { flex-direction: column; }
+    .sidebar {
+        width: 100%;
+        flex-direction: row;
+        flex-wrap: wrap;
+        align-items: center;
+        gap: 0.8rem;
+        padding: 1rem;
+    }
+    .sidebar-utente { border: none; padding: 0; }
+    .sidebar-menu { flex-direction: row; flex-wrap: wrap; }
+    .voce.logout { margin: 0; }
+    .contenuto { padding: 1.25rem; }
+}
+
+/* ============================================================ */
+/* SCHEDE DATI (dettaglio admin/condomino)                       */
+/* ============================================================ */
+.scheda {
+    background: #fff;
+    border: 1px solid var(--colore-bordo);
+    border-radius: var(--raggio);
+    padding: 1.1rem 1.25rem;
+    margin-bottom: 1rem;
+    box-shadow: 0 2px 8px rgba(31, 45, 54, 0.05);
+}
+.scheda h2, .scheda h3 { margin: 0 0 0.8rem; color: var(--colore-testo); }
+.scheda h2 { font-size: 1.1rem; }
+.campo, .riga-dato { margin: 0.5rem 0; }
+.etichetta-campo, .etichetta-dato {
+    display: block;
+    font-size: 0.78rem;
+    font-weight: 700;
+    color: #6a7c88;
+    text-transform: uppercase;
+    letter-spacing: 0.03em;
+    margin-bottom: 0.15rem;
+}
+.riga-dato { display: flex; justify-content: space-between; gap: 1rem; padding: 0.5rem 0; border-bottom: 1px solid #eef2f5; }
+.riga-dato:last-child { border-bottom: none; }
+.descrizione, .testo-descrizione { margin: 0.3rem 0 0; color: #44535e; line-height: 1.5; }
+.riga-stato { margin: 0 0 1rem; color: #6a7c88; font-size: 0.9rem; }
+
+/* Due colonne (form nega/approva affiancati) */
+.due-colonne {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 1rem;
+}
+@media (max-width: 640px) { .due-colonne { grid-template-columns: 1fr; } }
+
+/* Form azione (admin: nega/approva/fattura) */
+.form-azione { display: flex; flex-direction: column; gap: 0.6rem; }
+.form-azione h3 { margin: 0; }
+.btn-approva { background: var(--colore-primario); color: #fff; }
+.btn-approva:hover { background: var(--colore-primario-scuro); }
+.btn-nega { background: var(--rosso); color: #fff; }
+.btn-nega:hover { filter: brightness(1.08); }
+
+/* Foto box (galleria admin) */
+.foto-box { width: 120px; height: 120px; border-radius: 8px; overflow: hidden; border: 1px solid var(--colore-bordo); }
+.foto-box img { width: 100%; height: 100%; object-fit: cover; display: block; }
+
+/* ============================================================ */
+/* INTESTAZIONE con bottone a destra (dashboard condomino)       */
+/* ============================================================ */
+.intestazione {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    gap: 1rem;
+    margin-bottom: 1.5rem;
+}
+.intestazione h1 { margin: 0; color: var(--colore-primario); }
+
+/* griglia-contatori = alias di griglia-card */
+.griglia-contatori {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(140px, 1fr));
+    gap: 0.9rem;
+    margin-bottom: 2rem;
+}
+
+/* Card lavoro versione condomino (con testo + stato affiancati) */
+.card-lavoro-testo h3 { margin: 0 0 0.3rem; font-size: 1.05rem; }
+.card-lavoro-stato { text-align: right; display: flex; flex-direction: column; gap: 0.3rem; align-items: flex-end; }
+.meta { color: var(--colore-primario); font-weight: 600; font-size: 0.88rem; margin: 0 0 0.3rem; }
+.data { font-size: 0.8rem; color: #8a99a4; margin: 0; }
+.lista-vuota { color: #8a99a4; font-style: italic; padding: 1rem 0; }
+
+/* ============================================================ */
+/* DETTAGLIO HEADER (condomino)                                  */
+/* ============================================================ */
+.dettaglio-header { display: flex; align-items: center; gap: 0.9rem; margin-bottom: 1rem; flex-wrap: wrap; }
+.dettaglio-header h1 { margin: 0; color: var(--colore-primario); }
+
+/* ============================================================ */
+/* TIMELINE (storico note condomino)                             */
+/* ============================================================ */
+.timeline { list-style: none; margin: 0; padding: 0; }
+.timeline-punto { padding: 0.6rem 0 0.6rem 1.2rem; border-left: 2px solid var(--colore-bordo); position: relative; }
+.timeline-data { font-size: 0.78rem; color: #8a99a4; }
+.timeline-testo { color: var(--colore-testo); }
+
+/* ============================================================ */
+/* FORM CARD (presenta/modifica intervento)                      */
+/* ============================================================ */
+.form-card {
+    background: #fff;
+    border: 1px solid var(--colore-bordo);
+    border-radius: var(--raggio);
+    padding: 1.5rem;
+    max-width: 600px;
+    box-shadow: 0 2px 8px rgba(31, 45, 54, 0.05);
+}
+.form-card label { display: block; margin: 1rem 0 0.3rem; }
+.aiuto-campo { font-size: 0.8rem; color: #8a99a4; margin-top: 0.2rem; }
+.form-azioni { display: flex; gap: 0.6rem; margin-top: 1.2rem; }
+.sottotitolo { color: #6a7c88; text-align: center; margin: 0 0 1.5rem; font-size: 0.9rem; }
+.logo { color: var(--colore-primario); }
+
+/* Foto eliminabili (modifica intervento) */
+.galleria-modifica { display: flex; flex-wrap: wrap; gap: 0.8rem; margin-bottom: 0.5rem; }
+.riga-foto { margin-bottom: 0.5rem; }
+.foto-eliminabile {
+    display: inline-flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 0.4rem;
+    width: 110px;
+    cursor: pointer;
+}
+.foto-eliminabile img {
+    width: 110px;
+    height: 110px;
+    object-fit: cover;
+    border-radius: 8px;
+    border: 1px solid var(--colore-bordo);
+    display: block;
+}
+.checkbox-elimina {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.35rem;
+    font-size: 0.82rem;
+    color: var(--rosso);
+    font-weight: 600;
+}
+.checkbox-elimina input { width: auto; margin: 0; }
+.btn-accedi { width: 100%; margin-top: 1.2rem; background: var(--colore-primario); color: #fff; }
+.btn-accedi:hover { background: var(--colore-primario-scuro); }
+.btn-aggiungi { background: var(--colore-primario); color: #fff; }
+
+/* ============================================================ */
+/* BARRA DI RICERCA (dashboard)                                  */
+/* ============================================================ */
+.barra-ricerca {
+    display: flex;
+    gap: 0.5rem;
+    align-items: center;
+    margin: 0.5rem 0 1.25rem;
+    flex-wrap: wrap;
+}
+.barra-ricerca input[type="text"] {
+    flex: 1 1 240px;
+    max-width: 360px;
+    padding: 0.55rem 0.85rem;
+    border: 1px solid var(--colore-bordo);
+    border-radius: 8px;
+    font-size: 0.95rem;
+}
+.barra-ricerca input[type="text"]:focus { outline: none; border-color: var(--colore-primario); }
+.barra-ricerca button { flex: 0 0 auto; }
+.ricerca-azzera {
+    font-size: 0.88rem;
+    color: #6a7c88;
+    text-decoration: none;
+}
+.ricerca-azzera:hover { text-decoration: underline; }
+.ricerca-esito { margin: 0 0 1rem; color: #6a7c88; font-size: 0.9rem; }
+
+/* Card contatore cliccabili (filtro per stato) */
+a.card-contatore { cursor: pointer; text-decoration: none; color: inherit; display: block; }
+a.card-contatore:hover { box-shadow: 0 4px 16px rgba(31, 45, 54, 0.12); transform: translateY(-2px); }
+
+/* ============================================================ */
+/* VETRINA PUBBLICA (utente non registrato)                     */
+/* ============================================================ */
+.pagina-pubblica {
+    background: var(--colore-sfondo, #eef2f5);
+    margin: 0;
+    min-height: 100vh;
+}
+.testa-pubblica {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 0.9rem 1.5rem;
+    background: #fff;
+    border-bottom: 1px solid var(--colore-bordo, #d9e1e7);
+}
+.logo-pubblico { display: flex; align-items: center; gap: 0.5rem; }
+.logo-pubblico img { width: 36px; height: 36px; object-fit: contain; border-radius: 6px; }
+.logo-pubblico span { font-size: 1.3rem; font-weight: 700; color: var(--colore-primario); }
+.btn-accedi-piccolo {
+    background: var(--colore-primario);
+    color: #fff;
+    text-decoration: none;
+    padding: 0.5rem 1.1rem;
+    border-radius: 8px;
+    font-weight: 600;
+    font-size: 0.95rem;
+}
+.btn-accedi-piccolo:hover { opacity: 0.92; }
+.contenuto-pubblico { max-width: 820px; margin: 0 auto; padding: 1.8rem 1.5rem; }
+.lista-pubblica { display: flex; flex-direction: column; gap: 0.8rem; margin-top: 1rem; }
+.card-lavoro-pubblica {
+    background: #fff;
+    border: 1px solid var(--colore-bordo, #d9e1e7);
+    border-radius: 12px;
+    padding: 1rem 1.2rem;
+}
+.card-lavoro-pubblica .riga-titolo {
+    display: flex; align-items: center; justify-content: space-between; gap: 0.8rem;
+}
+.card-lavoro-pubblica h2 { margin: 0; font-size: 1.1rem; color: var(--colore-primario); }
+.descrizione-pubblica { margin: 0.5rem 0 0.7rem; color: #44525c; font-size: 0.95rem; }
+.meta-pubblica { display: flex; gap: 1rem; font-size: 0.85rem; color: #6a7c88; }
+
+/* Pulsante "Esplora senza accedere" nel login */
+.btn-esplora {
+    display: block;
+    text-align: center;
+    margin-top: 0.9rem;
+    padding: 0.6rem;
+    background: transparent;
+    color: var(--colore-primario);
+    border: 1px solid var(--colore-primario);
+    border-radius: 8px;
+    text-decoration: none;
+    font-weight: 600;
+    font-size: 0.95rem;
+}
+.btn-esplora:hover { background: rgba(44, 95, 124, 0.06); }
+
+/* Vetrina: card cliccabili e dettaglio */
+a.card-lavoro-pubblica { text-decoration: none; color: inherit; display: block; transition: box-shadow .15s, transform .15s; }
+a.card-lavoro-pubblica:hover { box-shadow: 0 4px 16px rgba(31,45,54,.12); transform: translateY(-2px); }
+.vedi-dettaglio { margin-left: auto; color: var(--colore-primario); font-weight: 600; }
+.nota-demo { margin-top: 1.2rem; padding: 0.9rem 1.1rem; background: #eef4f8; border-radius: 10px; color: #44525c; font-size: 0.92rem; }
+.nota-demo a { color: var(--colore-primario); font-weight: 600; }
+
+/* === LOGO (sidebar + login) === */
+.sidebar-logo { display: flex; align-items: center; gap: 0.5rem; }
+.sidebar-logo img { width: 34px; height: 34px; object-fit: contain; border-radius: 6px; }
+.sidebar-logo span { font-size: 1.3rem; font-weight: 700; color: var(--colore-primario); }
+.logo-login { display: flex; flex-direction: column; align-items: center; gap: 0.4rem; margin-bottom: 0.5rem; }
+.logo-login img { width: 90px; height: 90px; object-fit: contain; }
+.logo-login h1 { margin: 0; color: var(--colore-primario); font-size: 1.6rem; }
+
+/* ============================================================
+   BANNER MODALE DI ESITO (riepilogo azione amministratore)
+   Mostrato dopo: crea lavoro, accetta, nega, crea condominio.
+   ============================================================ */
+.banner-overlay {
+    position: fixed;
+    inset: 0;
+    background: rgba(31, 45, 54, 0.45);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 1000;
+    padding: 1rem;
+}
+.banner-modale {
+    background: #fff;
+    border-radius: 14px;
+    padding: 2rem 2.2rem;
+    width: 100%;
+    max-width: 460px;
+    box-shadow: 0 12px 40px rgba(31, 45, 54, 0.25);
+    text-align: center;
+    animation: banner-entra 0.18s ease-out;
+}
+@keyframes banner-entra {
+    from { transform: translateY(8px) scale(0.98); opacity: 0; }
+    to   { transform: translateY(0)   scale(1);    opacity: 1; }
+}
+.banner-icona {
+    width: 84px;
+    height: 84px;
+    border-radius: 50%;
+    margin: 0 auto 1rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 2.6rem;
+    line-height: 1;
+    border: 4px solid;
+}
+.banner-icona-successo { color: #1f9d55; border-color: #1f9d55; }
+.banner-icona-errore   { color: #d64545; border-color: #d64545; }
+.banner-titolo {
+    margin: 0 0 0.3rem;
+    font-size: 1.6rem;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    color: var(--colore-testo);
+}
+.banner-sottotitolo {
+    margin: 0 0 1.2rem;
+    color: #5a6b76;
+    font-size: 0.95rem;
+}
+.banner-righe {
+    text-align: left;
+    margin: 1.2rem 0;
+    border-top: 1px solid var(--colore-bordo);
+    padding-top: 1rem;
+}
+.banner-riga {
+    display: flex;
+    justify-content: space-between;
+    gap: 1rem;
+    padding: 0.35rem 0;
+    border-bottom: 1px solid var(--colore-sfondo);
+}
+.banner-riga dt {
+    font-weight: 600;
+    color: #5a6b76;
+    margin: 0;
+}
+.banner-riga dd {
+    margin: 0;
+    text-align: right;
+    color: var(--colore-testo);
+    word-break: break-word;
+}
+.banner-chiudi { margin-top: 1.2rem; min-width: 140px; }
