@@ -80,6 +80,8 @@ class CCompletaIntervento
         // Nota automatica di avanzamento (con timestamp automatico).
         $nota = new Nota();
         $nota->setTesto('Lavoro completato.');
+        // Autore della nota automatica: il fornitore che compie l'azione.
+        $nota->setAutore($pm->load(Utente::class, Session::getUserId()));
         $intervento->addNota($nota);
 
         $pm->update();

@@ -39,6 +39,12 @@
                 <span class="etichetta-dato">Data creazione</span>
                 <span>{$intervento->getDataCreazione()->format('d/m/Y H:i')}</span>
             </div>
+            {if $tipo == 'completato' && $intervento->getStato()->getDataCompletamento()}
+            <div class="riga-dato">
+                <span class="etichetta-dato">Data fine lavori</span>
+                <span>{$intervento->getStato()->getDataCompletamento()->format('d/m/Y H:i')}</span>
+            </div>
+            {/if}
             {if $intervento->getSegnalante()}
             <div class="riga-dato">
                 <span class="etichetta-dato">Segnalato da</span>
@@ -93,6 +99,11 @@
                         <li class="timeline-punto">
                             <p class="timeline-testo">{$n->getTesto()|escape}</p>
                             <span class="timeline-data">{$n->getTimestamp()->format('d/m/Y H:i')}</span>
+                            {if $n->getAutore()}
+                                <span class="timeline-autore">{$n->getAutore()->getNome()|escape} {$n->getAutore()->getCognome()|escape} ({$n->getAutore()->getRuoloLabel()|escape})</span>
+                            {else}
+                                <span class="timeline-autore">Autore sconosciuto</span>
+                            {/if}
                         </li>
                     {/foreach}
                 </ul>

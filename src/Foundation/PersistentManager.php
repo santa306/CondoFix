@@ -32,21 +32,25 @@
 //   $pm->utente()->login('mario@mail.it', 'pass');
 //   $pm->condominio()->findByAmministratore($admin);
 
-use Doctrine\ORM\EntityManagerInterface;
+use Doctrine\ORM\EntityManagerInterface;//importa l'interfaccia EntityManager
 
 class PersistentManager
 {
     // -------------------------------------------------------
     // Istanza Singleton
     // -------------------------------------------------------
-    private static ?PersistentManager $instance = null;
+    private static ?PersistentManager $instance = null;//private perche non puoi farla da fuori
+//L'unico modo per ottenere l'istanza è PersistentManager::getInstance(). E getInstance controlla: se $instance è ancora null, la crea;
+// altrimenti restituisce quella già creata
+//static significa che appartiene alla classe. Una sola copia di $instance per tutto il codice 
+
 
     // EntityManager di Doctrine
     private EntityManagerInterface $em;
 
     // -------------------------------------------------------
-    // Istanze delle classi Foundation specifiche
-    // Vengono create una volta sola (lazy initialization)
+    // Istanze delle classi Foundation specifiche. Inizializzati a null
+    // Vengono create una volta sola (lazy initialization) quando richieste
     // -------------------------------------------------------
     private ?FIntervento $fIntervento  = null;
     private ?FUtente     $fUtente      = null;
@@ -58,9 +62,9 @@ class PersistentManager
     // -------------------------------------------------------
     // COSTRUTTORE PRIVATO
     // -------------------------------------------------------
-    private function __construct()
+    private function __construct()//dal di fuori non si può creare
     {
-        global $entityManager;
+        global $entityManager;//recuperi da bootstrap e lo ficchi dentro il PersistentManager
         $this->em = $entityManager;
     }
 
@@ -70,8 +74,8 @@ class PersistentManager
     public static function getInstance(): PersistentManager
     {
         if (self::$instance === null) {
-            require_once __DIR__ . '/../../bootstrap.php';
-            self::$instance = new PersistentManager();
+            require_once __DIR__ . '/../../bootstrap.php';//garantisce che $entityManager esista prima di usarlo, basta che si trova in index e la riga non fa nulla
+            self::$instance = new PersistentManager();//QUI SI CREA
         }
         return self::$instance;
     }
@@ -90,8 +94,8 @@ class PersistentManager
      */
     public function store(object $entity): void
     {
-        $this->em->persist($entity);
-        $this->em->flush();
+        $this->em->persist($entity);//persist() segna l'oggetto come "da salvare" nella Unit of Work di Doctrine
+        $this->em->flush();//flush() esegue davvero le query SQL accumulate
     }
 
     /**
@@ -112,8 +116,8 @@ class PersistentManager
      */
     public function delete(object $entity): void
     {
-        $this->em->remove($entity);
-        $this->em->flush();
+        $this->em->remove($entity);//remove() segna l'oggetto per l'eliminazione
+        $this->em->flush();//flush() esegue il DELETE
     }
 
     /**
@@ -130,7 +134,7 @@ class PersistentManager
     // -------------------------------------------------------
     // DELEGATORI ALLE CLASSI F-SPECIFICHE
     // Ogni metodo restituisce l'istanza della F-classe
-    // corrispondente, creandola la prima volta (lazy).
+    // corrispondente, creandola la prima volta (lazy) se F* non viene richiesta non la crea.
     //
     // Il Control usa sempre la forma:
     //   $pm->intervento()->findByCondominio($cond)

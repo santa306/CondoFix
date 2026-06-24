@@ -226,10 +226,31 @@ class Session
     public static function requireRole(string $ruolo): void
     {
         self::requireAuth();
+        self::requireCambioPassword();
         if (self::get('ruolo') !== $ruolo) {
             http_response_code(403); echo 'Accesso negato.'; exit;
             exit;
         }
+    }
+
+    /**
+     * Se l'utente loggato ha il flag "deve cambiare password" attivo, lo
+     * costringe sulla pagina di cambio: qualsiasi pagina protetta lo rimanda
+     * lì finché non ha aggiornato la password. Esclude la pagina di cambio
+     * stessa e il logout, altrimenti si creerebbe un ciclo di redirect.
+     */
+    public static function requireCambioPassword(): void
+    {
+        if (!self::get('deveCambiarePassword')) {
+            return;
+        }
+        $azione = $_GET['action'] ?? '';
+        $consentite = ['formCambioPassword', 'cambioPassword', 'logout'];
+        if (in_array($azione, $consentite, true)) {
+            return;
+        }
+        header('Location: index.php?action=formCambioPassword');
+        exit;
     }
 
     /**
@@ -241,6 +262,7 @@ class Session
     public static function requireAnyRole(array $ruoli): void
     {
         self::requireAuth();
+        self::requireCambioPassword();
         if (!in_array(self::get('ruolo'), $ruoli, true)) {
             http_response_code(403); echo 'Accesso negato.'; exit;
             exit;

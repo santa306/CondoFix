@@ -12,7 +12,7 @@ class FIntervento extends FBase
     public function __construct(\Doctrine\ORM\EntityManagerInterface $em)
     {
         parent::__construct($em);
-        $this->entityClass = Intervento::class;
+        $this->entityClass = Intervento::class;//imposta che INtervento (entity) geestisce questa F*
     }
 
     // -------------------------------------------------------
@@ -20,13 +20,13 @@ class FIntervento extends FBase
     // -------------------------------------------------------
 
     /**
-     * Tutti gli interventi di un condominio specifico.
+     * Tutti gli interventi di un condominio specifico, i piuù recenti prima.
      * Usato nella dashboard del Condomino e dell'Admin.
      */
     public function findByCondominio(Condominio $condominio): array
     {
         return $this->getRepository()->findBy(
-            ['condominio' => $condominio],
+            ['condominio' => $condominio],//genera un SELECT * FROM interventi WHERE condominio_id = ? ORDER BY data_creazione DESC
             ['dataCreazione' => 'DESC']
         );
     }
@@ -60,13 +60,15 @@ class FIntervento extends FBase
      * Tutti gli interventi in stato "Presentato" (segnalazioni da valutare).
      * Usato nella dashboard Admin per mostrare le segnalazioni in attesa.
      */
+    //Alcune query non si possono fare con findBy, perché devono filtrare sul tipo di stato — e il tipo è il discriminator di una gerarchia, non una colonna normale 
+    //dell'intervento. Qui serve il DQL
     public function findPresentati(): array
     {
         return $this->em->createQuery('
             SELECT i FROM Intervento i JOIN i.stato s
             WHERE s INSTANCE OF ' . Presentato::class . '
             ORDER BY i.dataCreazione ASC
-        ')->getResult();
+        ')->getResult();//dammi tutti gli interventi il cui stato corrente è un Presentato, dal più vecchio al più recente
     }
 
     /**
@@ -117,7 +119,7 @@ class FIntervento extends FBase
             'completato' => [],
         ];
         foreach ($tutti as $intervento) {
-            $tipo = $intervento->getStato()?->getTipo();
+            $tipo = $intervento->getStato()?->getTipo();//chiama getTipo solo se getStato non è null
             if (isset($grouped[$tipo])) {
                 $grouped[$tipo][] = $intervento;
             }
@@ -149,13 +151,64 @@ class FIntervento extends FBase
      * Gli N interventi più recenti.
      * Usato nel widget "Lavori recenti" della dashboard Admin.
      */
-    public function findRecenti(int $limite = 5): array
+    public function findRecenti(int $limite = 5): array//i 5 più recenti
     {
         return $this->getRepository()->findBy(
             [],
             ['dataCreazione' => 'DESC'],
             $limite
         );
+    }
+
+    /**
+     * Interventi che appartengono ai condomìni di un certo amministratore,
+     * dal più recente. È la base per l'isolamento dei dati in dashboard admin.
+     *
+     * @param Condominio[] $condomini i condomìni dell'admin
+     * @return Intervento[]
+     */
+    public function findByCondomini(array $condomini, int $limite = 100000): array
+    {
+        if (empty($condomini)) {
+            return [];
+        }
+        return $this->getRepository()->findBy(
+            ['condominio' => $condomini],
+            ['dataCreazione' => 'DESC'],
+            $limite
+        );
+    }
+
+    /**
+     * Come findGroupedByStato() ma limitato ai condomìni dell'admin.
+     * Serve a calcolare i contatori (card) della sua dashboard.
+     *
+     * @param Condominio[] $condomini
+     * @return array<string, Intervento[]>
+     */
+    public function findGroupedByStatoForCondomini(array $condomini): array
+    {
+        $grouped = [
+            'presentato' => [],
+            'negato'     => [],
+            'accettato'  => [],
+            'in_corso'   => [],
+            'completato' => [],
+        ];
+        if (empty($condomini)) {
+            return $grouped;
+        }
+        $tutti = $this->getRepository()->findBy(
+            ['condominio' => $condomini],
+            ['dataCreazione' => 'DESC']
+        );
+        foreach ($tutti as $intervento) {
+            $tipo = $intervento->getStato()?->getTipo();
+            if (isset($grouped[$tipo])) {
+                $grouped[$tipo][] = $intervento;
+            }
+        }
+        return $grouped;
     }
 
     // =======================================================

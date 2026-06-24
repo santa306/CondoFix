@@ -23,9 +23,44 @@ class CListaLavoratori
             return;
         }
 
-        // Tutti i fornitori del sistema (i "lavoratori").
-        $lavoratori = $pm->utente()->findAllFornitori();
+        // Solo i fornitori creati da QUESTO amministratore (isolamento dati).
+        $lavoratori = $pm->utente()->findFornitoriByAmministratore($admin);
+
+        // Se è stata richiesta la scheda di un lavoratore, preparo il banner.
+        $this->preparaBannerInfo($pm, $admin);
 
         (new ViewListaLavoratori())->mostra($admin, $lavoratori);
+    }
+
+    /**
+     * Prepara il banner con le specifiche di un lavoratore (senza password),
+     * se l'URL lo richiede (?infoLavoratore=ID). Mostra solo i lavoratori
+     * creati da questo admin.
+     */
+    private function preparaBannerInfo(PersistentManager $pm, Amministratore $admin): void
+    {
+        $idInfo = (int) ($_GET['infoLavoratore'] ?? 0);
+        if ($idInfo <= 0) {
+            return;
+        }
+        $l = $pm->load(Fornitore::class, $idInfo);
+        // Mostro solo se esiste ed è un lavoratore di QUESTO admin.
+        if (!($l instanceof Fornitore) || $l->getAmministratore()?->getId() !== $admin->getId()) {
+            return;
+        }
+        Session::setBanner([
+            'tipo'        => 'successo',
+            'titolo'      => 'Scheda lavoratore',
+            'senzaIcona'  => true,
+            'foto'        => $l->getFotoProfilo(),
+            'sottotitolo' => $l->getNome() . ' ' . $l->getCognome(),
+            'righe'       => [
+                'Nome'        => $l->getNome() . ' ' . $l->getCognome(),
+                'Email'       => $l->getEmail(),
+                'Telefono'    => $l->getTelefono() ?? '—',
+                'Partita IVA' => $l->getPartitaIva() ?? '—',
+                'Categoria'   => $l->getCategoria() ? $l->getCategoria()->getNome() : '—',
+            ],
+        ]);
     }
 }

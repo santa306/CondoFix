@@ -89,6 +89,17 @@ class CLogin
         //    Session::login() rigenera l'id di sessione (anti session-fixation)
         //    e salva userId + ruolo + IP.
         Session::login($utente->getId(), $ruolo, $utente->getNome(), $utente->getCognome());
+        Session::set('fotoProfilo', $utente->getFotoProfilo());
+
+        // 5b. PRIMO ACCESSO con password temporanea: prima di tutto l'utente
+        //     deve cambiare la password. Lo mando alla pagina dedicata e non
+        //     alla dashboard. Il flag è in sessione per i controlli successivi.
+        if ($utente->getDeveCambiarePassword()) {
+            Session::set('deveCambiarePassword', true);
+            header('Location: index.php?action=formCambioPassword');
+            exit;
+        }
+
         Session::setFlash('successo', 'Benvenuto, ' . $utente->getNome() . '!');
 
         // Reindirizzo alla dashboard giusta. Il redirect lo fa il Control

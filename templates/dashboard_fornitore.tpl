@@ -29,20 +29,25 @@
             <a class="card-contatore" href="index.php?action=dashboardFornitore&stato=completato"><div class="numero">{$contatori.completati}</div><div class="etichetta">Completati</div></a>
         </section>
 
-        {* --- Barra di ricerca per titolo --- *}
-        <form class="barra-ricerca" method="get" action="index.php">
+        {* --- Filtro per condominio --- *}
+        <form class="barra-filtri" method="get" action="index.php">
             <input type="hidden" name="action" value="dashboardFornitore">
-            <input type="text" name="cerca" value="{$cerca|escape}" placeholder="Cerca un lavoro per nome...">
-            <button type="submit" class="btn-primario">Cerca</button>
-            {if $cerca != ''}<a class="ricerca-azzera" href="index.php?action=dashboardFornitore">Azzera</a>{/if}
+            <select name="condominio" onchange="this.form.submit()">
+                <option value="">Tutti i condomini</option>
+                {foreach $condomini as $cond}
+                    <option value="{$cond->getId()}" {if $filtroCondominio == $cond->getId()}selected{/if}>{$cond->getNome()|escape}</option>
+                {/foreach}
+            </select>
+            {if $filtroCondominio != ''}
+                <a class="ricerca-azzera" href="index.php?action=dashboardFornitore">Azzera filtro</a>
+            {/if}
         </form>
-        {if $cerca != ''}<p class="ricerca-esito">Risultati per: <strong>{$cerca|escape}</strong></p>{/if}
 
         <section class="lavori-recenti">
-            <h2>Lavori attivi</h2>
+            <h2>I miei lavori</h2>
 
             {if $numeroLavori == 0}
-                <p class="vuoto">Non hai lavori attivi al momento.</p>
+                <p class="vuoto">Nessun lavoro da mostrare.</p>
             {else}
                 {foreach $lavori as $i}
                     {assign var="tipo" value=$i->getStato()->getTipo()}
@@ -57,7 +62,7 @@
                                 <span class="badge badge-{$tipo|escape}">{$tipo|replace:'_':' '|escape}</span>
                             {/if}
                         </div>
-                        <p class="card-lavoro-condominio">{$i->getCondominio()->getNome()|escape}</p>
+                        <p class="card-lavoro-condominio">{$i->getCondominio()->getNome()|escape}{if $i->getStato()->getFornitore() && $i->getStato()->getFornitore()->getCategoria()} &middot; {$i->getStato()->getFornitore()->getCategoria()->getNome()|escape}{/if}</p>
                         <p class="card-lavoro-descrizione">{$i->getDescrizione()|escape}</p>
                         <p class="card-lavoro-data">Creato il {$i->getDataCreazione()->format('d/m/Y')}</p>
                         <div class="card-lavoro-azioni">

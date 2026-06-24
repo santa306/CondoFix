@@ -40,7 +40,20 @@ try {
     $fornitore->setTelefono("3409876543");
     $fornitore->setPartitaIva("12345678901");
     $fornitore->setCategoria($categoria);
+    $fornitore->setAmministratore($admin);
     $entityManager->persist($fornitore);
+
+    // Condòmino di test con password TEMPORANEA: al primo accesso il sistema
+    // lo obbligherà a cambiarla (dimostra il flusso del cambio forzato).
+    $condominoTemp = new Condomino();
+    $condominoTemp->setNome("Anna");
+    $condominoTemp->setCognome("Neri");
+    $condominoTemp->setEmail("nuovo@condofix.it");
+    $condominoTemp->setPassword("temp1234");
+    $condominoTemp->setCondominio($condominio);
+    $condominoTemp->setInterno("Scala B, Int. 2");
+    $condominoTemp->setDeveCambiarePassword(true);
+    $entityManager->persist($condominoTemp);
 
     $entityManager->flush();
 
@@ -49,6 +62,7 @@ try {
     echo "  Amministratore -> admin@condofix.it / admin123\n";
     echo "  Condomino      -> condomino@condofix.it / condomino123\n";
     echo "  Fornitore      -> fornitore@condofix.it / fornitore123\n";
+    echo "  Condomino TEMP -> nuovo@condofix.it / temp1234 (cambio password al 1° accesso)\n";
 } catch (Exception $e) {
     echo "Errore: " . $e->getMessage() . "\n";
 }

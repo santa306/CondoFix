@@ -96,6 +96,8 @@ class CPresentaIntervento
         // storico parte dalla creazione, come per le azioni dell'admin/fornitore.
         $nota = new Nota();
         $nota->setTesto('Segnalazione inviata.');
+        // Autore della nota automatica: chi compie l'azione.
+        $nota->setAutore($condomino);
         $intervento->addNota($nota);
 
         // 6. SALVO TUTTO (intervento + stato + foto in cascade)

@@ -56,17 +56,34 @@
                 <div class="numero">{$contatori.completati}</div>
                 <div class="etichetta">Completati</div>
             </a>
+            <a class="card-contatore" href="index.php?action=dashboardAdmin&stato=negato">
+                <div class="numero">{$contatori.negati}</div>
+                <div class="etichetta">Negati</div>
+            </a>
         </section>
 
-        {* ---------- LAVORI RECENTI ---------- *}
-        {* --- Barra di ricerca per titolo --- *}
-        <form class="barra-ricerca" method="get" action="index.php">
+        {* --- Filtri: categoria (del fornitore) e condominio --- *}
+        <form class="barra-filtri" method="get" action="index.php">
             <input type="hidden" name="action" value="dashboardAdmin">
-            <input type="text" name="cerca" value="{$cerca|escape}" placeholder="Cerca un lavoro per nome...">
-            <button type="submit" class="btn-primario">Cerca</button>
-            {if $cerca != ''}<a class="ricerca-azzera" href="index.php?action=dashboardAdmin">Azzera</a>{/if}
+
+            <select name="categoria" onchange="this.form.submit()">
+                <option value="">Tutte le categorie</option>
+                {foreach $categorie as $c}
+                    <option value="{$c->getId()}" {if $filtroCategoria == $c->getId()}selected{/if}>{$c->getNome()|escape}</option>
+                {/foreach}
+            </select>
+
+            <select name="condominio" onchange="this.form.submit()">
+                <option value="">Tutti i condomini</option>
+                {foreach $condomini as $cond}
+                    <option value="{$cond->getId()}" {if $filtroCondominio == $cond->getId()}selected{/if}>{$cond->getNome()|escape}</option>
+                {/foreach}
+            </select>
+
+            {if $filtroCategoria != '' || $filtroCondominio != ''}
+                <a class="ricerca-azzera" href="index.php?action=dashboardAdmin">Azzera filtri</a>
+            {/if}
         </form>
-        {if $cerca != ''}<p class="ricerca-esito">Risultati per: <strong>{$cerca|escape}</strong></p>{/if}
 
         <section class="lavori-recenti">
             <h2>Tutti i lavori</h2>
@@ -79,6 +96,9 @@
                         <div class="riga-meta">
                             {if $i->getCondominio()}
                                 {$i->getCondominio()->getNome()|escape}
+                            {/if}
+                            {if $i->getStato()->getFornitore() && $i->getStato()->getFornitore()->getCategoria()}
+                                &middot; {$i->getStato()->getFornitore()->getCategoria()->getNome()|escape}
                             {/if}
                         </div>
                         <span class="badge badge-{$i->getStato()->getTipo()|escape}">

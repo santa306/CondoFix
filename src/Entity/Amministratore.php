@@ -17,4 +17,6 @@ class Amministratore extends Utente
 
     public function getTelefono(): ?string    { return $this->telefono; }
     public function setTelefono(?string $v): void { $this->telefono = $v; }
+
+    public function getRuoloLabel(): string { return 'Amministratore'; }
 }

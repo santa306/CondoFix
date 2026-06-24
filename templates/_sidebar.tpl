@@ -6,13 +6,17 @@
 <aside class="sidebar">
     <div class="sidebar-logo"><img src="img/logo.jpeg" alt="CondoFix"><span>CondoFix</span></div>
 
-    <div class="sidebar-utente">
-        <div class="avatar"></div>
+    <a class="sidebar-utente" href="index.php?action=profilo" title="Il mio profilo">
+        {if $sidebarFoto}
+            <div class="avatar avatar-foto"><img src="{$sidebarFoto|escape}" alt="Profilo"></div>
+        {else}
+            <div class="avatar"></div>
+        {/if}
         <div>
             <div class="nome">{$sidebarNome|escape}</div>
             <div class="ruolo">{$sidebarRuoloLabel|escape}</div>
         </div>
-    </div>
+    </a>
 
     <nav class="sidebar-menu">
         {if $sidebarRuolo == 'amministratore'}

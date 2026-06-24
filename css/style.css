@@ -42,10 +42,11 @@ a { color: var(--colore-primario); }
 /* ============================================================ */
 body.pagina-login {
     display: flex;
-    align-items: center;
-    justify-content: center;
+    flex-direction: column;
     min-height: 100vh;
-    padding: 1rem;
+}
+body.pagina-login .card-login {
+    margin: auto;
 }
 .card-login {
     background: #fff;
@@ -433,10 +434,20 @@ label { font-weight: 600; font-size: 0.9rem; }
 /* ============================================================ */
 /* TIMELINE (storico note condomino)                             */
 /* ============================================================ */
-.timeline { list-style: none; margin: 0; padding: 0; }
+.timeline {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    /* Storico note scrollabile: oltre una certa altezza compare lo scroll
+       verticale, così le note non occupano troppo schermo (tutti i ruoli). */
+    max-height: 280px;
+    overflow-y: auto;
+    padding-right: 0.6rem;
+}
 .timeline-punto { padding: 0.6rem 0 0.6rem 1.2rem; border-left: 2px solid var(--colore-bordo); position: relative; }
 .timeline-data { font-size: 0.78rem; color: #8a99a4; }
 .timeline-testo { color: var(--colore-testo); }
+.timeline-autore { font-size: 0.72rem; color: #56616a; font-style: italic; margin-left: 8px; }
 
 /* ============================================================ */
 /* FORM CARD (presenta/modifica intervento)                      */
@@ -673,3 +684,324 @@ a.card-lavoro-pubblica:hover { box-shadow: 0 4px 16px rgba(31,45,54,.12); transf
     word-break: break-word;
 }
 .banner-chiudi { margin-top: 1.2rem; min-width: 140px; }
+
+/* ============================================================
+   BARRA FILTRI dashboard admin (categoria + condominio)
+   ============================================================ */
+.barra-filtri {
+    display: flex;
+    gap: 0.6rem;
+    align-items: center;
+    flex-wrap: wrap;
+    margin-bottom: 1.2rem;
+}
+.barra-filtri select {
+    padding: 0.55rem 0.8rem;
+    border: 1px solid var(--colore-bordo);
+    border-radius: 8px;
+    background: #fff;
+    color: var(--colore-testo);
+    font-size: 0.95rem;
+    cursor: pointer;
+    min-width: 200px;
+}
+.barra-filtri select:focus { outline: none; border-color: var(--colore-primario); }
+
+/* ============================================================
+   LANDING PAGE (pagina d'ingresso pubblica)
+   ============================================================ */
+body.pagina-landing {
+    background: var(--colore-sfondo);
+    margin: 0;
+}
+.landing-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 1rem 2.5rem;
+    background: #fff;
+    border-bottom: 1px solid var(--colore-bordo);
+}
+.landing-logo { display: flex; align-items: center; gap: 0.6rem; }
+.landing-logo img { height: 38px; width: auto; }
+.landing-logo span { font-size: 1.4rem; font-weight: 700; color: var(--colore-primario); }
+.landing-nav { display: flex; gap: 0.7rem; align-items: center; }
+
+.landing-hero {
+    display: flex;
+    align-items: center;
+    gap: 3rem;
+    max-width: 1100px;
+    margin: 0 auto;
+    padding: 4rem 2.5rem;
+    flex-wrap: wrap;
+}
+.landing-testo { flex: 1 1 380px; }
+.landing-testo h1 {
+    font-size: 2.4rem;
+    color: var(--colore-primario);
+    margin: 0 0 1rem;
+    line-height: 1.2;
+}
+.landing-testo p { font-size: 1.1rem; color: #4a5b66; margin: 0 0 1.4rem; }
+.landing-vantaggi { list-style: none; padding: 0; margin: 0 0 1.8rem; }
+.landing-vantaggi li {
+    padding: 0.4rem 0 0.4rem 1.8rem;
+    position: relative;
+    color: var(--colore-testo);
+}
+.landing-vantaggi li::before {
+    content: "\2713";
+    position: absolute;
+    left: 0;
+    color: #1f9d55;
+    font-weight: 700;
+}
+.btn-grande {
+    display: inline-block;
+    padding: 0.8rem 2rem;
+    font-size: 1.05rem;
+}
+.landing-immagine {
+    flex: 1 1 380px;
+    background: #fff;
+    border: 1px solid var(--colore-bordo);
+    border-radius: 14px;
+    padding: 2.5rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    box-shadow: 0 8px 30px rgba(31, 45, 54, 0.06);
+}
+.landing-immagine img { max-width: 220px; height: auto; opacity: 0.95; }
+.landing-footer {
+    text-align: center;
+    padding: 2rem;
+    color: #8a99a4;
+    font-size: 0.9rem;
+}
+
+/* ============================================================
+   PAGINE AUTH pubbliche (registrazione) — form centrato
+   ============================================================ */
+.contenuto-auth {
+    max-width: 520px;
+    margin: 2.5rem auto;
+    padding: 0 1.5rem;
+}
+.form-card-auth {
+    background: #fff;
+    border: 1px solid var(--colore-bordo);
+    border-radius: 14px;
+    padding: 2rem 2.2rem;
+    box-shadow: 0 8px 30px rgba(31, 45, 54, 0.06);
+}
+.form-card-auth .titolo-pagina { margin-top: 0; }
+
+/* ============================================================
+   PROFILO UTENTE + avatar con foto
+   ============================================================ */
+/* Blocco utente nella sidebar reso cliccabile */
+a.sidebar-utente { text-decoration: none; color: inherit; transition: background 0.15s; }
+a.sidebar-utente:hover { background: var(--colore-sfondo); }
+
+/* Avatar con foto: l'immagine riempie il cerchio */
+.sidebar-utente .avatar.avatar-foto { overflow: hidden; padding: 0; }
+.sidebar-utente .avatar.avatar-foto img {
+    width: 100%; height: 100%; object-fit: cover; border-radius: 50%;
+}
+
+/* Pagina profilo */
+.profilo-testa { display: flex; align-items: flex-start; gap: 1.5rem; }
+.profilo-avatar {
+    position: relative;
+    display: block;
+    width: 90px; height: 90px;
+    cursor: pointer;
+    flex-shrink: 0;
+}
+.profilo-avatar .avatar-grande,
+.profilo-avatar img {
+    width: 90px; height: 90px; border-radius: 50%;
+    background: var(--colore-sfondo); border: 1px solid var(--colore-bordo);
+    object-fit: cover;
+    display: block;
+}
+/* Overlay "Cambia foto" che appare passando sopra il cerchio */
+.profilo-avatar-overlay {
+    position: absolute;
+    inset: 0;
+    border-radius: 50%;
+    background: rgba(31, 45, 54, 0.55);
+    color: #fff;
+    font-size: 0.72rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    opacity: 0;
+    transition: opacity 0.15s;
+    text-align: center;
+}
+.profilo-avatar:hover .profilo-avatar-overlay { opacity: 1; }
+.profilo-dati { flex: 1; }
+
+/* Link "clicca qua" per il cambio password */
+.profilo-cambio-pw { margin: 1.2rem 0 0.4rem; color: #4a5b66; }
+.profilo-cambio-pw a { font-weight: 600; }
+
+/* Box password nascosto di default, visibile con la classe .aperto */
+.box-password { display: none; }
+.box-password.aperto { display: block; }
+
+/* Foto profilo dentro il banner (scheda condòmino / lavoratore) */
+.banner-foto { margin: 0 auto 1rem; width: 84px; height: 84px; }
+.banner-foto img,
+.banner-foto .avatar-grande {
+    width: 84px; height: 84px; border-radius: 50%;
+    object-fit: cover;
+    background: var(--colore-sfondo);
+    border: 1px solid var(--colore-bordo);
+    display: block;
+}
+
+/* ============================================================ */
+/*  RIFINITURA LANDING + LOGIN (migliorie estetiche)            */
+/*  Aggiunto in fondo: queste regole affinano lo stile esistente */
+/* ============================================================ */
+
+/* ---- Hero: sfondo morbido e piu' arioso ---- */
+body.pagina-landing {
+    background: linear-gradient(160deg, #f4f8fb 0%, #eaf1f6 55%, #e3edf3 100%);
+}
+.landing-hero {
+    padding: 5rem 2.5rem 4rem;
+    gap: 4rem;
+}
+.landing-testo h1 {
+    font-size: 2.8rem;
+    letter-spacing: -0.5px;
+    margin-bottom: 0.6rem;
+}
+
+/* ---- Frase a effetto sotto il titolo ---- */
+.landing-claim {
+    font-size: 1.35rem;
+    font-weight: 600;
+    color: #3a7ca5;
+    margin: 0 0 1.3rem;
+    line-height: 1.35;
+}
+
+.landing-testo p { font-size: 1.12rem; line-height: 1.6; }
+
+/* ---- Vantaggi con pallino piu' marcato ---- */
+.landing-vantaggi li { padding-left: 2rem; font-size: 1.02rem; }
+.landing-vantaggi li::before {
+    content: "\2713";
+    background: #1f9d55;
+    color: #fff;
+    width: 1.25rem;
+    height: 1.25rem;
+    border-radius: 50%;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 0.75rem;
+    top: 0.45rem;
+}
+
+/* ---- Pulsante "Inizia gratis" grande e in evidenza ---- */
+.btn-grande {
+    padding: 0.9rem 2.2rem;
+    font-size: 1.05rem;
+    font-weight: 700;
+    border-radius: 10px;
+    box-shadow: 0 6px 18px rgba(44, 95, 124, 0.28);
+    transition: transform .15s, box-shadow .15s;
+}
+.btn-grande:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 9px 24px rgba(44, 95, 124, 0.34);
+}
+
+/* ---- Riquadro hero: composizione grafica al posto del logo ripetuto ---- */
+.landing-immagine {
+    background: linear-gradient(150deg, #2c5f7c 0%, #3a7ca5 100%);
+    border: none;
+    padding: 0;
+    min-height: 320px;
+    overflow: hidden;
+    position: relative;
+    box-shadow: 0 14px 40px rgba(31, 45, 54, 0.18);
+}
+.landing-immagine img {
+    max-width: 130px;
+    filter: brightness(0) invert(1);   /* logo in bianco sul fondo blu */
+    opacity: 0.96;
+    position: relative;
+    z-index: 2;
+}
+/* cerchi decorativi morbidi sullo sfondo del riquadro */
+.landing-immagine::before,
+.landing-immagine::after {
+    content: "";
+    position: absolute;
+    border-radius: 50%;
+    background: rgba(255, 255, 255, 0.08);
+}
+.landing-immagine::before { width: 280px; height: 280px; top: -90px; right: -80px; }
+.landing-immagine::after  { width: 200px; height: 200px; bottom: -70px; left: -60px; }
+
+/* ---- Header landing piu' pulito ---- */
+.landing-header { padding: 1.1rem 3rem; box-shadow: 0 1px 0 rgba(31,45,54,.04); }
+
+/* ---- Footer ---- */
+.landing-footer { margin-top: 1rem; }
+
+/* ============================================================ */
+/*  LOGIN: card piu' raffinata                                   */
+/* ============================================================ */
+body.pagina-login {
+    background: linear-gradient(160deg, #f4f8fb 0%, #e6eef4 100%);
+}
+.card-login {
+    max-width: 400px;
+    padding: 2.4rem 2.2rem;
+    border: none;
+    border-radius: 16px;
+    box-shadow: 0 12px 40px rgba(31, 45, 54, 0.12);
+}
+.logo-login img { width: 76px; height: 76px; }
+.logo-login h1 { font-size: 1.5rem; }
+.form-login input:focus {
+    outline: none;
+    border-color: var(--colore-primario);
+    box-shadow: 0 0 0 3px rgba(44, 95, 124, 0.12);
+}
+.btn-accedi {
+    margin-top: 1.2rem;
+    padding: 0.7rem;
+    font-weight: 700;
+    border-radius: 9px;
+    transition: transform .12s;
+}
+.btn-accedi:hover { transform: translateY(-1px); }
+
+/* Hero immagine: logo grande a colori, niente sfondo blu ne' filtro */
+.landing-immagine {
+    background: #ffffff;
+    border: 1px solid var(--colore-bordo);
+    padding: 1.5rem;
+    min-height: auto;
+    box-shadow: 0 14px 40px rgba(31, 45, 54, 0.14);
+}
+.landing-immagine::before,
+.landing-immagine::after { display: none; }
+.landing-immagine img {
+    max-width: 100%;
+    width: 100%;
+    height: auto;
+    filter: none;
+    opacity: 1;
+    border-radius: 10px;
+}

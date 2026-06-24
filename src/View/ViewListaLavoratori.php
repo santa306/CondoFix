@@ -23,6 +23,9 @@ class ViewListaLavoratori extends ViewBase
         $this->assign('successo', Session::getFlash('successo'));
         $this->assign('errore',   Session::getFlash('errore'));
 
+        // Banner di esito (conferma creazione lavoratore con credenziali).
+        $this->assign('banner', Session::getBanner());
+
         $this->render('lista_lavoratori.tpl');
     }
 }

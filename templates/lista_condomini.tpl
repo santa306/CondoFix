@@ -34,12 +34,12 @@
 
             {if $condomini}
                 {foreach $condomini as $c}
-                    <div class="riga-lavoro">
+                    <a class="riga-lavoro" href="index.php?action=dettaglioCondominio&id={$c->getId()}">
                         <div class="riga-titolo">{$c->getNome()|escape}</div>
                         <div class="riga-meta">
                             {$c->getIndirizzo()|escape} &middot; {$c->getCitta()|escape}
                         </div>
-                    </div>
+                    </a>
                 {/foreach}
             {else}
                 <p class="vuoto">Nessun condominio presente.</p>

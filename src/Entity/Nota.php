@@ -33,6 +33,12 @@ class Nota
     #[ORM\JoinColumn(nullable: false)]
     private Intervento|null $intervento = null;
 
+    // Autore della nota: l'Utente (Admin o Fornitore) che l'ha scritta.
+    // nullable: true perche' le note vecchie nel DB non hanno autore.
+    #[ORM\ManyToOne(targetEntity: Utente::class)]
+    #[ORM\JoinColumn(nullable: true)]
+    private Utente|null $autore = null;
+
     // -------------------------------------------------------
     // COSTRUTTORE
     // Imposta automaticamente il timestamp alla creazione
@@ -56,4 +62,7 @@ class Nota
 
     public function getIntervento(): ?Intervento  { return $this->intervento; }
     public function setIntervento(?Intervento $v): void { $this->intervento = $v; }
+
+    public function getAutore(): ?Utente  { return $this->autore; }
+    public function setAutore(?Utente $v): void { $this->autore = $v; }
 }
