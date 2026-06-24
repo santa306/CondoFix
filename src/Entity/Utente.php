@@ -41,6 +41,20 @@ abstract class Utente
     #[ORM\Column(type: 'string')]
     protected string $password;
 
+    // Flag "deve cambiare password al primo accesso".
+    // È true per condòmini e lavoratori creati dall'admin con password
+    // temporanea: al primo login il sistema li obbliga a cambiarla.
+    // Diventa false dopo il cambio. Gli admin che si registrano da soli
+    // scelgono già la propria password, quindi per loro resta false.
+    #[ORM\Column(type: 'boolean', options: ['default' => false])]
+    protected bool $deveCambiarePassword = false;
+
+    // Percorso dell'immagine del profilo (relativo, es. uploads/profili/x.jpg).
+    // Null finché l'utente non ne carica una: in tal caso si mostra un avatar
+    // vuoto di default.
+    #[ORM\Column(type: 'string', nullable: true)]
+    protected ?string $fotoProfilo = null;
+
     // -------------------------------------------------------
     // GETTER E SETTER
     // -------------------------------------------------------
@@ -68,4 +82,12 @@ abstract class Utente
     public function verificaPassword(string $passwordChiara): bool {//restituirà un true false
         return password_verify($passwordChiara, $this->password);//senza mai decriptare
     }
+
+    // Flag "deve cambiare password al primo accesso"
+    public function getDeveCambiarePassword(): bool { return $this->deveCambiarePassword; }
+    public function setDeveCambiarePassword(bool $v): void { $this->deveCambiarePassword = $v; }
+
+    // Foto del profilo (percorso relativo) — null se non impostata
+    public function getFotoProfilo(): ?string { return $this->fotoProfilo; }
+    public function setFotoProfilo(?string $v): void { $this->fotoProfilo = $v; }
 }

@@ -35,14 +35,19 @@
             <a class="card-contatore" href="index.php?action=dashboardCondomino&stato=negato"><div class="numero">{$contatori.negato}</div><div class="etichetta">Negati</div></a>
         </section>
 
-        {* --- Barra di ricerca per titolo --- *}
-        <form class="barra-ricerca" method="get" action="index.php">
+        {* --- Filtro per categoria (del fornitore assegnato) --- *}
+        <form class="barra-filtri" method="get" action="index.php">
             <input type="hidden" name="action" value="dashboardCondomino">
-            <input type="text" name="cerca" value="{$cerca|escape}" placeholder="Cerca una segnalazione per nome...">
-            <button type="submit" class="btn-primario">Cerca</button>
-            {if $cerca != ''}<a class="ricerca-azzera" href="index.php?action=dashboardCondomino">Azzera</a>{/if}
+            <select name="categoria" onchange="this.form.submit()">
+                <option value="">Tutte le categorie</option>
+                {foreach $categorie as $cat}
+                    <option value="{$cat->getId()}" {if $filtroCategoria == $cat->getId()}selected{/if}>{$cat->getNome()|escape}</option>
+                {/foreach}
+            </select>
+            {if $filtroCategoria != ''}
+                <a class="ricerca-azzera" href="index.php?action=dashboardCondomino">Azzera filtro</a>
+            {/if}
         </form>
-        {if $cerca != ''}<p class="ricerca-esito">Risultati per: <strong>{$cerca|escape}</strong></p>{/if}
 
         <section class="lavori-recenti">
             <h2>Lavori recenti</h2>
@@ -52,7 +57,7 @@
                 {foreach $interventi as $i}
                     <a class="riga-lavoro" href="index.php?action=dettaglioIntervento&id={$i->getId()}">
                         <div class="riga-titolo">{$i->getTitolo()|escape}</div>
-                        <div class="riga-meta">{if $i->getCondominio()}{$i->getCondominio()->getNome()|escape}{/if}</div>
+                        <div class="riga-meta">{if $i->getCondominio()}{$i->getCondominio()->getNome()|escape}{/if}{if $i->getStato()->getFornitore() && $i->getStato()->getFornitore()->getCategoria()} &middot; {$i->getStato()->getFornitore()->getCategoria()->getNome()|escape}{/if}</div>
                         {assign var="tipo" value=$i->getStato()->getTipo()}
                         <span class="badge badge-{$tipo|escape}">{$tipo|replace:'_':' '|escape}</span>
                     </a>

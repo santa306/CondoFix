@@ -40,6 +40,12 @@
                 <span class="etichetta-dato">Data creazione</span>
                 <span>{$intervento->getDataCreazione()->format('d/m/Y H:i')}</span>
             </div>
+            {if $tipo == 'completato' && $stato->getDataCompletamento()}
+            <div class="riga-dato">
+                <span class="etichetta-dato">Data fine lavori</span>
+                <span>{$stato->getDataCompletamento()->format('d/m/Y H:i')}</span>
+            </div>
+            {/if}
             {if $stato->getPriorita()}
             <div class="riga-dato">
                 <span class="etichetta-dato">Priorità</span>

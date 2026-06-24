@@ -30,7 +30,12 @@ class ViewDashboardFornitore extends ViewBase
         return trim($this->get('stato'));
     }
 
-    public function mostra(Fornitore $fornitore, array $lavori, array $tutti = [], string $cerca = '', string $stato = ''): void
+    public function getCondominio(): string
+    {
+        return trim($this->get('condominio'));
+    }
+
+    public function mostra(Fornitore $fornitore, array $lavori, array $tutti = [], string $cerca = '', string $stato = '', string $condominio = '', array $condomini = []): void
     {
         $this->assign('titolo', 'CondoFix — I miei lavori');
         $this->assign('nomeCompleto', $fornitore->getNome() . ' ' . $fornitore->getCognome());
@@ -40,6 +45,8 @@ class ViewDashboardFornitore extends ViewBase
         $this->assign('numeroLavori', count($lavori));
         $this->assign('cerca',        $cerca);
         $this->assign('stato',        $stato);
+        $this->assign('filtroCondominio', $condominio);
+        $this->assign('condomini',        $condomini);
 
         // --- Contatori per stato (come l'Amministratore) ---
         $contatori = [

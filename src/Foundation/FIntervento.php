@@ -158,6 +158,57 @@ class FIntervento extends FBase
         );
     }
 
+    /**
+     * Interventi che appartengono ai condomìni di un certo amministratore,
+     * dal più recente. È la base per l'isolamento dei dati in dashboard admin.
+     *
+     * @param Condominio[] $condomini i condomìni dell'admin
+     * @return Intervento[]
+     */
+    public function findByCondomini(array $condomini, int $limite = 100000): array
+    {
+        if (empty($condomini)) {
+            return [];
+        }
+        return $this->getRepository()->findBy(
+            ['condominio' => $condomini],
+            ['dataCreazione' => 'DESC'],
+            $limite
+        );
+    }
+
+    /**
+     * Come findGroupedByStato() ma limitato ai condomìni dell'admin.
+     * Serve a calcolare i contatori (card) della sua dashboard.
+     *
+     * @param Condominio[] $condomini
+     * @return array<string, Intervento[]>
+     */
+    public function findGroupedByStatoForCondomini(array $condomini): array
+    {
+        $grouped = [
+            'presentato' => [],
+            'negato'     => [],
+            'accettato'  => [],
+            'in_corso'   => [],
+            'completato' => [],
+        ];
+        if (empty($condomini)) {
+            return $grouped;
+        }
+        $tutti = $this->getRepository()->findBy(
+            ['condominio' => $condomini],
+            ['dataCreazione' => 'DESC']
+        );
+        foreach ($tutti as $intervento) {
+            $tipo = $intervento->getStato()?->getTipo();
+            if (isset($grouped[$tipo])) {
+                $grouped[$tipo][] = $intervento;
+            }
+        }
+        return $grouped;
+    }
+
     // =======================================================
     // QUERY DI RICERCA PER TITOLO
     // Usate dalla barra di ricerca nelle dashboard. Ogni ruolo cerca

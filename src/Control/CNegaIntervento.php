@@ -32,6 +32,14 @@ class CNegaIntervento
             header('Location: index.php?action=dashboardAdmin');
             exit;
         }
+        // Isolamento dati: l'intervento dev'essere di un condominio di QUESTO admin.
+        $admin = $pm->load(Amministratore::class, Session::getUserId());
+        $condInt = $intervento->getCondominio();
+        if ($admin === null || $condInt === null || $condInt->getAmministratore()?->getId() !== $admin->getId()) {
+            Session::setFlash('errore', 'Non hai accesso a questa segnalazione.');
+            header('Location: index.php?action=dashboardAdmin');
+            exit;
+        }
 
         // Si nega solo un intervento ancora "Presentato"
         if (!($intervento->getStato() instanceof Presentato)) {

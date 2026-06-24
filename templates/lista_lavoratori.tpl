@@ -21,30 +21,32 @@
         {if $successo}<div class="avviso avviso-successo">{$successo|escape}</div>{/if}
         {if $errore}<div class="avviso avviso-errore">{$errore|escape}</div>{/if}
 
-        <h1 class="titolo-pagina">Lavoratori</h1>
-        <p class="benvenuto">Elenco di tutti i lavoratori registrati.</p>
+        <div class="intestazione">
+            <div>
+                <h1 class="titolo-pagina">Lavoratori</h1>
+                <p class="benvenuto">I lavoratori che hai creato.</p>
+            </div>
+            <a href="index.php?action=formCreaLavoratore" class="btn-primario">+ Crea lavoratore</a>
+        </div>
 
         <section class="lavori-recenti">
-            <h2>Tutti i lavoratori</h2>
+            <h2>I tuoi lavoratori</h2>
 
             {if $lavoratori}
                 {foreach $lavoratori as $l}
-                    <div class="riga-lavoro">
+                    <a class="riga-lavoro" href="index.php?action=listaLavoratori&infoLavoratore={$l->getId()}">
                         <div class="riga-titolo">{$l->getNome()|escape} {$l->getCognome()|escape}</div>
-                        <div class="riga-meta">
-                            {$l->getEmail()|escape}
-                            {if $l->getTelefono()} &middot; Tel: {$l->getTelefono()|escape}{/if}
-                            {if $l->getPartitaIva()} &middot; P.IVA: {$l->getPartitaIva()|escape}{/if}
-                        </div>
                         {if $l->getCategoria()}
                             <span class="badge">{$l->getCategoria()->getNome()|escape}</span>
                         {/if}
-                    </div>
+                    </a>
                 {/foreach}
             {else}
                 <p class="vuoto">Nessun lavoratore presente.</p>
             {/if}
         </section>
+
+        {include file="_banner_esito.tpl"}
 
     </main>
 </div>

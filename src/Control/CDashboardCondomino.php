@@ -64,6 +64,7 @@ class CDashboardCondomino
         $view  = new ViewDashboardCondomino();
         $cerca = $view->getCerca();
         $stato = $view->getStato();
+        $categoria = $view->getCategoria();   // id categoria o ''
 
         if ($cerca !== '' && $condominio !== null) {
             $interventi = $pm->intervento()->cercaByCondominio($condominio, $cerca);
@@ -76,8 +77,16 @@ class CDashboardCondomino
             $interventi = $this->filtraPerStato($interventi, $stato);
         }
 
+        // Filtro per categoria del fornitore assegnato (menu a tendina).
+        if ($categoria !== '') {
+            $interventi = $this->filtraPerCategoria($interventi, (int) $categoria);
+        }
+
+        // Categorie per popolare il menu a tendina.
+        $categorie = $pm->categoria()->findAll();
+
         // 6. PASSO TUTTO ALLA VIEW
-        $view->mostra($condomino, $interventi, $contatori, $cerca, $stato);
+        $view->mostra($condomino, $interventi, $contatori, $cerca, $stato, $categoria, $categorie);
     }
 
     // =======================================================
@@ -134,6 +143,24 @@ class CDashboardCondomino
         $out = [];
         foreach ($interventi as $i) {
             if ($i->getStato()?->getTipo() === $stato) {
+                $out[] = $i;
+            }
+        }
+        return $out;
+    }
+
+    /**
+     * Filtra gli interventi per categoria del fornitore assegnato.
+     * I lavori senza fornitore (es. solo presentati) vengono esclusi.
+     * @param Intervento[] $interventi
+     * @return Intervento[]
+     */
+    private function filtraPerCategoria(array $interventi, int $idCategoria): array
+    {
+        $out = [];
+        foreach ($interventi as $i) {
+            $categoria = $i->getStato()?->getFornitore()?->getCategoria();
+            if ($categoria !== null && $categoria->getId() === $idCategoria) {
                 $out[] = $i;
             }
         }

@@ -7,9 +7,15 @@
     <div class="banner-overlay" id="bannerEsito">
         <div class="banner-modale">
 
+            {if $banner.foto}
+            <div class="banner-foto"><img src="{$banner.foto|escape}" alt="Foto profilo"></div>
+            {elseif $banner.senzaIcona}
+            <div class="banner-foto"><div class="avatar avatar-grande"></div></div>
+            {else}
             <div class="banner-icona {if $bannerErrore}banner-icona-errore{else}banner-icona-successo{/if}">
                 {if $bannerErrore}&#10006;{else}&#10003;{/if}
             </div>
+            {/if}
 
             <h2 class="banner-titolo">{$banner.titolo|escape}</h2>
 

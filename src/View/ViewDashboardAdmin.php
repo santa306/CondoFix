@@ -22,19 +22,25 @@ class ViewDashboardAdmin extends ViewBase
      * @param array               $contatori  i 7 contatori delle card
      * @param array               $recenti    gli interventi recenti (oggetti Intervento)
      */
-    // INPUT: termine di ricerca per titolo (da GET, opzionale).
-    public function getCerca(): string
-    {
-        return trim($this->get('cerca'));
-    }
-
     // INPUT: filtro per stato (da GET, opzionale; click su una card contatore).
     public function getStato(): string
     {
         return trim($this->get('stato'));
     }
 
-    public function mostra(?Amministratore $admin, array $contatori, array $recenti, string $cerca = '', string $stato = ''): void
+    // INPUT: filtro per categoria del fornitore (id, da GET, opzionale).
+    public function getCategoria(): string
+    {
+        return trim($this->get('categoria'));
+    }
+
+    // INPUT: filtro per condominio (id, da GET, opzionale).
+    public function getCondominio(): string
+    {
+        return trim($this->get('condominio'));
+    }
+
+    public function mostra(?Amministratore $admin, array $contatori, array $recenti, string $stato = '', string $categoria = '', string $condominio = '', array $categorie = [], array $condomini = []): void
     {
         // Nome da mostrare nel saluto e nella sidebar.
         $nomeCompleto = $admin
@@ -45,8 +51,12 @@ class ViewDashboardAdmin extends ViewBase
         $this->assign('nomeCompleto', $nomeCompleto);
         $this->assign('contatori',    $contatori);
         $this->assign('recenti',      $recenti);
-        $this->assign('cerca',        $cerca);
         $this->assign('stato',        $stato);
+        // Filtri attivi e liste per i menu a tendina.
+        $this->assign('filtroCategoria',  $categoria);
+        $this->assign('filtroCondominio', $condominio);
+        $this->assign('categorie',        $categorie);
+        $this->assign('condomini',        $condomini);
 
         // Messaggi flash lasciati dal login o da un'altra operazione.
         $this->assign('successo', Session::getFlash('successo'));

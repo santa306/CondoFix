@@ -15,6 +15,18 @@
 </head>
 <body class="pagina-login">
 
+    <header class="landing-header">
+        <div class="landing-logo">
+            <a href="index.php?action=landing" style="display:flex;align-items:center;gap:0.6rem;text-decoration:none;">
+                <img src="img/logo.jpeg" alt="CondoFix">
+                <span>CondoFix</span>
+            </a>
+        </div>
+        <nav class="landing-nav">
+            <a href="index.php?action=formRegistrazione" class="btn-primario">Registrati</a>
+        </nav>
+    </header>
+
     <main class="card-login">
         <div class="logo-login"><img src="img/logo.jpeg" alt="CondoFix"><h1>CondoFix</h1></div>
         <p class="sottotitolo">Gestione interventi condominiali</p>

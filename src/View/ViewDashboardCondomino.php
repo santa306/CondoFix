@@ -34,7 +34,12 @@ class ViewDashboardCondomino extends ViewBase
         return trim($this->get('stato'));
     }
 
-    public function mostra(Condomino $condomino, array $interventi, array $contatori, string $cerca = '', string $stato = ''): void
+    public function getCategoria(): string
+    {
+        return trim($this->get('categoria'));
+    }
+
+    public function mostra(Condomino $condomino, array $interventi, array $contatori, string $cerca = '', string $stato = '', string $categoria = '', array $categorie = []): void
     {
         // Titolo della pagina (come fa ViewLogin)
         $this->assign('titolo', 'CondoFix — Dashboard');
@@ -48,6 +53,8 @@ class ViewDashboardCondomino extends ViewBase
         $this->assign('contatori',  $contatori);
         $this->assign('cerca',      $cerca);
         $this->assign('stato',      $stato);
+        $this->assign('filtroCategoria', $categoria);
+        $this->assign('categorie',       $categorie);
 
         // Messaggio flash di successo (es. dopo aver creato una segnalazione)
         $this->assign('successo', Session::getFlash('successo'));

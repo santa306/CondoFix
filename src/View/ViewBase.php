@@ -59,6 +59,7 @@ abstract class ViewBase
         $this->smarty->assign('sidebarNome',  Session::getNomeCompleto());
         $this->smarty->assign('sidebarRuolo', Session::getRuolo());
         $this->smarty->assign('sidebarRuoloLabel', Session::getRuoloLabel());
+        $this->smarty->assign('sidebarFoto', Session::get('fotoProfilo'));
         // Azione corrente: serve al partial per evidenziare la voce attiva.
         $this->smarty->assign('sidebarAzione', $_GET['action'] ?? '');
 

@@ -33,12 +33,13 @@ class CDashboardAdmin
         //     L'id è in sessione; carico l'oggetto Entity corrispondente.
         $admin = $pm->load(Amministratore::class, Session::getUserId());
 
-        // 2b. Interventi raggruppati per stato -> da qui ricavo i contatori.
-        //     findGroupedByStato() torna un array con le chiavi:
-        //     presentato | negato | accettato | in_corso | completato
-        $perStato = $pm->intervento()->findGroupedByStato();
+        // 2a. Condomìni gestiti da QUESTO admin: base dell'isolamento dati.
+        $mieiCondomini = $pm->condominio()->findByAmministratore($admin);
 
-        // 2c. Contatori delle card (sketch: 7 card).
+        // 2b. Interventi dei SOLI condomìni dell'admin, raggruppati per stato.
+        $perStato = $pm->intervento()->findGroupedByStatoForCondomini($mieiCondomini);
+
+        // 2c. Contatori delle card.
         //     "Da fare" = lavori accettati ma non ancora avviati.
         $contatori = [
             'totali'      => array_sum(array_map('count', $perStato)),
@@ -46,36 +47,75 @@ class CDashboardAdmin
             'da_fare'     => count($perStato['accettato']),
             'in_corso'    => count($perStato['in_corso']),
             'completati'  => count($perStato['completato']),
-            // Condomini gestiti DALL'admin loggato (relazione del dominio).
-            'condomini'   => count($pm->condominio()->findByAmministratore($admin)),
-            // Lavoratori: nel dominio i fornitori sono globali (assegnabili da
-            // qualunque admin), non c'è un legame admin->fornitore. Quindi qui
-            // mostro il totale dei fornitori del sistema. Scelta ragionevole e
-            // facile da cambiare se in futuro si aggiunge la relazione.
-            'lavoratori'  => count($pm->utente()->findAllFornitori()),
+            // Condomini e lavoratori dell'admin loggato.
+            'condomini'   => count($mieiCondomini),
+            'lavoratori'  => count($pm->utente()->findFornitoriByAmministratore($admin)),
         ];
 
-        // 2d. Lista lavori: se c'e' una ricerca per titolo mostro i risultati,
-        //     altrimenti i lavori recenti. Il termine cercato lo legge la View
-        //     (unico punto che tocca l'input HTTP).
-        $view  = new ViewDashboardAdmin();
-        $cerca = $view->getCerca();
-        $stato = $view->getStato();
+        // 2d. Lista lavori con filtri per CATEGORIA (del fornitore assegnato)
+        //     e per CONDOMINIO. I valori dei filtri li legge la View.
+        $view       = new ViewDashboardAdmin();
+        $stato      = $view->getStato();
+        $categoria  = $view->getCategoria();   // id categoria (string) o ''
+        $condominio = $view->getCondominio();  // id condominio (string) o ''
 
-        if ($cerca !== '') {
-            // ricerca per titolo: cerca in tutto il sistema
-            $recenti = $pm->intervento()->cercaTutti($cerca);
-        } elseif ($stato !== '') {
-            // filtro per stato (click su una card): parto da TUTTI i lavori
-            $recenti = $this->filtraPerStato($pm->intervento()->findRecenti(100000), $stato);
-        } else {
-            // vista normale: TUTTI i lavori del sistema (dal piu' recente).
-            // Uso findRecenti con un limite alto per riusare il metodo esistente.
-            $recenti = $pm->intervento()->findRecenti(100000);
+        // Parto dai lavori dei SOLI condomìni dell'admin (dal più recente).
+        $recenti = $pm->intervento()->findByCondomini($mieiCondomini);
+
+        // Filtro per stato (click su una card contatore).
+        if ($stato !== '') {
+            $recenti = $this->filtraPerStato($recenti, $stato);
+        }
+        // Filtro per condominio (menu a tendina).
+        if ($condominio !== '') {
+            $recenti = $this->filtraPerCondominio($recenti, (int) $condominio);
+        }
+        // Filtro per categoria del fornitore assegnato (menu a tendina).
+        if ($categoria !== '') {
+            $recenti = $this->filtraPerCategoria($recenti, (int) $categoria);
         }
 
+        // Liste per popolare i due menu a tendina.
+        $categorie    = $pm->categoria()->findAll();
+        $condominiAdm = $mieiCondomini;
+
         // 3. PASSO TUTTO ALLA VIEW -----------------------------------------
-        $view->mostra($admin, $contatori, $recenti, $cerca, $stato);
+        $view->mostra($admin, $contatori, $recenti, $stato, $categoria, $condominio, $categorie, $condominiAdm);
+    }
+
+    /**
+     * Filtra gli interventi per condominio.
+     * @param Intervento[] $interventi
+     * @return Intervento[]
+     */
+    private function filtraPerCondominio(array $interventi, int $idCondominio): array
+    {
+        $out = [];
+        foreach ($interventi as $i) {
+            if ($i->getCondominio() !== null && $i->getCondominio()->getId() === $idCondominio) {
+                $out[] = $i;
+            }
+        }
+        return $out;
+    }
+
+    /**
+     * Filtra gli interventi per categoria del FORNITORE assegnato.
+     * I lavori senza fornitore (es. solo presentati) vengono esclusi.
+     * @param Intervento[] $interventi
+     * @return Intervento[]
+     */
+    private function filtraPerCategoria(array $interventi, int $idCategoria): array
+    {
+        $out = [];
+        foreach ($interventi as $i) {
+            $fornitore = $i->getStato()?->getFornitore();
+            $categoria = $fornitore?->getCategoria();
+            if ($categoria !== null && $categoria->getId() === $idCategoria) {
+                $out[] = $i;
+            }
+        }
+        return $out;
     }
 
     /**

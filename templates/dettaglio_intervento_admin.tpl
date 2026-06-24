@@ -39,6 +39,12 @@
                 <span class="etichetta-dato">Data creazione</span>
                 <span>{$intervento->getDataCreazione()->format('d/m/Y H:i')}</span>
             </div>
+            {if $tipo == 'completato' && $intervento->getStato()->getDataCompletamento()}
+            <div class="riga-dato">
+                <span class="etichetta-dato">Data fine lavori</span>
+                <span>{$intervento->getStato()->getDataCompletamento()->format('d/m/Y H:i')}</span>
+            </div>
+            {/if}
             {if $intervento->getSegnalante()}
             <div class="riga-dato">
                 <span class="etichetta-dato">Segnalato da</span>

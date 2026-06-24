@@ -30,9 +30,9 @@ class CCreaIntervento
             return;
         }
 
-        // Tendine: i condomini gestiti da questo admin e tutti i fornitori.
+        // Tendine: i condomini e i fornitori di QUESTO admin (isolamento dati).
         $condomini  = $pm->condominio()->findByAmministratore($admin);
-        $fornitori  = $pm->utente()->findAllFornitori();
+        $fornitori  = $pm->utente()->findFornitoriByAmministratore($admin);
 
         (new ViewCreaIntervento())->mostraForm($condomini, $fornitori);
     }
@@ -72,15 +72,23 @@ class CCreaIntervento
 
         $pm = PersistentManager::getInstance();
 
-        // 3. CARICO condominio e fornitore scelti (verifico che siano validi)
+        // Carico l'amministratore loggato (serve per i controlli di proprietà).
+        $admin = $pm->load(Amministratore::class, Session::getUserId());
+        if ($admin === null) {
+            Session::logout();
+            return;
+        }
+
+        // 3. CARICO condominio e fornitore scelti e verifico che appartengano
+        //    a QUESTO admin (isolamento: non si può assegnare roba altrui).
         $condominio = $pm->load(Condominio::class, $idCondominio);
-        if ($condominio === null) {
+        if ($condominio === null || $condominio->getAmministratore()?->getId() !== $admin->getId()) {
             Session::setFlash('errore', 'Condominio non valido.');
             header('Location: index.php?action=formCreaIntervento');
             exit;
         }
         $fornitore = $pm->load(Fornitore::class, $idFornitore);
-        if (!($fornitore instanceof Fornitore)) {
+        if (!($fornitore instanceof Fornitore) || $fornitore->getAmministratore()?->getId() !== $admin->getId()) {
             Session::setFlash('errore', 'Fornitore non valido.');
             header('Location: index.php?action=formCreaIntervento');
             exit;

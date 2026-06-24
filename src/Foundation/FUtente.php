@@ -97,4 +97,15 @@ class FUtente extends FBase
             ['condominio' => $condominio]
         );
     }
+
+    /**
+     * Tutti i fornitori (lavoratori) creati da un certo amministratore.
+     * Usato per l'isolamento dei dati: ogni admin vede solo i propri.
+     */
+    public function findFornitoriByAmministratore(Amministratore $admin): array
+    {
+        return $this->em->getRepository(Fornitore::class)->findBy(
+            ['amministratore' => $admin]
+        );
+    }
 }

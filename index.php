@@ -10,13 +10,38 @@ foreach (glob(__DIR__ . '/src/Control/*.php') as $file) { require_once $file; }
 require_once __DIR__ . '/src/View/ViewBase.php';
 foreach (glob(__DIR__ . '/src/View/*.php')    as $file) { require_once $file; }
 // --- 2. AZIONE -------------------------------------------------------
-$action = $_GET['action'] ?? 'login';
+$action = $_GET['action'] ?? 'landing';
 // --- 3. SMISTAMENTO --------------------------------------------------
 try {
     switch ($action) {
         // ---- Autenticazione (PRONTO) ----
+        case 'landing':
+            (new CLanding())->mostra();
+            break;
         case 'login':
             (new CLogin())->mostraForm();
+            break;
+        case 'formRegistrazione':
+            (new CRegistrazione())->mostraForm();
+            break;
+        case 'registraAdmin':
+            (new CRegistrazione())->esegui();
+            break;
+        case 'formCambioPassword':
+            (new CCambioPassword())->mostraForm();
+            break;
+        case 'cambioPassword':
+            (new CCambioPassword())->esegui();
+            break;
+        // ---- Profilo personale (tutti i ruoli) ----
+        case 'profilo':
+            (new CProfilo())->mostra();
+            break;
+        case 'profiloPassword':
+            (new CProfilo())->cambiaPassword();
+            break;
+        case 'profiloFoto':
+            (new CProfilo())->cambiaFoto();
             break;
         case 'vetrina':
             (new CVetrinaPubblica())->mostra();
@@ -45,6 +70,12 @@ try {
         case 'listaLavoratori':
             (new CListaLavoratori())->mostra();
             break;
+        case 'formCreaLavoratore':
+            (new CCreaLavoratore())->mostraForm();
+            break;
+        case 'creaLavoratore':
+            (new CCreaLavoratore())->esegui();
+            break;
         // ---- Amministratore: lista condomini + nuovo condominio ----
         case 'listaCondomini':
             (new CListaCondomini())->mostra();
@@ -54,6 +85,16 @@ try {
             break;
         case 'creaCondominio':
             (new CListaCondomini())->esegui();
+            break;
+        // ---- Amministratore: dettaglio condominio + gestione condòmini ----
+        case 'dettaglioCondominio':
+            (new CDettaglioCondominio())->mostra();
+            break;
+        case 'formCreaCondomino':
+            (new CDettaglioCondominio())->mostraFormCondomino();
+            break;
+        case 'creaCondomino':
+            (new CDettaglioCondominio())->creaCondomino();
             break;
         case 'dashboardFornitore':
             (new CDashboardFornitore())->mostra();
