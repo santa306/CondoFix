@@ -862,3 +862,145 @@ a.sidebar-utente:hover { background: var(--colore-sfondo); }
     border: 1px solid var(--colore-bordo);
     display: block;
 }
+
+/* ============================================================ */
+/*  RIFINITURA LANDING + LOGIN (migliorie estetiche)            */
+/*  Aggiunto in fondo: queste regole affinano lo stile esistente */
+/* ============================================================ */
+
+/* ---- Hero: sfondo morbido e piu' arioso ---- */
+body.pagina-landing {
+    background: linear-gradient(160deg, #f4f8fb 0%, #eaf1f6 55%, #e3edf3 100%);
+}
+.landing-hero {
+    padding: 5rem 2.5rem 4rem;
+    gap: 4rem;
+}
+.landing-testo h1 {
+    font-size: 2.8rem;
+    letter-spacing: -0.5px;
+    margin-bottom: 0.6rem;
+}
+
+/* ---- Frase a effetto sotto il titolo ---- */
+.landing-claim {
+    font-size: 1.35rem;
+    font-weight: 600;
+    color: #3a7ca5;
+    margin: 0 0 1.3rem;
+    line-height: 1.35;
+}
+
+.landing-testo p { font-size: 1.12rem; line-height: 1.6; }
+
+/* ---- Vantaggi con pallino piu' marcato ---- */
+.landing-vantaggi li { padding-left: 2rem; font-size: 1.02rem; }
+.landing-vantaggi li::before {
+    content: "\2713";
+    background: #1f9d55;
+    color: #fff;
+    width: 1.25rem;
+    height: 1.25rem;
+    border-radius: 50%;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 0.75rem;
+    top: 0.45rem;
+}
+
+/* ---- Pulsante "Inizia gratis" grande e in evidenza ---- */
+.btn-grande {
+    padding: 0.9rem 2.2rem;
+    font-size: 1.05rem;
+    font-weight: 700;
+    border-radius: 10px;
+    box-shadow: 0 6px 18px rgba(44, 95, 124, 0.28);
+    transition: transform .15s, box-shadow .15s;
+}
+.btn-grande:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 9px 24px rgba(44, 95, 124, 0.34);
+}
+
+/* ---- Riquadro hero: composizione grafica al posto del logo ripetuto ---- */
+.landing-immagine {
+    background: linear-gradient(150deg, #2c5f7c 0%, #3a7ca5 100%);
+    border: none;
+    padding: 0;
+    min-height: 320px;
+    overflow: hidden;
+    position: relative;
+    box-shadow: 0 14px 40px rgba(31, 45, 54, 0.18);
+}
+.landing-immagine img {
+    max-width: 130px;
+    filter: brightness(0) invert(1);   /* logo in bianco sul fondo blu */
+    opacity: 0.96;
+    position: relative;
+    z-index: 2;
+}
+/* cerchi decorativi morbidi sullo sfondo del riquadro */
+.landing-immagine::before,
+.landing-immagine::after {
+    content: "";
+    position: absolute;
+    border-radius: 50%;
+    background: rgba(255, 255, 255, 0.08);
+}
+.landing-immagine::before { width: 280px; height: 280px; top: -90px; right: -80px; }
+.landing-immagine::after  { width: 200px; height: 200px; bottom: -70px; left: -60px; }
+
+/* ---- Header landing piu' pulito ---- */
+.landing-header { padding: 1.1rem 3rem; box-shadow: 0 1px 0 rgba(31,45,54,.04); }
+
+/* ---- Footer ---- */
+.landing-footer { margin-top: 1rem; }
+
+/* ============================================================ */
+/*  LOGIN: card piu' raffinata                                   */
+/* ============================================================ */
+body.pagina-login {
+    background: linear-gradient(160deg, #f4f8fb 0%, #e6eef4 100%);
+}
+.card-login {
+    max-width: 400px;
+    padding: 2.4rem 2.2rem;
+    border: none;
+    border-radius: 16px;
+    box-shadow: 0 12px 40px rgba(31, 45, 54, 0.12);
+}
+.logo-login img { width: 76px; height: 76px; }
+.logo-login h1 { font-size: 1.5rem; }
+.form-login input:focus {
+    outline: none;
+    border-color: var(--colore-primario);
+    box-shadow: 0 0 0 3px rgba(44, 95, 124, 0.12);
+}
+.btn-accedi {
+    margin-top: 1.2rem;
+    padding: 0.7rem;
+    font-weight: 700;
+    border-radius: 9px;
+    transition: transform .12s;
+}
+.btn-accedi:hover { transform: translateY(-1px); }
+
+/* Hero immagine: logo grande a colori, niente sfondo blu ne' filtro */
+.landing-immagine {
+    background: #ffffff;
+    border: 1px solid var(--colore-bordo);
+    padding: 1.5rem;
+    min-height: auto;
+    box-shadow: 0 14px 40px rgba(31, 45, 54, 0.14);
+}
+.landing-immagine::before,
+.landing-immagine::after { display: none; }
+.landing-immagine img {
+    max-width: 100%;
+    width: 100%;
+    height: auto;
+    filter: none;
+    opacity: 1;
+    border-radius: 10px;
+}

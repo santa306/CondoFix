@@ -1,4 +1,4 @@
-{* templates/landing.tpl *}
+﻿{* templates/landing.tpl *}
 {* Landing page d'ingresso di CondoFix (utente non loggato). *}
 {* Header con logo + Accedi/Registrati, sezione hero con testo e immagine, *}
 {* pulsante "Inizia gratis" (porta alla registrazione amministratore).      *}
@@ -29,27 +29,34 @@
     <main class="landing-hero">
         <div class="landing-testo">
             <h1>Gestisci il tuo condominio senza pensieri</h1>
+            <p class="landing-claim">La gestione condominiale, semplice per davvero.</p>
             <p>
-                CondoFix mette in contatto amministratori, condòmini e lavoratori
+                CondoFix mette in contatto amministratori, condomini e lavoratori
                 in un'unica piattaforma. Raccogli le segnalazioni, assegna gli
                 interventi ai professionisti giusti e segui ogni lavoro fino alla
                 fattura, in totale trasparenza.
             </p>
             <ul class="landing-vantaggi">
-                <li>Segnalazioni dei condòmini sempre tracciate</li>
+                <li>Segnalazioni dei condomini sempre tracciate</li>
                 <li>Assegnazione rapida dei lavori ai fornitori</li>
                 <li>Storico, foto e fatture per ogni intervento</li>
             </ul>
         </div>
 
         <div class="landing-immagine">
-            <img src="img/logo.jpeg" alt="Anteprima CondoFix">
+            <img src="img/hero.jpeg" alt="Anteprima CondoFix">
         </div>
     </main>
 
     <footer class="landing-footer">
-        <p>CondoFix — Gestione interventi condominiali</p>
+        <p>CondoFix - Gestione interventi condominiali</p>
     </footer>
 
 </body>
 </html>
+
+
+
+
+
+

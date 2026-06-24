@@ -7,9 +7,9 @@
     <div class="banner-overlay" id="bannerEsito">
         <div class="banner-modale">
 
-            {if $banner.foto}
+            {if isset($banner.foto) && $banner.foto}
             <div class="banner-foto"><img src="{$banner.foto|escape}" alt="Foto profilo"></div>
-            {elseif $banner.senzaIcona}
+            {elseif isset($banner.senzaIcona) && $banner.senzaIcona}
             <div class="banner-foto"><div class="avatar avatar-grande"></div></div>
             {else}
             <div class="banner-icona {if $bannerErrore}banner-icona-errore{else}banner-icona-successo{/if}">
@@ -40,3 +40,4 @@
         </div>
     </div>
 {/if}
+
