@@ -42,4 +42,6 @@ class Fornitore extends Utente
 
     public function getCategoria(): ?Categoria  { return $this->categoria; }
     public function setCategoria(?Categoria $v): void { $this->categoria = $v; }
+
+    public function getRuoloLabel(): string { return 'Lavoratore'; }
 }

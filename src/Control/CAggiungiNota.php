@@ -70,6 +70,8 @@ class CAggiungiNota
         // 6. CREO LA NOTA e la collego all'intervento
         $nota = new Nota();
         $nota->setTesto($testo);
+        // Autore della nota: l'utente loggato (Admin o Fornitore).
+        $nota->setAutore($pm->load(Utente::class, Session::getUserId()));
         $intervento->addNota($nota);
 
         $pm->update();

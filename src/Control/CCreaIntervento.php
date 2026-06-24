@@ -109,6 +109,8 @@ class CCreaIntervento
         // Nota automatica di avanzamento (timestamp automatico)
         $nota = new Nota();
         $nota->setTesto('Lavoro creato e assegnato dall\'amministratore.');
+        // Autore della nota automatica: chi compie l'azione.
+        $nota->setAutore($admin);
         $intervento->addNota($nota);
 
         // 5. SALVO (intervento + stato + nota in cascade)

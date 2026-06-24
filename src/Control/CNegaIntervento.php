@@ -57,6 +57,8 @@ class CNegaIntervento
         // Nota automatica di avanzamento (con timestamp automatico).
         $nota = new Nota();
         $nota->setTesto('Segnalazione rifiutata.');
+        // Autore della nota automatica: chi compie l'azione.
+        $nota->setAutore($admin);
         $intervento->addNota($nota);
 
         $pm->update();

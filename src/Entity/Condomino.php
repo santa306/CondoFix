@@ -27,4 +27,6 @@ class Condomino extends Utente
 
     public function getInterno(): ?string  { return $this->interno; }
     public function setInterno(?string $v): void { $this->interno = $v; }
+
+    public function getRuoloLabel(): string { return 'Condomino'; }
 }

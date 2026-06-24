@@ -90,4 +90,8 @@ abstract class Utente
     // Foto del profilo (percorso relativo) — null se non impostata
     public function getFotoProfilo(): ?string { return $this->fotoProfilo; }
     public function setFotoProfilo(?string $v): void { $this->fotoProfilo = $v; }
+
+    // Etichetta leggibile del ruolo, implementata da ogni sottoclasse.
+    // Usata ad esempio per firmare le note operative.
+    abstract public function getRuoloLabel(): string;
 }

@@ -447,6 +447,7 @@ label { font-weight: 600; font-size: 0.9rem; }
 .timeline-punto { padding: 0.6rem 0 0.6rem 1.2rem; border-left: 2px solid var(--colore-bordo); position: relative; }
 .timeline-data { font-size: 0.78rem; color: #8a99a4; }
 .timeline-testo { color: var(--colore-testo); }
+.timeline-autore { font-size: 0.72rem; color: #56616a; font-style: italic; margin-left: 8px; }
 
 /* ============================================================ */
 /* FORM CARD (presenta/modifica intervento)                      */

@@ -87,6 +87,8 @@ class CAccettaIntervento
         // Nota automatica di avanzamento (con timestamp automatico).
         $nota = new Nota();
         $nota->setTesto('Lavoro accettato e assegnato al fornitore.');
+        // Autore della nota automatica: chi compie l'azione.
+        $nota->setAutore($admin);
         $intervento->addNota($nota);
 
         $pm->update();
