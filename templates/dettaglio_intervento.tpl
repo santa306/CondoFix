@@ -72,7 +72,7 @@
         </section>
 
         <section class="scheda">
-            <h2>Storico note</h2>
+            <h2>Storico note ({$intervento->getNote()|@count})</h2>
             {if $note|@count == 0}
                 <p class="vuoto-inline">Nessuna nota presente.</p>
             {else}
