@@ -8,8 +8,8 @@ class FUtente extends FBase
 {
     public function __construct(\Doctrine\ORM\EntityManagerInterface $em)
     {
-        parent::__construct($em);
-        $this->entityClass = Utente::class;
+        parent::__construct($em);//richiama il costruttore di Fbase
+        $this->entityClass = Utente::class;//imposta quale entity gestisce questa F*
     }
 
     // -------------------------------------------------------
@@ -25,14 +25,14 @@ class FUtente extends FBase
      *
      * Uso: $utente = $pm->utente()->login('mario@mail.it', 'password123');
      */
-    public function login(string $email, string $password): ?Utente
+    public function login(string $email, string $password): ?Utente//da notare come il controllo lo fa Utente (Enitity)
     {
-        $utente = $this->getRepository()->findOneBy(['email' => $email]);
+        $utente = $this->getRepository()->findOneBy(['email' => $email]);//restituisce utente o null
         if ($utente === null) {
-            return null; // email non trovata
+            return null; // email non trovata per evitareche un hacker sia avvantaggiato sapendo cosa è errato :)
         }
-        if (!$utente->verificaPassword($password)) {
-            return null; // password errata
+        if (!$utente->verificaPassword($password)) {//confronta le password e digita l'hash salvato
+            return null; // password errata per evitareche un hacker sia avvantaggiato sapendo cosa è errato :)
         }
         return $utente;
     }

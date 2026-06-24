@@ -21,7 +21,7 @@ abstract class FBase
 
     // Nome della classe Entity gestita da questa Foundation
     // Viene impostato nel costruttore delle sottoclassi
-    protected string $entityClass;
+    protected string $entityClass;//ti dice a quale F* appartiene e viene creato nella soottclasse rispettiva
 
     // -------------------------------------------------------
     // COSTRUTTORE — riceve l'EntityManager dal PersistentManager
@@ -49,7 +49,7 @@ abstract class FBase
      */
     public function load(int $id): ?object
     {
-        return $this->em->find($this->entityClass, $id);
+        return $this->em->find($this->entityClass, $id);//ci mette la rispettiva entity
     }
 
     /**

@@ -32,4 +32,4 @@ $dbParams = [
 $connection = DriverManager::getConnection($dbParams, $config);//non apre subito la connessione tcp a mySql, si apre solo alla prima query
 
 // 3. EntityManager (Doctrine 3.x: si passa connection per parlare con il db + config per sapere come mappare)
-$entityManager = new EntityManager($connection, $config);//variabile glogael ovviamente
+$entityManager = new EntityManager($connection, $config);//variabile globale ovviamente
