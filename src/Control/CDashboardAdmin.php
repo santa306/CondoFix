@@ -47,6 +47,7 @@ class CDashboardAdmin
             'da_fare'     => count($perStato['accettato']),
             'in_corso'    => count($perStato['in_corso']),
             'completati'  => count($perStato['completato']),
+            'negati'      => count($perStato['negato']),
             // Condomini e lavoratori dell'admin loggato.
             'condomini'   => count($mieiCondomini),
             'lavoratori'  => count($pm->utente()->findFornitoriByAmministratore($admin)),

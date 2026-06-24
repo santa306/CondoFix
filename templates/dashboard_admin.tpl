@@ -56,6 +56,10 @@
                 <div class="numero">{$contatori.completati}</div>
                 <div class="etichetta">Completati</div>
             </a>
+            <a class="card-contatore" href="index.php?action=dashboardAdmin&stato=negato">
+                <div class="numero">{$contatori.negati}</div>
+                <div class="etichetta">Negati</div>
+            </a>
         </section>
 
         {* --- Filtri: categoria (del fornitore) e condominio --- *}
