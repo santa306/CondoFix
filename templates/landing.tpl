@@ -1,4 +1,4 @@
-﻿{* templates/landing.tpl *}
+{* templates/landing.tpl *}
 {* Landing page d'ingresso di CondoFix (utente non loggato). *}
 {* Header con logo + Accedi/Registrati, sezione hero con testo e immagine, *}
 {* pulsante "Inizia gratis" (porta alla registrazione amministratore).      *}
@@ -21,7 +21,7 @@
         </div>
         <nav class="landing-nav">
             <a href="index.php?action=login" class="btn-secondario">Accedi</a>
-            <a href="index.php?action=formRegistrazione" class="btn-primario">Registrati</a>
+            <a href="index.php?action=formRegistrazione" class="btn-primario">Registrati come amministratore</a>
         </nav>
     </header>
 
@@ -54,6 +54,7 @@
 
 </body>
 </html>
+
 
 
 

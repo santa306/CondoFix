@@ -23,7 +23,7 @@
             </a>
         </div>
         <nav class="landing-nav">
-            <a href="index.php?action=formRegistrazione" class="btn-primario">Registrati</a>
+            <a href="index.php?action=formRegistrazione" class="btn-primario">Registrati come amministratore</a>
         </nav>
     </header>
 
@@ -57,6 +57,7 @@
 
 </body>
 </html>
+
 
 
 
