@@ -102,6 +102,9 @@ try {
         case 'creaCondomino':
             (new CDettaglioCondominio())->creaCondomino();
             break;
+        case 'eliminaCondomino':
+            (new CDettaglioCondominio())->eliminaCondomino();
+            break;
         case 'dashboardFornitore':
             (new CDashboardFornitore())->mostra();
             break;
@@ -167,6 +170,7 @@ try {
     http_response_code(500);
     echo 'Si e\' verificato un errore: ' . htmlspecialchars($e->getMessage());
 }
+
 
 
 

@@ -34,14 +34,21 @@
 
             {if $condomini}
                 {foreach $condomini as $c}
-                    <a class="riga-lavoro"
-                       href="index.php?action=dettaglioCondominio&id={$condominio->getId()}&infoCondomino={$c->getId()}">
-                        <div class="riga-titolo">{$c->getNome()|escape} {$c->getCognome()|escape}</div>
-                        <div class="riga-meta">
-                            {$c->getEmail()|escape}
-                            {if $c->getInterno()} &middot; {$c->getInterno()|escape}{/if}
-                        </div>
-                    </a>
+                    <div class="riga-lavoro riga-con-azioni">
+                        <a class="riga-link"
+                           href="index.php?action=dettaglioCondominio&id={$condominio->getId()}&infoCondomino={$c->getId()}">
+                            <div class="riga-titolo">{$c->getNome()|escape} {$c->getCognome()|escape}</div>
+                            <div class="riga-meta">
+                                {$c->getEmail()|escape}
+                                {if $c->getInterno()} &middot; {$c->getInterno()|escape}{/if}
+                            </div>
+                        </a>
+                        <a class="btn-elimina"
+                           href="index.php?action=eliminaCondomino&id={$c->getId()}"
+                           onclick="return confirm('Eliminare il condòmino {$c->getNome()|escape} {$c->getCognome()|escape}? Le sue segnalazioni resteranno nello storico ma senza il suo nome.');">
+                           Elimina
+                        </a>
+                    </div>
                 {/foreach}
             {else}
                 <p class="vuoto">Nessun condòmino in questo condominio. Aggiungi il primo.</p>
