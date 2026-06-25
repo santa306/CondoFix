@@ -1,4 +1,4 @@
-<?php
+﻿<?php
 // src/Foundation/FNota.php
 //
 // Gestisce le query relative alle Note operative degli interventi.
@@ -39,5 +39,9 @@ class FNota extends FBase
             1   // limite 1
         );
         return $result[0] ?? null;
+    }
+    public function findByAutore(Utente $autore): array
+    {
+        return $this->getRepository()->findBy(['autore' => $autore]);
     }
 }

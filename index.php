@@ -1,4 +1,4 @@
-<?php
+﻿<?php
 // index.php
 //
 // FRONT CONTROLLER / ROUTER di CondoFix.
@@ -76,6 +76,9 @@ try {
         case 'creaLavoratore':
             (new CCreaLavoratore())->esegui();
             break;
+        case 'eliminaLavoratore':
+            (new CEliminaLavoratore())->esegui();
+            break;
         // ---- Amministratore: lista condomini + nuovo condominio ----
         case 'listaCondomini':
             (new CListaCondomini())->mostra();
@@ -86,7 +89,10 @@ try {
         case 'creaCondominio':
             (new CListaCondomini())->esegui();
             break;
-        // ---- Amministratore: dettaglio condominio + gestione condòmini ----
+        case 'eliminaCondominio':
+            (new CEliminaCondominio())->esegui();
+            break;
+        // ---- Amministratore: dettaglio condominio + gestione condÃ²mini ----
         case 'dettaglioCondominio':
             (new CDettaglioCondominio())->mostra();
             break;
@@ -161,6 +167,9 @@ try {
     http_response_code(500);
     echo 'Si e\' verificato un errore: ' . htmlspecialchars($e->getMessage());
 }
+
+
+
 
 
 

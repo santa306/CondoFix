@@ -34,12 +34,19 @@
 
             {if $condomini}
                 {foreach $condomini as $c}
-                    <a class="riga-lavoro" href="index.php?action=dettaglioCondominio&id={$c->getId()}">
-                        <div class="riga-titolo">{$c->getNome()|escape}</div>
-                        <div class="riga-meta">
-                            {$c->getIndirizzo()|escape} &middot; {$c->getCitta()|escape}
-                        </div>
-                    </a>
+                    <div class="riga-lavoro riga-con-azioni">
+                        <a class="riga-link" href="index.php?action=dettaglioCondominio&id={$c->getId()}">
+                            <div class="riga-titolo">{$c->getNome()|escape}</div>
+                            <div class="riga-meta">
+                                {$c->getIndirizzo()|escape} &middot; {$c->getCitta()|escape}
+                            </div>
+                        </a>
+                        <a class="btn-elimina"
+                           href="index.php?action=eliminaCondominio&id={$c->getId()}"
+                           onclick="return confirm('Eliminare il condominio {$c->getNome()|escape}? Verranno eliminati ANCHE tutti i suoi interventi, con note e foto. L\'azione e\' irreversibile.');">
+                           Elimina
+                        </a>
+                    </div>
                 {/foreach}
             {else}
                 <p class="vuoto">Nessun condominio presente.</p>

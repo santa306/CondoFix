@@ -34,12 +34,19 @@
 
             {if $lavoratori}
                 {foreach $lavoratori as $l}
-                    <a class="riga-lavoro" href="index.php?action=listaLavoratori&infoLavoratore={$l->getId()}">
-                        <div class="riga-titolo">{$l->getNome()|escape} {$l->getCognome()|escape}</div>
-                        {if $l->getCategoria()}
-                            <span class="badge">{$l->getCategoria()->getNome()|escape}</span>
-                        {/if}
-                    </a>
+                    <div class="riga-lavoro riga-con-azioni">
+                        <a class="riga-link" href="index.php?action=listaLavoratori&infoLavoratore={$l->getId()}">
+                            <div class="riga-titolo">{$l->getNome()|escape} {$l->getCognome()|escape}</div>
+                            {if $l->getCategoria()}
+                                <span class="badge">{$l->getCategoria()->getNome()|escape}</span>
+                            {/if}
+                        </a>
+                        <a class="btn-elimina"
+                           href="index.php?action=eliminaLavoratore&id={$l->getId()}"
+                           onclick="return confirm('Eliminare il lavoratore {$l->getNome()|escape} {$l->getCognome()|escape}? I lavori completati resteranno nello storico ma senza il suo nome. Se ha lavori ancora attivi, l\'eliminazione verra\' bloccata.');">
+                           Elimina
+                        </a>
+                    </div>
                 {/foreach}
             {else}
                 <p class="vuoto">Nessun lavoratore presente.</p>
