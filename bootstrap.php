@@ -1,4 +1,4 @@
-<?php
+﻿<?php
 // bootstrap.php
 // Configurazione Doctrine ORM 3.x.
 // Crea la variabile globale $entityManager usata da PersistentManager.
@@ -13,11 +13,14 @@ use Doctrine\ORM\ORMSetup;
 
 
 // 1. Percorso delle Entity (ora in src/Entity)
-$paths = [__DIR__ . "/src/Entity"]; //Dice dove sono le entity èun array perhè possono essere sparse qua e là entity
-$isDevMode = true; //entri in modalità sviluppatore facendo si che non si usi la cache dei metadati per rileggere ogni volta i mapping su richiesta, è piu lento
+$paths = [__DIR__ . "/src/Entity"]; //Dice dove sono le entity Ã¨un array perhÃ¨ possono essere sparse qua e lÃ  entity
+$isDevMode = true; //entri in modalitÃ  sviluppatore facendo si che non si usi la cache dei metadati per rileggere ogni volta i mapping su richiesta, Ã¨ piu lento
 
 // Configurazione per leggere gli Attributi PHP 8 (#[ORM\...])
 $config = ORMSetup::createAttributeMetadataConfiguration($paths, $isDevMode);//come leggerne il mapping
+// Cartella scrivibile per i proxy di Doctrine (su hosting come InfinityFree /tmp non e' scrivibile).
+$config->setProxyDir(__DIR__ . '/tmp');
+$config->setProxyNamespace('Proxies');
 //$paths, $isDevMode ti dice dove cercare e se attivare la cache
 
 
@@ -33,3 +36,4 @@ $connection = DriverManager::getConnection($dbParams, $config);//non apre subito
 
 // 3. EntityManager (Doctrine 3.x: si passa connection per parlare con il db + config per sapere come mappare)
 $entityManager = new EntityManager($connection, $config);//variabile globale ovviamente
+

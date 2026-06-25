@@ -33,3 +33,7 @@ dashboard/
 # Foto caricate dagli utenti (dati, non codice)
 uploads/*
 !uploads/.gitkeep
+
+# Proxy generati da Doctrine
+tmp/*
+!tmp/.gitkeep
