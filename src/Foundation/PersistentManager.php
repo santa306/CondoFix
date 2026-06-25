@@ -1,22 +1,22 @@
-<?php
+﻿<?php
 // src/Foundation/PersistentManager.php
 //
 // RUOLO: unica classe pubblica dello strato Foundation accessibile
 //        dagli strati superiori (Control, View).
 //        Fa da FACADE: delega tutto alle classi F-specifiche,
-//        così i Control non conoscono mai Doctrine o le F-classi
+//        cosÃ¬ i Control non conoscono mai Doctrine o le F-classi
 //        direttamente.
 //
-// PATTERN: Singleton — una sola istanza per richiesta HTTP.
+// PATTERN: Singleton â€” una sola istanza per richiesta HTTP.
 //
 // STRUTTURA INTERNA:
 //   PersistentManager
-//     ├── FIntervento   → query su Interventi
-//     ├── FUtente       → query su Utenti + login
-//     ├── FCondominio   → query su Condomini
-//     ├── FCategoria    → query su Categorie
-//     ├── FNota         → query su Note
-//     └── FFoto         → query su Foto
+//     â”œâ”€â”€ FIntervento   â†’ query su Interventi
+//     â”œâ”€â”€ FUtente       â†’ query su Utenti + login
+//     â”œâ”€â”€ FCondominio   â†’ query su Condomini
+//     â”œâ”€â”€ FCategoria    â†’ query su Categorie
+//     â”œâ”€â”€ FNota         â†’ query su Note
+//     â””â”€â”€ FFoto         â†’ query su Foto
 //
 // COME SI USA (dal Control):
 //
@@ -40,8 +40,8 @@ class PersistentManager
     // Istanza Singleton
     // -------------------------------------------------------
     private static ?PersistentManager $instance = null;//private perche non puoi farla da fuori
-//L'unico modo per ottenere l'istanza è PersistentManager::getInstance(). E getInstance controlla: se $instance è ancora null, la crea;
-// altrimenti restituisce quella già creata
+//L'unico modo per ottenere l'istanza Ã¨ PersistentManager::getInstance(). E getInstance controlla: se $instance Ã¨ ancora null, la crea;
+// altrimenti restituisce quella giÃ  creata
 //static significa che appartiene alla classe. Una sola copia di $instance per tutto il codice 
 
 
@@ -62,14 +62,14 @@ class PersistentManager
     // -------------------------------------------------------
     // COSTRUTTORE PRIVATO
     // -------------------------------------------------------
-    private function __construct()//dal di fuori non si può creare
+    private function __construct()//dal di fuori non si puÃ² creare
     {
         global $entityManager;//recuperi da bootstrap e lo ficchi dentro il PersistentManager
         $this->em = $entityManager;
     }
 
     // -------------------------------------------------------
-    // getInstance() — punto di accesso globale
+    // getInstance() â€” punto di accesso globale
     // -------------------------------------------------------
     public static function getInstance(): PersistentManager
     {
@@ -82,7 +82,7 @@ class PersistentManager
 
     // -------------------------------------------------------
     // OPERAZIONI CRUD GENERICHE
-    // Usate quando si ha già l'oggetto in mano e si vuole
+    // Usate quando si ha giÃ  l'oggetto in mano e si vuole
     // solo salvarlo, aggiornarlo o eliminarlo.
     // -------------------------------------------------------
 
@@ -122,7 +122,7 @@ class PersistentManager
 
     /**
      * Carica un oggetto tramite classe e id.
-     * Per query più specifiche usare i metodi delle F-classi.
+     * Per query piÃ¹ specifiche usare i metodi delle F-classi.
      *
      * Uso: $i = $pm->load(Intervento::class, 42);
      */
@@ -221,6 +221,16 @@ class PersistentManager
         }
         return $this->fNota;
     }
+    /**
+     * Scollega un fornitore da TUTTI i suoi stati (anche quelli orfani).
+     * Usato prima di eliminare un fornitore.
+     */
+    public function scollegaStatiDaFornitore(Fornitore $fornitore): void
+    {
+        $this->em->createQuery(
+            'UPDATE Stato s SET s.fornitore = NULL WHERE s.fornitore = :f'
+        )->setParameter('f', $fornitore)->execute();
+    }
 
     /**
      * Accesso alle query sulle Foto.
@@ -237,3 +247,5 @@ class PersistentManager
         return $this->fFoto;
     }
 }
+
+

@@ -73,13 +73,17 @@ class CCreaLavoratore
             exit;
         }
 
-        // 3. CATEGORIA: se l'admin ha scritto una categoria nuova la creo,
-        //    altrimenti uso quella scelta dal menu (se presente).
+        // 3. CATEGORIA: se l'admin ha scritto una categoria nuova, controllo
+        //    PRIMA se esiste gia' una con quel nome: se si', la riuso (evito
+        //    il duplicato); se no, la creo. Altrimenti uso quella del menu.
         $categoria = null;
         if ($nuovaCateg !== '') {
-            $categoria = new Categoria();
-            $categoria->setNome($nuovaCateg);
-            $pm->store($categoria);
+            $categoria = $pm->categoria()->findByNome($nuovaCateg);
+            if ($categoria === null) {
+                $categoria = new Categoria();
+                $categoria->setNome($nuovaCateg);
+                $pm->store($categoria);
+            }
         } elseif ($idCategoria > 0) {
             $categoria = $pm->load(Categoria::class, $idCategoria);
         }

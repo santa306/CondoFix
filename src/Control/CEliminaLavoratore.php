@@ -61,17 +61,10 @@ class CEliminaLavoratore
             exit;
         }
 
-        // 5. SCOLLEGO il fornitore dai lavori COMPLETATI (lo storico resta).
-        //    Recupero tutti i suoi lavori e azzero il fornitore sullo Stato.
-        $tuttiLavori = $pm->intervento()->findByFornitore($fornitore);
-        foreach ($tuttiLavori as $intervento) {
-            $stato = $intervento->getStato();
-            if ($stato !== null && $stato->getFornitore() !== null
-                && $stato->getFornitore()->getId() === $fornitore->getId()) {
-                $stato->setFornitore(null);
-                $pm->store($stato);
-            }
-        }
+        // 5. SCOLLEGO il fornitore da TUTTI i suoi stati (anche orfani).
+        //    Una sola query DQL che azzera fornitore_id su tutti gli stati
+        //    che referenziano questo fornitore, senza passare dagli interventi.
+        $pm->scollegaStatiDaFornitore($fornitore);
 
         // 6. SCOLLEGO le note scritte dal fornitore (autore = null).
         //    Le note restano nello storico ma senza riferimento all'utente.
@@ -91,8 +84,7 @@ class CEliminaLavoratore
             'titolo'      => 'Lavoratore eliminato',
             'sottotitolo' => 'Il lavoratore e\' stato eliminato. I lavori completati restano nello storico.',
             'righe'       => [
-                'Lavoratore'        => $nomeFornitore,
-                'Lavori scollegati' => (string) count($tuttiLavori),
+                'Lavoratore' => $nomeFornitore,
             ],
         ]);
         header('Location: index.php?action=listaLavoratori');
