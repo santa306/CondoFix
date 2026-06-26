@@ -131,13 +131,13 @@ class CDettaglioCondominio
         // 5. ESITO: banner con le credenziali da consegnare al condÃ²mino.
         Session::setBanner([
             'tipo'        => 'successo',
-            'titolo'      => 'CondÃ²mino creato',
-            'sottotitolo' => 'Consegna queste credenziali temporanee al condÃ²mino.',
+            'titolo'      => 'Condomino creato',
+            'sottotitolo' => 'Consegna queste credenziali temporanee al condomino.',
             'righe'       => [
                 'Nome'      => $nome . ' ' . $cognome,
                 'Email'     => $email,
                 'Password'  => $password,
-                'Interno'   => $interno !== '' ? $interno : 'â€”',
+                'Interno'   => $interno !== '' ? $interno : '',
                 'Condominio'=> $condominio->getNome(),
             ],
         ]);
@@ -147,8 +147,8 @@ class CDettaglioCondominio
 
     
 
-    // =======================================================
-    // HELPER â€” prepara il banner con le info di un condÃ²mino,
+// =======================================================
+    // HELPER — prepara il banner con le info di un condomino,
     // se l'URL lo richiede (?infoCondomino=ID).
     // =======================================================
     private function preparaBannerInfo(PersistentManager $pm, Condominio $condominio): void
@@ -157,26 +157,40 @@ class CDettaglioCondominio
         if ($idInfo <= 0) {
             return;
         }
+        
         $c = $pm->load(Condomino::class, $idInfo);
-        // Mostro solo se il condÃ²mino esiste e appartiene a QUESTO condominio.
+        
+        // Mostro solo se il condomino esiste e appartiene a QUESTO condominio.
         if ($c === null || $c->getCondominio()?->getId() !== $condominio->getId()) {
             return;
         }
+
+        // 1. Costruisco l'array con le righe fisse (Nome ed Email)
+        $righeInfo = [
+            'Nome'  => $c->getNome() . ' ' . $c->getCognome(),
+            'Email' => $c->getEmail(),
+        ];
+
+        // 2. Aggiungo la riga 'Interno' SOLO se non è vuota o null
+        $interno = $c->getInterno();
+        if ($interno !== null && trim($interno) !== '') {
+            $righeInfo['Interno'] = $interno;
+        }
+
+        // 3. Aggiungo il condominio
+        $righeInfo['Condominio'] = $condominio->getNome();
+
+        // 4. Imposto il banner pulito
         Session::setBanner([
             'tipo'        => 'successo',
-            'titolo'      => 'Scheda condÃ²mino',
+            'titolo'      => 'Scheda Condomino',
             'senzaIcona'  => true,
             'foto'        => $c->getFotoProfilo(),
             'sottotitolo' => $c->getNome() . ' ' . $c->getCognome(),
-            'righe'       => [
-                'Nome'       => $c->getNome() . ' ' . $c->getCognome(),
-                'Email'      => $c->getEmail(),
-                'Interno'    => $c->getInterno() ?? 'â€”',
-                'Condominio' => $condominio->getNome(),
-            ],
+            'righe'       => $righeInfo,
         ]);
     }
-    // -------------------------------------------------------
+// -------------------------------------------------------
     // eliminaCondomino() — elimina un condòmino del condominio
     // -------------------------------------------------------
     public function eliminaCondomino(): void
@@ -202,21 +216,37 @@ class CDettaglioCondominio
             exit;
         }
 
-        // Scollego il condòmino dagli interventi che ha segnalato (restano nello storico)
+        // 1. Scollego il condòmino dagli interventi che ha segnalato (restano nello storico)
         $segnalati = $pm->intervento()->findBySegnalante($condomino);
-        foreach ($segnalati as $intervento) {
-            $intervento->setSegnalante(null);
-            $pm->store($intervento);
+        if ($segnalati) {
+            foreach ($segnalati as $intervento) {
+                $intervento->setSegnalante(null);
+                $pm->store($intervento);
+            }
+        }
+
+        // 2. NUOVO BLOCCO: Scollego le note scritte dal condòmino per evitare l'errore Foreign Key
+        // Nota: Assicurati che nel tuo PersistentManager la classe per gestire le note
+        // si chiami 'nota()' e il metodo di ricerca sia 'findByAutore()'. 
+        // Adattalo se usi nomi diversi (es. findNoteByAutore).
+        $noteScritte = $pm->nota()->findByAutore($condomino);
+        if ($noteScritte) {
+            foreach ($noteScritte as $nota) {
+                $nota->setAutore(null);
+                $pm->store($nota);
+            }
         }
 
         $nomeCondomino = $condomino->getNome() . ' ' . $condomino->getCognome();
         $idRedirect = $condominio->getId();
+        
+        // 3. Ora che le relazioni con note e interventi sono scollegate, posso eliminare l'utente in sicurezza
         $pm->delete($condomino);
 
         Session::setBanner([
             'tipo'        => 'successo',
             'titolo'      => 'Condòmino eliminato',
-            'sottotitolo' => 'Il condòmino è stato eliminato. Le sue segnalazioni restano nello storico.',
+            'sottotitolo' => 'Il condòmino è stato eliminato. Le sue segnalazioni e note restano nello storico.',
             'righe'       => [ 'Condòmino' => $nomeCondomino ],
         ]);
         header('Location: index.php?action=dettaglioCondominio&id=' . $idRedirect);
